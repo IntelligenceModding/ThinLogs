@@ -1,0 +1,276 @@
+package de.artemis.thinlogs.common.data;
+
+import de.artemis.thinlogs.ThinLogs;
+import de.artemis.thinlogs.common.blockStateProperties.ModBlockStateProperties;
+import de.artemis.thinlogs.common.blocks.ThinLogBlock;
+import de.artemis.thinlogs.common.registration.ModBlocks;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraftforge.client.model.generators.BlockStateProvider;
+import net.minecraftforge.client.model.generators.ConfiguredModel;
+import net.minecraftforge.client.model.generators.ModelFile;
+import net.minecraftforge.common.data.ExistingFileHelper;
+
+public class ModelAndBlockStateProvider extends BlockStateProvider {
+
+    public ModelAndBlockStateProvider(DataGenerator gen, ExistingFileHelper exFileHelper) {
+        super(gen, ThinLogs.MOD_ID, exFileHelper);
+    }
+
+    @Override
+    protected void registerStatesAndModels() {
+        thinLogBlock(ModBlocks.THIN_OAK_LOG.get(), new ResourceLocation("block/oak_log"), new ResourceLocation("block/oak_log_top"));
+        thinLogBlock(ModBlocks.THIN_STRIPPED_OAK_LOG.get(), new ResourceLocation("block/stripped_oak_log"), new ResourceLocation("block/stripped_oak_log_top"));
+        thinLogBlock(ModBlocks.THIN_BIRCH_LOG.get(), new ResourceLocation("block/birch_log"), new ResourceLocation("block/birch_log_top"));
+        thinLogBlock(ModBlocks.THIN_STRIPPED_BIRCH_LOG.get(), new ResourceLocation("block/stripped_birch_log"), new ResourceLocation("block/stripped_birch_log_top"));
+        thinLogBlock(ModBlocks.THIN_SPRUCE_LOG.get(), new ResourceLocation("block/spruce_log"), new ResourceLocation("block/spruce_log_top"));
+        thinLogBlock(ModBlocks.THIN_STRIPPED_SPRUCE_LOG.get(), new ResourceLocation("block/stripped_spruce_log"), new ResourceLocation("block/stripped_spruce_log_top"));
+        thinLogBlock(ModBlocks.THIN_DARK_OAK_LOG.get(), new ResourceLocation("block/dark_oak_log"), new ResourceLocation("block/dark_oak_log_top"));
+        thinLogBlock(ModBlocks.THIN_STRIPPED_DARK_OAK_LOG.get(), new ResourceLocation("block/stripped_dark_oak_log"), new ResourceLocation("block/stripped_dark_oak_log_top"));
+        thinLogBlock(ModBlocks.THIN_ACACIA_LOG.get(), new ResourceLocation("block/acacia_log"), new ResourceLocation("block/acacia_log_top"));
+        thinLogBlock(ModBlocks.THIN_STRIPPED_ACACIA_LOG.get(), new ResourceLocation("block/stripped_acacia_log"), new ResourceLocation("block/stripped_acacia_log_top"));
+        thinLogBlock(ModBlocks.THIN_JUNGLE_LOG.get(), new ResourceLocation("block/jungle_log"), new ResourceLocation("block/jungle_log_top"));
+        thinLogBlock(ModBlocks.THIN_STRIPPED_JUNGLE_LOG.get(), new ResourceLocation("block/stripped_jungle_log"), new ResourceLocation("block/stripped_jungle_log_top"));
+        thinLogBlock(ModBlocks.THIN_MANGROVE_LOG.get(), new ResourceLocation("block/mangrove_log"), new ResourceLocation("block/mangrove_log_top"));
+        thinLogBlock(ModBlocks.THIN_STRIPPED_MANGROVE_LOG.get(), new ResourceLocation("block/stripped_mangrove_log"), new ResourceLocation("block/stripped_mangrove_log_top"));
+        thinLogBlock(ModBlocks.THIN_CRIMSON_STEM.get(), new ResourceLocation("block/crimson_stem"), new ResourceLocation("block/crimson_stem_top"));
+        thinLogBlock(ModBlocks.THIN_STRIPPED_CRIMSON_STEM.get(), new ResourceLocation("block/stripped_crimson_stem"), new ResourceLocation("block/stripped_crimson_stem_top"));
+        thinLogBlock(ModBlocks.THIN_WARPED_STEM.get(), new ResourceLocation("block/warped_stem"), new ResourceLocation("block/warped_stem_top"));
+        thinLogBlock(ModBlocks.THIN_STRIPPED_WARPED_STEM.get(), new ResourceLocation("block/stripped_warped_stem"), new ResourceLocation("block/stripped_warped_stem_top"));
+    }
+
+    public void thinLogBlock(Block block, ResourceLocation texture_side, ResourceLocation texture_top) {
+        ModelFile block_model_vertical_north_south = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south")).texture("log_side", texture_side).texture("log_top", texture_top);
+        ModelFile block_model_vertical_north_south_moss_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_moss_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/moss_block"));
+        ModelFile block_model_vertical_north_south_white_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_white_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/white_wool"));
+        ModelFile block_model_vertical_north_south_orange_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_orange_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/orange_wool"));
+        ModelFile block_model_vertical_north_south_magenta_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_magenta_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/magenta_wool"));
+        ModelFile block_model_vertical_north_south_light_blue_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_light_blue_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/light_blue_wool"));
+        ModelFile block_model_vertical_north_south_yellow_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_yellow_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/yellow_wool"));
+        ModelFile block_model_vertical_north_south_lime_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_lime_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/lime_wool"));
+        ModelFile block_model_vertical_north_south_pink_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_pink_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/pink_wool"));
+        ModelFile block_model_vertical_north_south_gray_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_gray_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/gray_wool"));
+        ModelFile block_model_vertical_north_south_light_gray_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_light_gray_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/light_gray_wool"));
+        ModelFile block_model_vertical_north_south_cyan_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_cyan_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/cyan_wool"));
+        ModelFile block_model_vertical_north_south_purple_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_purple_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/purple_wool"));
+        ModelFile block_model_vertical_north_south_blue_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_blue_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/blue_wool"));
+        ModelFile block_model_vertical_north_south_brown_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_brown_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/brown_wool"));
+        ModelFile block_model_vertical_north_south_green_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_green_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/green_wool"));
+        ModelFile block_model_vertical_north_south_red_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_red_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/red_wool"));
+        ModelFile block_model_vertical_north_south_black_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_black_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/black_wool"));
+        ModelFile block_model_vertical_north_south_oak_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_oak_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_leaves_tint")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/oak_leaves")).renderType("cutout");
+        ModelFile block_model_vertical_north_south_birch_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_birch_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_leaves_tint")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/birch_leaves")).renderType("cutout");
+        ModelFile block_model_vertical_north_south_spruce_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_spruce_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_leaves_tint")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/spruce_leaves")).renderType("cutout");
+        ModelFile block_model_vertical_north_south_dark_oak_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_dark_oak_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_leaves_tint")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/dark_oak_leaves")).renderType("cutout");
+        ModelFile block_model_vertical_north_south_acacia_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_acacia_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_leaves_tint")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/acacia_leaves")).renderType("cutout");
+        ModelFile block_model_vertical_north_south_jungle_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_jungle_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_leaves_tint")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/jungle_leaves")).renderType("cutout");
+        ModelFile block_model_vertical_north_south_mangrove_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_mangrove_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_leaves_tint")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/mangrove_leaves")).renderType("cutout");
+        ModelFile block_model_vertical_north_south_azalea_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_azalea_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_leaves")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/azalea_leaves")).renderType("cutout");
+        ModelFile block_model_vertical_north_south_flowering_azalea_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_flowering_azalea_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_leaves")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/flowering_azalea_leaves")).renderType("cutout");
+        ModelFile block_model_vertical_north_south_snow_layer_1 = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_snow_layer_1", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_snow_layer_1")).texture("log_side", texture_side).texture("log_top", texture_top).texture("snow", new ResourceLocation("block/snow"));
+        ModelFile block_model_vertical_north_south_snow_layer_2 = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_snow_layer_2", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_snow_layer_2")).texture("log_side", texture_side).texture("log_top", texture_top).texture("snow", new ResourceLocation("block/snow"));
+        ModelFile block_model_vertical_north_south_snow_layer_3 = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_snow_layer_3", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_snow_layer_3")).texture("log_side", texture_side).texture("log_top", texture_top).texture("snow", new ResourceLocation("block/snow"));
+        ModelFile block_model_vertical_north_south_snow_layer_4 = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_snow_layer_4", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_snow_layer_4")).texture("log_side", texture_side).texture("log_top", texture_top).texture("snow", new ResourceLocation("block/snow"));
+        ModelFile block_model_vertical_north_south_snow_layer_5 = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_snow_layer_5", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_snow_layer_5")).texture("log_side", texture_side).texture("log_top", texture_top).texture("snow", new ResourceLocation("block/snow"));
+        ModelFile block_model_vertical_north_south_snow_layer_6 = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_snow_layer_6", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_snow_layer_6")).texture("log_side", texture_side).texture("log_top", texture_top).texture("snow", new ResourceLocation("block/snow"));
+        ModelFile block_model_vertical_north_south_snow_layer_7 = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_snow_layer_7", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_snow_layer_7")).texture("log_side", texture_side).texture("log_top", texture_top).texture("snow", new ResourceLocation("block/snow"));
+        ModelFile block_model_vertical_north_south_snow_layer_8 = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_snow_layer_8", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_snow_layer_8")).texture("log_side", texture_side).texture("log_top", texture_top).texture("snow", new ResourceLocation("block/snow"));
+
+        ModelFile block_model_vertical_east_west = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west")).texture("log_side", texture_side).texture("log_top", texture_top);
+        ModelFile block_model_vertical_east_west_moss_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_moss_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/moss_block"));
+        ModelFile block_model_vertical_east_west_white_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_white_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/white_wool"));
+        ModelFile block_model_vertical_east_west_orange_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_orange_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/orange_wool"));
+        ModelFile block_model_vertical_east_west_magenta_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_magenta_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/magenta_wool"));
+        ModelFile block_model_vertical_east_west_light_blue_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_light_blue_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/light_blue_wool"));
+        ModelFile block_model_vertical_east_west_yellow_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_yellow_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/yellow_wool"));
+        ModelFile block_model_vertical_east_west_lime_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_lime_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/lime_wool"));
+        ModelFile block_model_vertical_east_west_pink_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_pink_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/pink_wool"));
+        ModelFile block_model_vertical_east_west_gray_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_gray_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/gray_wool"));
+        ModelFile block_model_vertical_east_west_light_gray_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_light_gray_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/light_gray_wool"));
+        ModelFile block_model_vertical_east_west_cyan_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_cyan_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/cyan_wool"));
+        ModelFile block_model_vertical_east_west_purple_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_purple_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/purple_wool"));
+        ModelFile block_model_vertical_east_west_blue_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_blue_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/blue_wool"));
+        ModelFile block_model_vertical_east_west_brown_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_brown_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/brown_wool"));
+        ModelFile block_model_vertical_east_west_green_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_green_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/green_wool"));
+        ModelFile block_model_vertical_east_west_red_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_red_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/red_wool"));
+        ModelFile block_model_vertical_east_west_black_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_black_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/black_wool"));
+        ModelFile block_model_vertical_east_west_oak_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_oak_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_leaves_tint")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/oak_leaves")).renderType("cutout");
+        ModelFile block_model_vertical_east_west_birch_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_birch_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_leaves_tint")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/birch_leaves")).renderType("cutout");
+        ModelFile block_model_vertical_east_west_spruce_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_spruce_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_leaves_tint")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/spruce_leaves")).renderType("cutout");
+        ModelFile block_model_vertical_east_west_dark_oak_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_dark_oak_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_leaves_tint")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/dark_oak_leaves")).renderType("cutout");
+        ModelFile block_model_vertical_east_west_acacia_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_acacia_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_leaves_tint")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/acacia_leaves")).renderType("cutout");
+        ModelFile block_model_vertical_east_west_jungle_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_jungle_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_leaves_tint")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/jungle_leaves")).renderType("cutout");
+        ModelFile block_model_vertical_east_west_mangrove_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_mangrove_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_leaves_tint")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/mangrove_leaves")).renderType("cutout");
+        ModelFile block_model_vertical_east_west_azalea_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_azalea_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_leaves")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/azalea_leaves")).renderType("cutout");
+        ModelFile block_model_vertical_east_west_flowering_azalea_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_flowering_azalea_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_leaves")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/flowering_azalea_leaves")).renderType("cutout");
+        ModelFile block_model_vertical_east_west_snow_layer_1 = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_snow_layer_1", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_snow_layer_1")).texture("log_side", texture_side).texture("log_top", texture_top).texture("snow", new ResourceLocation("block/snow"));
+        ModelFile block_model_vertical_east_west_snow_layer_2 = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_snow_layer_2", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_snow_layer_2")).texture("log_side", texture_side).texture("log_top", texture_top).texture("snow", new ResourceLocation("block/snow"));
+        ModelFile block_model_vertical_east_west_snow_layer_3 = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_snow_layer_3", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_snow_layer_3")).texture("log_side", texture_side).texture("log_top", texture_top).texture("snow", new ResourceLocation("block/snow"));
+        ModelFile block_model_vertical_east_west_snow_layer_4 = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_snow_layer_4", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_snow_layer_4")).texture("log_side", texture_side).texture("log_top", texture_top).texture("snow", new ResourceLocation("block/snow"));
+        ModelFile block_model_vertical_east_west_snow_layer_5 = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_snow_layer_5", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_snow_layer_5")).texture("log_side", texture_side).texture("log_top", texture_top).texture("snow", new ResourceLocation("block/snow"));
+        ModelFile block_model_vertical_east_west_snow_layer_6 = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_snow_layer_6", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_snow_layer_6")).texture("log_side", texture_side).texture("log_top", texture_top).texture("snow", new ResourceLocation("block/snow"));
+        ModelFile block_model_vertical_east_west_snow_layer_7 = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_snow_layer_7", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_snow_layer_7")).texture("log_side", texture_side).texture("log_top", texture_top).texture("snow", new ResourceLocation("block/snow"));
+        ModelFile block_model_vertical_east_west_snow_layer_8 = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_snow_layer_8", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_snow_layer_8")).texture("log_side", texture_side).texture("log_top", texture_top).texture("snow", new ResourceLocation("block/snow"));
+
+        ModelFile block_model_horizontal = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal")).texture("log_side", texture_side).texture("log_top", texture_top);
+        ModelFile block_model_horizontal_moss_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_moss_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/moss_block"));
+        ModelFile block_model_horizontal_white_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_white_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/white_wool"));
+        ModelFile block_model_horizontal_orange_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_orange_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/orange_wool"));
+        ModelFile block_model_horizontal_magenta_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_magenta_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/magenta_wool"));
+        ModelFile block_model_horizontal_light_blue_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_light_blue_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/light_blue_wool"));
+        ModelFile block_model_horizontal_yellow_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_yellow_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/yellow_wool"));
+        ModelFile block_model_horizontal_lime_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_lime_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/lime_wool"));
+        ModelFile block_model_horizontal_pink_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_pink_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/pink_wool"));
+        ModelFile block_model_horizontal_gray_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_gray_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/gray_wool"));
+        ModelFile block_model_horizontal_light_gray_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_light_gray_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/light_gray_wool"));
+        ModelFile block_model_horizontal_cyan_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_cyan_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/cyan_wool"));
+        ModelFile block_model_horizontal_purple_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_purple_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/purple_wool"));
+        ModelFile block_model_horizontal_blue_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_blue_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/blue_wool"));
+        ModelFile block_model_horizontal_brown_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_brown_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/brown_wool"));
+        ModelFile block_model_horizontal_green_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_green_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/green_wool"));
+        ModelFile block_model_horizontal_red_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_red_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/red_wool"));
+        ModelFile block_model_horizontal_black_carpet = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_black_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_carpet")).texture("log_side", texture_side).texture("log_top", texture_top).texture("carpet", new ResourceLocation("block/black_wool"));
+        ModelFile block_model_horizontal_oak_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_oak_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_leaves_tint")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/oak_leaves")).renderType("cutout");
+        ModelFile block_model_horizontal_birch_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_birch_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_leaves_tint")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/birch_leaves")).renderType("cutout");
+        ModelFile block_model_horizontal_spruce_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_spruce_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_leaves_tint")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/spruce_leaves")).renderType("cutout");
+        ModelFile block_model_horizontal_dark_oak_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_dark_oak_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_leaves_tint")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/dark_oak_leaves")).renderType("cutout");
+        ModelFile block_model_horizontal_acacia_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_acacia_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_leaves_tint")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/acacia_leaves")).renderType("cutout");
+        ModelFile block_model_horizontal_jungle_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_jungle_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_leaves_tint")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/jungle_leaves")).renderType("cutout");
+        ModelFile block_model_horizontal_mangrove_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_mangrove_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_leaves_tint")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/mangrove_leaves")).renderType("cutout");
+        ModelFile block_model_horizontal_azalea_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_azalea_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_leaves")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/azalea_leaves")).renderType("cutout");
+        ModelFile block_model_horizontal_flowering_azalea_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_flowering_azalea_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_leaves")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/flowering_azalea_leaves")).renderType("cutout");
+        ModelFile block_model_horizontal_snow_layer_1 = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_snow_layer_1", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_snow_layer_1")).texture("log_side", texture_side).texture("log_top", texture_top).texture("snow", new ResourceLocation("block/snow"));
+        ModelFile block_model_horizontal_snow_layer_2 = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_snow_layer_2", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_snow_layer_2")).texture("log_side", texture_side).texture("log_top", texture_top).texture("snow", new ResourceLocation("block/snow"));
+        ModelFile block_model_horizontal_snow_layer_3 = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_snow_layer_3", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_snow_layer_3")).texture("log_side", texture_side).texture("log_top", texture_top).texture("snow", new ResourceLocation("block/snow"));
+        ModelFile block_model_horizontal_snow_layer_4 = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_snow_layer_4", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_snow_layer_4")).texture("log_side", texture_side).texture("log_top", texture_top).texture("snow", new ResourceLocation("block/snow"));
+        ModelFile block_model_horizontal_snow_layer_5 = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_snow_layer_5", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_snow_layer_5")).texture("log_side", texture_side).texture("log_top", texture_top).texture("snow", new ResourceLocation("block/snow"));
+        ModelFile block_model_horizontal_snow_layer_6 = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_snow_layer_6", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_snow_layer_6")).texture("log_side", texture_side).texture("log_top", texture_top).texture("snow", new ResourceLocation("block/snow"));
+        ModelFile block_model_horizontal_snow_layer_7 = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_snow_layer_7", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_snow_layer_7")).texture("log_side", texture_side).texture("log_top", texture_top).texture("snow", new ResourceLocation("block/snow"));
+        ModelFile block_model_horizontal_snow_layer_8 = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_snow_layer_8", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_snow_layer_8")).texture("log_side", texture_side).texture("log_top", texture_top).texture("snow", new ResourceLocation("block/snow"));
+
+        getVariantBuilder(block).forAllStates(blockState -> {
+            ModelFile finalModel = switch (blockState.getValue(ThinLogBlock.AXIS)) {
+                case X -> switch (blockState.getValue(ModBlockStateProperties.APPLIED_ON_THIN_LOG_BLOCK)) {
+                    case MOSS_CARPET -> block_model_vertical_east_west_moss_carpet;
+                    case WHITE_CARPET -> block_model_vertical_east_west_white_carpet;
+                    case ORANGE_CARPET -> block_model_vertical_east_west_orange_carpet;
+                    case MAGENTA_CARPET -> block_model_vertical_east_west_magenta_carpet;
+                    case LIGHT_BLUE_CARPET -> block_model_vertical_east_west_light_blue_carpet;
+                    case YELLOW_CARPET -> block_model_vertical_east_west_yellow_carpet;
+                    case LIME_CARPET -> block_model_vertical_east_west_lime_carpet;
+                    case PINK_CARPET -> block_model_vertical_east_west_pink_carpet;
+                    case GRAY_CARPET -> block_model_vertical_east_west_gray_carpet;
+                    case LIGHT_GRAY_CARPET -> block_model_vertical_east_west_light_gray_carpet;
+                    case CYAN_CARPET -> block_model_vertical_east_west_cyan_carpet;
+                    case PURPLE_CARPET -> block_model_vertical_east_west_purple_carpet;
+                    case BLUE_CARPET -> block_model_vertical_east_west_blue_carpet;
+                    case BROWN_CARPET -> block_model_vertical_east_west_brown_carpet;
+                    case GREEN_CARPET -> block_model_vertical_east_west_green_carpet;
+                    case RED_CARPET -> block_model_vertical_east_west_red_carpet;
+                    case BLACK_CARPET -> block_model_vertical_east_west_black_carpet;
+                    case OAK_LEAVES -> block_model_vertical_east_west_oak_leaves;
+                    case BIRCH_LEAVES -> block_model_vertical_east_west_birch_leaves;
+                    case SPRUCE_LEAVES -> block_model_vertical_east_west_spruce_leaves;
+                    case DARK_OAK_LEAVES -> block_model_vertical_east_west_dark_oak_leaves;
+                    case ACACIA_LEAVES -> block_model_vertical_east_west_acacia_leaves;
+                    case JUNGLE_LEAVES -> block_model_vertical_east_west_jungle_leaves;
+                    case MANGROVE_LEAVES -> block_model_vertical_east_west_mangrove_leaves;
+                    case AZALEA_LEAVES -> block_model_vertical_east_west_azalea_leaves;
+                    case FLOWERING_AZALEA_LEAVES -> block_model_vertical_east_west_flowering_azalea_leaves;
+                    case SNOW_LAYER_1 -> block_model_vertical_east_west_snow_layer_1;
+                    case SNOW_LAYER_2 -> block_model_vertical_east_west_snow_layer_2;
+                    case SNOW_LAYER_3 -> block_model_vertical_east_west_snow_layer_3;
+                    case SNOW_LAYER_4 -> block_model_vertical_east_west_snow_layer_4;
+                    case SNOW_LAYER_5 -> block_model_vertical_east_west_snow_layer_5;
+                    case SNOW_LAYER_6 -> block_model_vertical_east_west_snow_layer_6;
+                    case SNOW_LAYER_7 -> block_model_vertical_east_west_snow_layer_7;
+                    case SNOW_LAYER_8 -> block_model_vertical_east_west_snow_layer_8;
+                    case SNOW_BLOCK -> block_model_vertical_east_west_snow_layer_8;
+                    case DEFAULT -> block_model_vertical_east_west;
+                };
+                case Y -> switch (blockState.getValue(ModBlockStateProperties.APPLIED_ON_THIN_LOG_BLOCK)) {
+                    case MOSS_CARPET -> block_model_horizontal_moss_carpet;
+                    case WHITE_CARPET -> block_model_horizontal_white_carpet;
+                    case ORANGE_CARPET -> block_model_horizontal_orange_carpet;
+                    case MAGENTA_CARPET -> block_model_horizontal_magenta_carpet;
+                    case LIGHT_BLUE_CARPET -> block_model_horizontal_light_blue_carpet;
+                    case YELLOW_CARPET -> block_model_horizontal_yellow_carpet;
+                    case LIME_CARPET -> block_model_horizontal_lime_carpet;
+                    case PINK_CARPET -> block_model_horizontal_pink_carpet;
+                    case GRAY_CARPET -> block_model_horizontal_gray_carpet;
+                    case LIGHT_GRAY_CARPET -> block_model_horizontal_light_gray_carpet;
+                    case CYAN_CARPET -> block_model_horizontal_cyan_carpet;
+                    case PURPLE_CARPET -> block_model_horizontal_purple_carpet;
+                    case BLUE_CARPET -> block_model_horizontal_blue_carpet;
+                    case BROWN_CARPET -> block_model_horizontal_brown_carpet;
+                    case GREEN_CARPET -> block_model_horizontal_green_carpet;
+                    case RED_CARPET -> block_model_horizontal_red_carpet;
+                    case BLACK_CARPET -> block_model_horizontal_black_carpet;
+                    case OAK_LEAVES -> block_model_horizontal_oak_leaves;
+                    case BIRCH_LEAVES -> block_model_horizontal_birch_leaves;
+                    case SPRUCE_LEAVES -> block_model_horizontal_spruce_leaves;
+                    case DARK_OAK_LEAVES -> block_model_horizontal_dark_oak_leaves;
+                    case ACACIA_LEAVES -> block_model_horizontal_acacia_leaves;
+                    case JUNGLE_LEAVES -> block_model_horizontal_jungle_leaves;
+                    case MANGROVE_LEAVES -> block_model_horizontal_mangrove_leaves;
+                    case AZALEA_LEAVES -> block_model_horizontal_azalea_leaves;
+                    case FLOWERING_AZALEA_LEAVES -> block_model_horizontal_flowering_azalea_leaves;
+                    case SNOW_LAYER_1 -> block_model_horizontal_snow_layer_1;
+                    case SNOW_LAYER_2 -> block_model_horizontal_snow_layer_2;
+                    case SNOW_LAYER_3 -> block_model_horizontal_snow_layer_3;
+                    case SNOW_LAYER_4 -> block_model_horizontal_snow_layer_4;
+                    case SNOW_LAYER_5 -> block_model_horizontal_snow_layer_5;
+                    case SNOW_LAYER_6 -> block_model_horizontal_snow_layer_6;
+                    case SNOW_LAYER_7 -> block_model_horizontal_snow_layer_7;
+                    case SNOW_LAYER_8 -> block_model_horizontal_snow_layer_8;
+                    case SNOW_BLOCK -> block_model_horizontal_snow_layer_8;
+                    case DEFAULT -> block_model_horizontal;
+                };
+                case Z -> switch (blockState.getValue(ModBlockStateProperties.APPLIED_ON_THIN_LOG_BLOCK)) {
+                    case MOSS_CARPET -> block_model_vertical_north_south_moss_carpet;
+                    case WHITE_CARPET -> block_model_vertical_north_south_white_carpet;
+                    case ORANGE_CARPET -> block_model_vertical_north_south_orange_carpet;
+                    case MAGENTA_CARPET -> block_model_vertical_north_south_magenta_carpet;
+                    case LIGHT_BLUE_CARPET -> block_model_vertical_north_south_light_blue_carpet;
+                    case YELLOW_CARPET -> block_model_vertical_north_south_yellow_carpet;
+                    case LIME_CARPET -> block_model_vertical_north_south_lime_carpet;
+                    case PINK_CARPET -> block_model_vertical_north_south_pink_carpet;
+                    case GRAY_CARPET -> block_model_vertical_north_south_gray_carpet;
+                    case LIGHT_GRAY_CARPET -> block_model_vertical_north_south_light_gray_carpet;
+                    case CYAN_CARPET -> block_model_vertical_north_south_cyan_carpet;
+                    case PURPLE_CARPET -> block_model_vertical_north_south_purple_carpet;
+                    case BLUE_CARPET -> block_model_vertical_north_south_blue_carpet;
+                    case BROWN_CARPET -> block_model_vertical_north_south_brown_carpet;
+                    case GREEN_CARPET -> block_model_vertical_north_south_green_carpet;
+                    case RED_CARPET -> block_model_vertical_north_south_red_carpet;
+                    case BLACK_CARPET -> block_model_vertical_north_south_black_carpet;
+                    case OAK_LEAVES -> block_model_vertical_north_south_oak_leaves;
+                    case BIRCH_LEAVES -> block_model_vertical_north_south_birch_leaves;
+                    case SPRUCE_LEAVES -> block_model_vertical_north_south_spruce_leaves;
+                    case DARK_OAK_LEAVES -> block_model_vertical_north_south_dark_oak_leaves;
+                    case ACACIA_LEAVES -> block_model_vertical_north_south_acacia_leaves;
+                    case JUNGLE_LEAVES -> block_model_vertical_north_south_jungle_leaves;
+                    case MANGROVE_LEAVES -> block_model_vertical_north_south_mangrove_leaves;
+                    case AZALEA_LEAVES -> block_model_vertical_north_south_azalea_leaves;
+                    case FLOWERING_AZALEA_LEAVES -> block_model_vertical_north_south_flowering_azalea_leaves;
+                    case SNOW_LAYER_1 -> block_model_vertical_north_south_snow_layer_1;
+                    case SNOW_LAYER_2 -> block_model_vertical_north_south_snow_layer_2;
+                    case SNOW_LAYER_3 -> block_model_vertical_north_south_snow_layer_3;
+                    case SNOW_LAYER_4 -> block_model_vertical_north_south_snow_layer_4;
+                    case SNOW_LAYER_5 -> block_model_vertical_north_south_snow_layer_5;
+                    case SNOW_LAYER_6 -> block_model_vertical_north_south_snow_layer_6;
+                    case SNOW_LAYER_7 -> block_model_vertical_north_south_snow_layer_7;
+                    case SNOW_LAYER_8 -> block_model_vertical_north_south_snow_layer_8;
+                    case SNOW_BLOCK -> block_model_vertical_north_south_snow_layer_8;
+                    case DEFAULT -> block_model_vertical_north_south;
+                };
+            };
+            return ConfiguredModel.builder()
+                    .modelFile(finalModel)
+                    .build();
+        });
+
+    }
+
+}

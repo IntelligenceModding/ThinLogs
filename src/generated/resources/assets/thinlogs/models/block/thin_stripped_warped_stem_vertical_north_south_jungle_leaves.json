@@ -1,0 +1,9 @@
+{
+  "parent": "thinlogs:generation/thin_log_vertical_north_south_leaves_tint",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "leaves": "minecraft:block/jungle_leaves",
+    "log_side": "minecraft:block/stripped_warped_stem",
+    "log_top": "minecraft:block/stripped_warped_stem_top"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "thinlogs:generation/thin_log_vertical_east_west",
+  "textures": {
+    "log_side": "minecraft:block/stripped_birch_log",
+    "log_top": "minecraft:block/stripped_birch_log_top"
+  }
+}

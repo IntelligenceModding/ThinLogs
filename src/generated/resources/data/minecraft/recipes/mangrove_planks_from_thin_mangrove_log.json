@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "thinlogs:thin_mangrove_log"
+    }
+  ],
+  "result": {
+    "item": "minecraft:mangrove_planks"
+  }
+}

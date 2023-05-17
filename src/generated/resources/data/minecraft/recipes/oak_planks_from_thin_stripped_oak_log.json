@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "thinlogs:thin_stripped_oak_log"
+    }
+  ],
+  "result": {
+    "item": "minecraft:oak_planks"
+  }
+}

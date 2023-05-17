@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "thinlogs:thin_crimson_stem"
+    }
+  ],
+  "result": {
+    "item": "minecraft:crimson_planks"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:mangrove_planks_from_thin_stripped_mangrove_log"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_thin_stripped_mangrove_log": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "thinlogs:thin_stripped_mangrove_log"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_thin_stripped_mangrove_log",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:mangrove_planks_from_thin_stripped_mangrove_log"
+    ]
+  }
+}

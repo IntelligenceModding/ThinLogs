@@ -1,0 +1,7 @@
+{
+  "parent": "thinlogs:generation/thin_log_vertical_east_west",
+  "textures": {
+    "log_side": "minecraft:block/mangrove_log",
+    "log_top": "minecraft:block/mangrove_log_top"
+  }
+}

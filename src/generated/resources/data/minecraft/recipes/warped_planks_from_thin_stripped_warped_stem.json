@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "thinlogs:thin_stripped_warped_stem"
+    }
+  ],
+  "result": {
+    "item": "minecraft:warped_planks"
+  }
+}

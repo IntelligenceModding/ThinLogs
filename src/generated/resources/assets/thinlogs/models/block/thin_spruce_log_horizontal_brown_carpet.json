@@ -1,0 +1,8 @@
+{
+  "parent": "thinlogs:generation/thin_log_horizontal_carpet",
+  "textures": {
+    "carpet": "minecraft:block/brown_wool",
+    "log_side": "minecraft:block/spruce_log",
+    "log_top": "minecraft:block/spruce_log_top"
+  }
+}

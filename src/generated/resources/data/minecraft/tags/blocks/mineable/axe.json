@@ -1,0 +1,22 @@
+{
+  "values": [
+    "thinlogs:thin_oak_log",
+    "thinlogs:thin_stripped_oak_log",
+    "thinlogs:thin_birch_log",
+    "thinlogs:thin_stripped_birch_log",
+    "thinlogs:thin_spruce_log",
+    "thinlogs:thin_stripped_spruce_log",
+    "thinlogs:thin_dark_oak_log",
+    "thinlogs:thin_stripped_dark_oak_log",
+    "thinlogs:thin_acacia_log",
+    "thinlogs:thin_stripped_acacia_log",
+    "thinlogs:thin_jungle_log",
+    "thinlogs:thin_stripped_jungle_log",
+    "thinlogs:thin_mangrove_log",
+    "thinlogs:thin_stripped_mangrove_log",
+    "thinlogs:thin_crimson_stem",
+    "thinlogs:thin_stripped_crimson_stem",
+    "thinlogs:thin_warped_stem",
+    "thinlogs:thin_stripped_warped_stem"
+  ]
+}

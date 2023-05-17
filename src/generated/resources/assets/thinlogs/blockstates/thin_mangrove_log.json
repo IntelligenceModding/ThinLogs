@@ -1,0 +1,328 @@
+{
+  "variants": {
+    "applied_on_thin_log_block=acacia_leaves,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_acacia_leaves"
+    },
+    "applied_on_thin_log_block=acacia_leaves,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_acacia_leaves"
+    },
+    "applied_on_thin_log_block=acacia_leaves,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_acacia_leaves"
+    },
+    "applied_on_thin_log_block=azalea_leaves,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_azalea_leaves"
+    },
+    "applied_on_thin_log_block=azalea_leaves,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_azalea_leaves"
+    },
+    "applied_on_thin_log_block=azalea_leaves,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_azalea_leaves"
+    },
+    "applied_on_thin_log_block=birch_leaves,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_birch_leaves"
+    },
+    "applied_on_thin_log_block=birch_leaves,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_birch_leaves"
+    },
+    "applied_on_thin_log_block=birch_leaves,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_birch_leaves"
+    },
+    "applied_on_thin_log_block=black_carpet,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_black_carpet"
+    },
+    "applied_on_thin_log_block=black_carpet,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_black_carpet"
+    },
+    "applied_on_thin_log_block=black_carpet,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_black_carpet"
+    },
+    "applied_on_thin_log_block=blue_carpet,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_blue_carpet"
+    },
+    "applied_on_thin_log_block=blue_carpet,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_blue_carpet"
+    },
+    "applied_on_thin_log_block=blue_carpet,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_blue_carpet"
+    },
+    "applied_on_thin_log_block=brown_carpet,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_brown_carpet"
+    },
+    "applied_on_thin_log_block=brown_carpet,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_brown_carpet"
+    },
+    "applied_on_thin_log_block=brown_carpet,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_brown_carpet"
+    },
+    "applied_on_thin_log_block=cyan_carpet,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_cyan_carpet"
+    },
+    "applied_on_thin_log_block=cyan_carpet,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_cyan_carpet"
+    },
+    "applied_on_thin_log_block=cyan_carpet,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_cyan_carpet"
+    },
+    "applied_on_thin_log_block=dark_oak_leaves,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_dark_oak_leaves"
+    },
+    "applied_on_thin_log_block=dark_oak_leaves,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_dark_oak_leaves"
+    },
+    "applied_on_thin_log_block=dark_oak_leaves,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_dark_oak_leaves"
+    },
+    "applied_on_thin_log_block=default,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west"
+    },
+    "applied_on_thin_log_block=default,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal"
+    },
+    "applied_on_thin_log_block=default,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south"
+    },
+    "applied_on_thin_log_block=flowering_azalea_leaves,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_flowering_azalea_carpet"
+    },
+    "applied_on_thin_log_block=flowering_azalea_leaves,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_flowering_azalea_carpet"
+    },
+    "applied_on_thin_log_block=flowering_azalea_leaves,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_flowering_azalea_carpet"
+    },
+    "applied_on_thin_log_block=gray_carpet,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_gray_carpet"
+    },
+    "applied_on_thin_log_block=gray_carpet,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_gray_carpet"
+    },
+    "applied_on_thin_log_block=gray_carpet,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_gray_carpet"
+    },
+    "applied_on_thin_log_block=green_carpet,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_green_carpet"
+    },
+    "applied_on_thin_log_block=green_carpet,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_green_carpet"
+    },
+    "applied_on_thin_log_block=green_carpet,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_green_carpet"
+    },
+    "applied_on_thin_log_block=jungle_leaves,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_jungle_leaves"
+    },
+    "applied_on_thin_log_block=jungle_leaves,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_jungle_leaves"
+    },
+    "applied_on_thin_log_block=jungle_leaves,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_jungle_leaves"
+    },
+    "applied_on_thin_log_block=light_blue_carpet,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_light_blue_carpet"
+    },
+    "applied_on_thin_log_block=light_blue_carpet,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_light_blue_carpet"
+    },
+    "applied_on_thin_log_block=light_blue_carpet,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_light_blue_carpet"
+    },
+    "applied_on_thin_log_block=light_gray_carpet,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_light_gray_carpet"
+    },
+    "applied_on_thin_log_block=light_gray_carpet,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_light_gray_carpet"
+    },
+    "applied_on_thin_log_block=light_gray_carpet,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_light_gray_carpet"
+    },
+    "applied_on_thin_log_block=lime_carpet,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_lime_carpet"
+    },
+    "applied_on_thin_log_block=lime_carpet,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_lime_carpet"
+    },
+    "applied_on_thin_log_block=lime_carpet,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_lime_carpet"
+    },
+    "applied_on_thin_log_block=magenta_carpet,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_magenta_carpet"
+    },
+    "applied_on_thin_log_block=magenta_carpet,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_magenta_carpet"
+    },
+    "applied_on_thin_log_block=magenta_carpet,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_magenta_carpet"
+    },
+    "applied_on_thin_log_block=mangrove_leaves,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_mangrove_leaves"
+    },
+    "applied_on_thin_log_block=mangrove_leaves,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_mangrove_leaves"
+    },
+    "applied_on_thin_log_block=mangrove_leaves,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_mangrove_leaves"
+    },
+    "applied_on_thin_log_block=moss_carpet,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_moss_carpet"
+    },
+    "applied_on_thin_log_block=moss_carpet,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_moss_carpet"
+    },
+    "applied_on_thin_log_block=moss_carpet,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_moss_carpet"
+    },
+    "applied_on_thin_log_block=oak_leaves,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_oak_leaves"
+    },
+    "applied_on_thin_log_block=oak_leaves,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_oak_leaves"
+    },
+    "applied_on_thin_log_block=oak_leaves,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_oak_leaves"
+    },
+    "applied_on_thin_log_block=orange_carpet,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_orange_carpet"
+    },
+    "applied_on_thin_log_block=orange_carpet,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_orange_carpet"
+    },
+    "applied_on_thin_log_block=orange_carpet,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_orange_carpet"
+    },
+    "applied_on_thin_log_block=pink_carpet,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_pink_carpet"
+    },
+    "applied_on_thin_log_block=pink_carpet,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_pink_carpet"
+    },
+    "applied_on_thin_log_block=pink_carpet,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_pink_carpet"
+    },
+    "applied_on_thin_log_block=purple_carpet,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_purple_carpet"
+    },
+    "applied_on_thin_log_block=purple_carpet,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_purple_carpet"
+    },
+    "applied_on_thin_log_block=purple_carpet,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_purple_carpet"
+    },
+    "applied_on_thin_log_block=red_carpet,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_red_carpet"
+    },
+    "applied_on_thin_log_block=red_carpet,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_red_carpet"
+    },
+    "applied_on_thin_log_block=red_carpet,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_red_carpet"
+    },
+    "applied_on_thin_log_block=snow_block,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_snow_layer_8"
+    },
+    "applied_on_thin_log_block=snow_block,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_snow_layer_8"
+    },
+    "applied_on_thin_log_block=snow_block,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_snow_layer_8"
+    },
+    "applied_on_thin_log_block=snow_layer_1,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_snow_layer_1"
+    },
+    "applied_on_thin_log_block=snow_layer_1,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_snow_layer_1"
+    },
+    "applied_on_thin_log_block=snow_layer_1,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_snow_layer_1"
+    },
+    "applied_on_thin_log_block=snow_layer_2,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_snow_layer_2"
+    },
+    "applied_on_thin_log_block=snow_layer_2,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_snow_layer_2"
+    },
+    "applied_on_thin_log_block=snow_layer_2,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_snow_layer_2"
+    },
+    "applied_on_thin_log_block=snow_layer_3,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_snow_layer_3"
+    },
+    "applied_on_thin_log_block=snow_layer_3,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_snow_layer_3"
+    },
+    "applied_on_thin_log_block=snow_layer_3,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_snow_layer_3"
+    },
+    "applied_on_thin_log_block=snow_layer_4,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_snow_layer_4"
+    },
+    "applied_on_thin_log_block=snow_layer_4,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_snow_layer_4"
+    },
+    "applied_on_thin_log_block=snow_layer_4,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_snow_layer_4"
+    },
+    "applied_on_thin_log_block=snow_layer_5,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_snow_layer_5"
+    },
+    "applied_on_thin_log_block=snow_layer_5,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_snow_layer_5"
+    },
+    "applied_on_thin_log_block=snow_layer_5,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_snow_layer_5"
+    },
+    "applied_on_thin_log_block=snow_layer_6,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_snow_layer_6"
+    },
+    "applied_on_thin_log_block=snow_layer_6,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_snow_layer_6"
+    },
+    "applied_on_thin_log_block=snow_layer_6,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_snow_layer_6"
+    },
+    "applied_on_thin_log_block=snow_layer_7,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_snow_layer_7"
+    },
+    "applied_on_thin_log_block=snow_layer_7,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_snow_layer_7"
+    },
+    "applied_on_thin_log_block=snow_layer_7,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_snow_layer_7"
+    },
+    "applied_on_thin_log_block=snow_layer_8,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_snow_layer_8"
+    },
+    "applied_on_thin_log_block=snow_layer_8,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_snow_layer_8"
+    },
+    "applied_on_thin_log_block=snow_layer_8,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_snow_layer_8"
+    },
+    "applied_on_thin_log_block=spruce_leaves,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_spruce_leaves"
+    },
+    "applied_on_thin_log_block=spruce_leaves,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_spruce_leaves"
+    },
+    "applied_on_thin_log_block=spruce_leaves,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_spruce_leaves"
+    },
+    "applied_on_thin_log_block=white_carpet,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_white_carpet"
+    },
+    "applied_on_thin_log_block=white_carpet,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_white_carpet"
+    },
+    "applied_on_thin_log_block=white_carpet,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_white_carpet"
+    },
+    "applied_on_thin_log_block=yellow_carpet,axis=x": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_east_west_yellow_carpet"
+    },
+    "applied_on_thin_log_block=yellow_carpet,axis=y": {
+      "model": "thinlogs:block/thin_mangrove_log_horizontal_yellow_carpet"
+    },
+    "applied_on_thin_log_block=yellow_carpet,axis=z": {
+      "model": "thinlogs:block/thin_mangrove_log_vertical_north_south_yellow_carpet"
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "thinlogs:generation/thin_log_vertical_east_west_carpet",
+  "textures": {
+    "carpet": "minecraft:block/green_wool",
+    "log_side": "minecraft:block/mangrove_log",
+    "log_top": "minecraft:block/mangrove_log_top"
+  }
+}

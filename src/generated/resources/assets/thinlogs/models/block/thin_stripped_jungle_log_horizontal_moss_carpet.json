@@ -1,0 +1,8 @@
+{
+  "parent": "thinlogs:generation/thin_log_horizontal_carpet",
+  "textures": {
+    "carpet": "minecraft:block/moss_block",
+    "log_side": "minecraft:block/stripped_jungle_log",
+    "log_top": "minecraft:block/stripped_jungle_log_top"
+  }
+}
