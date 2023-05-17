@@ -12,7 +12,7 @@ public class LanguageProvider extends net.minecraftforge.common.data.LanguagePro
 
     @Override
     protected void addTranslations() {
-        add("itemGroup.thinlogs", "Thin Logs");
+        add("itemGroup.thinlogs", "Artemis' Thin Logs");
         add(ModBlocks.THIN_OAK_LOG.get(), "Thin Oak Log");
         add(ModBlocks.THIN_STRIPPED_OAK_LOG.get(), "Thin Stripped Oak Log");
         add(ModBlocks.THIN_BIRCH_LOG.get(), "Thin Birch Log");
