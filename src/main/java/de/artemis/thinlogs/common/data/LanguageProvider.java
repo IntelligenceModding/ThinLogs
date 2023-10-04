@@ -3,11 +3,12 @@ package de.artemis.thinlogs.common.data;
 import de.artemis.thinlogs.ThinLogs;
 import de.artemis.thinlogs.common.registration.ModBlocks;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 
 public class LanguageProvider extends net.minecraftforge.common.data.LanguageProvider {
 
-    public LanguageProvider(DataGenerator gen, String locale) {
-        super(gen, ThinLogs.MOD_ID, locale);
+    public LanguageProvider(PackOutput packOutput, String locale) {
+        super(packOutput, ThinLogs.MOD_ID, locale);
     }
 
     @Override
@@ -31,6 +32,10 @@ public class LanguageProvider extends net.minecraftforge.common.data.LanguagePro
         add(ModBlocks.THIN_STRIPPED_CRIMSON_STEM.get(), "Thin Stripped Crimson Stem");
         add(ModBlocks.THIN_WARPED_STEM.get(), "Thin Warped Stem");
         add(ModBlocks.THIN_STRIPPED_WARPED_STEM.get(), "Thin Stripped Warped Stem");
+        add(ModBlocks.THIN_CHERRY_LOG.get(), "Thin Cherry Log");
+        add(ModBlocks.THIN_STRIPPED_CHERRY_LOG.get(), "Thin Stripped Cherry log");
+        add(ModBlocks.THIN_BAMBOO_BLOCK.get(), "Thin Bamboo Block");
+        add(ModBlocks.THIN_STRIPPED_BAMBOO_BLOCK.get(), "Thin Stripped Bamboo Block");
     }
 
 }

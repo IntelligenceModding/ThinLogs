@@ -17,6 +17,10 @@
     "thinlogs:thin_crimson_stem",
     "thinlogs:thin_stripped_crimson_stem",
     "thinlogs:thin_warped_stem",
-    "thinlogs:thin_stripped_warped_stem"
+    "thinlogs:thin_stripped_warped_stem",
+    "thinlogs:thin_cherry_log",
+    "thinlogs:thin_stripped_cherry_log",
+    "thinlogs:thin_bamboo_block",
+    "thinlogs:thin_stripped_bamboo_log"
   ]
 }

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "thinlogs:thin_stripped_bamboo_log"
+    }
+  ],
+  "result": {
+    "item": "minecraft:bamboo_planks"
+  }
+}

@@ -13,7 +13,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
@@ -109,6 +108,8 @@ public class ThinLogBlock extends RotatedPillarBlock {
                         ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_FULL_BLOCK);
                 case FLOWERING_AZALEA_LEAVES ->
                         ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_FULL_BLOCK);
+                case CHERRY_LEAVES ->
+                        ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_FULL_BLOCK);
                 case SNOW_LAYER_1 ->
                         ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_SNOW_LAYER_1);
                 case SNOW_LAYER_2 ->
@@ -156,6 +157,7 @@ public class ThinLogBlock extends RotatedPillarBlock {
                 case MANGROVE_LEAVES -> VOXEL_SHAPE_HORIZONTAL_FULL_BLOCK;
                 case AZALEA_LEAVES -> VOXEL_SHAPE_HORIZONTAL_FULL_BLOCK;
                 case FLOWERING_AZALEA_LEAVES -> VOXEL_SHAPE_HORIZONTAL_FULL_BLOCK;
+                case CHERRY_LEAVES -> VOXEL_SHAPE_HORIZONTAL_FULL_BLOCK;
                 case SNOW_LAYER_1 -> VOXEL_SHAPE_HORIZONTAL_SNOW_LAYER_1;
                 case SNOW_LAYER_2 -> VOXEL_SHAPE_HORIZONTAL_SNOW_LAYER_2;
                 case SNOW_LAYER_3 -> VOXEL_SHAPE_HORIZONTAL_SNOW_LAYER_3;
@@ -194,6 +196,7 @@ public class ThinLogBlock extends RotatedPillarBlock {
                 case MANGROVE_LEAVES -> VOXEL_SHAPE_VERTICAL_FULL_BLOCK;
                 case AZALEA_LEAVES -> VOXEL_SHAPE_VERTICAL_FULL_BLOCK;
                 case FLOWERING_AZALEA_LEAVES -> VOXEL_SHAPE_VERTICAL_FULL_BLOCK;
+                case CHERRY_LEAVES -> VOXEL_SHAPE_VERTICAL_FULL_BLOCK;
                 case SNOW_LAYER_1 -> VOXEL_SHAPE_VERTICAL_SNOW_LAYER_1;
                 case SNOW_LAYER_2 -> VOXEL_SHAPE_VERTICAL_SNOW_LAYER_2;
                 case SNOW_LAYER_3 -> VOXEL_SHAPE_VERTICAL_SNOW_LAYER_3;
@@ -380,6 +383,9 @@ public class ThinLogBlock extends RotatedPillarBlock {
                 success = true;
             } else if (itemStackInHand.is(Blocks.FLOWERING_AZALEA_LEAVES.asItem()) && appliedBlockIsDefault) {
                 level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.FLOWERING_AZALEA_LEAVES), 3);
+                success = true;
+            } else if (itemStackInHand.is(Blocks.CHERRY_LEAVES.asItem()) && appliedBlockIsDefault) {
+                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.CHERRY_LEAVES), 3);
                 success = true;
             } else if (itemStackInHand.is(Blocks.SNOW_BLOCK.asItem()) && appliedBlockIsDefault) {
                 level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.SNOW_BLOCK), 3);

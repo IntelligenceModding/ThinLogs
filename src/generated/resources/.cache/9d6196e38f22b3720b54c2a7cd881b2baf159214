@@ -1,6 +1,8 @@
-// 1.19.2	2023-04-27T21:41:55.478467	Item Models: thinlogs
+// 1.20.1	2023-10-02T12:21:17.991654	Item Models: thinlogs
 e4bbec1f7de71f91300dd6c16c0ede295b0308c8 assets/thinlogs/models/item/thin_acacia_log.json
+122145b4b57471e9deab1a4d0fd26f1d58f9d765 assets/thinlogs/models/item/thin_bamboo_block.json
 57fddc86b2d633fd0708b5a0e3323797fafcdc29 assets/thinlogs/models/item/thin_birch_log.json
+d7843e215aecbcd45090268c7164849c0a374f24 assets/thinlogs/models/item/thin_cherry_log.json
 5d69ef9c8bc6cc4c55a1b3fd33abf94e72b0a4c9 assets/thinlogs/models/item/thin_crimson_stem.json
 f579cf95b8ea1d56e45b5c6b40b6de17af674522 assets/thinlogs/models/item/thin_dark_oak_log.json
 2ca7bfc42c74080249e0bb50bf5930cec3978828 assets/thinlogs/models/item/thin_jungle_log.json
@@ -8,7 +10,9 @@ ddcfde386e76140eebf6ff396fadd43f26e52823 assets/thinlogs/models/item/thin_mangro
 f3121607852c9ce3d6b5676510bd05d95ca975e4 assets/thinlogs/models/item/thin_oak_log.json
 866cf23411186027b95916c2d5b034477f64760c assets/thinlogs/models/item/thin_spruce_log.json
 8f95e426f9fe33acaf88685357ed75747f04acea assets/thinlogs/models/item/thin_stripped_acacia_log.json
+b39aee93a25e79a540bba5284924122a384d6224 assets/thinlogs/models/item/thin_stripped_bamboo_log.json
 9d56e38954d855a8ef5ba0a63f1560a8764be54f assets/thinlogs/models/item/thin_stripped_birch_log.json
+2fb3a07851a88b117b81c4b25f3c7187c11f9588 assets/thinlogs/models/item/thin_stripped_cherry_log.json
 d61d3d30b30f73cca41adb1dff44b7e35977568c assets/thinlogs/models/item/thin_stripped_crimson_stem.json
 a2e580d927c0d87f0108ccd30098613937d54f45 assets/thinlogs/models/item/thin_stripped_dark_oak_log.json
 938361a685a81948b6a5c645318daadc47affdf2 assets/thinlogs/models/item/thin_stripped_jungle_log.json

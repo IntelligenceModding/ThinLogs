@@ -30,5 +30,6 @@
     "recipes": [
       "minecraft:mangrove_planks_from_thin_stripped_mangrove_log"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

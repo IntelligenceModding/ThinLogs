@@ -1,0 +1,9 @@
+{
+  "parent": "thinlogs:generation/thin_log_vertical_east_west_leaves_tint",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "leaves": "minecraft:block/acacia_leaves",
+    "log_side": "minecraft:block/cherry_log",
+    "log_top": "minecraft:block/cherry_log_top"
+  }
+}

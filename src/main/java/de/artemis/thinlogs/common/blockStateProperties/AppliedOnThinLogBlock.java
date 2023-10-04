@@ -36,6 +36,7 @@ public enum AppliedOnThinLogBlock implements StringRepresentable {
     MANGROVE_LEAVES("mangrove_leaves", Blocks.JUNGLE_LEAVES::asItem),
     AZALEA_LEAVES("azalea_leaves", Blocks.AZALEA_LEAVES::asItem),
     FLOWERING_AZALEA_LEAVES("flowering_azalea_leaves", Blocks.FLOWERING_AZALEA_LEAVES::asItem),
+    CHERRY_LEAVES("cherry_leaves", Blocks.CHERRY_LEAVES::asItem),
 
     SNOW_LAYER_1("snow_layer_1", Blocks.SNOW::asItem),
     SNOW_LAYER_2("snow_layer_2", Blocks.SNOW::asItem),

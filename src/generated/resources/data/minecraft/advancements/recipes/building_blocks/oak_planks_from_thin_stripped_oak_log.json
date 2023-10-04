@@ -30,5 +30,6 @@
     "recipes": [
       "minecraft:oak_planks_from_thin_stripped_oak_log"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

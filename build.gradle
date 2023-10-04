@@ -33,8 +33,15 @@ java {
     toolchain.languageVersion = JavaLanguageVersion.of(17)
 }
 
+wrapper {
+    gradleVersion = '7.5.1'
+    distributionType = Wrapper.DistributionType.ALL
+}
+
 minecraft {
     mappings channel: "${mappings_channel}", version: "${mappings_version}"
+
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     runs {
         client {
@@ -42,6 +49,8 @@ minecraft {
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             property 'forge.enabledGameTestNamespaces', 'thinlogs'
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
 
             args "--username", "ArtemisYouTube"
             args "--uuid", "6611b78f-7fbb-4f41-801a-4e85fd0dca3c"
@@ -58,6 +67,8 @@ minecraft {
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             property 'forge.enabledGameTestNamespaces', 'thinlogs'
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
 
             mods {
                 thinlogs {
@@ -71,6 +82,8 @@ minecraft {
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             property 'forge.enabledGameTestNamespaces', 'thinlogs'
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
 
             mods {
                 thinlogs {
@@ -83,6 +96,8 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
 
             args '--mod', 'thinlogs', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
@@ -95,16 +110,39 @@ minecraft {
     }
 }
 
-sourceSets.main.resources { srcDir 'src/generated/resources' }
+sourceSets {
+    main.resources {
+        srcDir 'src/generated/resources'
+    }
+    testMod {}
+}
 
 repositories {
     flatDir {
-        dir 'libs'
+        dir 'lib'
+    }
+
+    maven {
+        name = "Blamejared maven botania patchouli"
+        url = 'https://maven.blamejared.com'
+    }
+    maven {
+        name = "Intelligence Space repository"
+        url = "https://maven.pkg.jetbrains.space/intelligence/p/advancedperipherals/ap-repository"
+        credentials {
+            username = spaceUsername
+            password = spacePassword
+        }
+    }
+    maven {
+        url "https://cursemaven.com"
     }
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
+    //JEI
+    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
 }
 
 jar {

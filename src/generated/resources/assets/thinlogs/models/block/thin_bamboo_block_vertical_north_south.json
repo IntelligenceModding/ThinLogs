@@ -1,0 +1,7 @@
+{
+  "parent": "thinlogs:generation/thin_log_vertical_north_south",
+  "textures": {
+    "log_side": "minecraft:block/bamboo_block",
+    "log_top": "minecraft:block/bamboo_block_top"
+  }
+}

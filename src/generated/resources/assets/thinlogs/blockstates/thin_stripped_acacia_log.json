@@ -54,6 +54,15 @@
     "applied_on_thin_log_block=brown_carpet,axis=z": {
       "model": "thinlogs:block/thin_stripped_acacia_log_vertical_north_south_brown_carpet"
     },
+    "applied_on_thin_log_block=cherry_leaves,axis=x": {
+      "model": "thinlogs:block/thin_stripped_acacia_log_vertical_east_west_cherry_leaves"
+    },
+    "applied_on_thin_log_block=cherry_leaves,axis=y": {
+      "model": "thinlogs:block/thin_stripped_acacia_log_horizontal_cherry_leaves"
+    },
+    "applied_on_thin_log_block=cherry_leaves,axis=z": {
+      "model": "thinlogs:block/thin_stripped_acacia_log_vertical_north_south_cherry_leaves"
+    },
     "applied_on_thin_log_block=cyan_carpet,axis=x": {
       "model": "thinlogs:block/thin_stripped_acacia_log_vertical_east_west_cyan_carpet"
     },
@@ -82,13 +91,13 @@
       "model": "thinlogs:block/thin_stripped_acacia_log_vertical_north_south"
     },
     "applied_on_thin_log_block=flowering_azalea_leaves,axis=x": {
-      "model": "thinlogs:block/thin_stripped_acacia_log_vertical_east_west_flowering_azalea_carpet"
+      "model": "thinlogs:block/thin_stripped_acacia_log_vertical_east_west_flowering_azalea_leaves"
     },
     "applied_on_thin_log_block=flowering_azalea_leaves,axis=y": {
-      "model": "thinlogs:block/thin_stripped_acacia_log_horizontal_flowering_azalea_carpet"
+      "model": "thinlogs:block/thin_stripped_acacia_log_horizontal_flowering_azalea_leaves"
     },
     "applied_on_thin_log_block=flowering_azalea_leaves,axis=z": {
-      "model": "thinlogs:block/thin_stripped_acacia_log_vertical_north_south_flowering_azalea_carpet"
+      "model": "thinlogs:block/thin_stripped_acacia_log_vertical_north_south_flowering_azalea_leaves"
     },
     "applied_on_thin_log_block=gray_carpet,axis=x": {
       "model": "thinlogs:block/thin_stripped_acacia_log_vertical_east_west_gray_carpet"

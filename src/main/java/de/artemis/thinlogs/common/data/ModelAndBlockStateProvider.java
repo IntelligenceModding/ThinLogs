@@ -4,7 +4,7 @@ import de.artemis.thinlogs.ThinLogs;
 import de.artemis.thinlogs.common.blockStateProperties.ModBlockStateProperties;
 import de.artemis.thinlogs.common.blocks.ThinLogBlock;
 import de.artemis.thinlogs.common.registration.ModBlocks;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
@@ -14,8 +14,8 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class ModelAndBlockStateProvider extends BlockStateProvider {
 
-    public ModelAndBlockStateProvider(DataGenerator gen, ExistingFileHelper exFileHelper) {
-        super(gen, ThinLogs.MOD_ID, exFileHelper);
+    public ModelAndBlockStateProvider(PackOutput packOutput, ExistingFileHelper exFileHelper) {
+        super(packOutput, ThinLogs.MOD_ID, exFileHelper);
     }
 
     @Override
@@ -38,6 +38,10 @@ public class ModelAndBlockStateProvider extends BlockStateProvider {
         thinLogBlock(ModBlocks.THIN_STRIPPED_CRIMSON_STEM.get(), new ResourceLocation("block/stripped_crimson_stem"), new ResourceLocation("block/stripped_crimson_stem_top"));
         thinLogBlock(ModBlocks.THIN_WARPED_STEM.get(), new ResourceLocation("block/warped_stem"), new ResourceLocation("block/warped_stem_top"));
         thinLogBlock(ModBlocks.THIN_STRIPPED_WARPED_STEM.get(), new ResourceLocation("block/stripped_warped_stem"), new ResourceLocation("block/stripped_warped_stem_top"));
+        thinLogBlock(ModBlocks.THIN_CHERRY_LOG.get(), new ResourceLocation("block/cherry_log"), new ResourceLocation("block/cherry_log_top"));
+        thinLogBlock(ModBlocks.THIN_STRIPPED_CHERRY_LOG.get(), new ResourceLocation("block/stripped_cherry_log"), new ResourceLocation("block/stripped_cherry_log_top"));
+        thinLogBlock(ModBlocks.THIN_BAMBOO_BLOCK.get(), new ResourceLocation("block/bamboo_block"), new ResourceLocation("block/bamboo_block_top"));
+        thinLogBlock(ModBlocks.THIN_STRIPPED_BAMBOO_BLOCK.get(), new ResourceLocation("block/stripped_bamboo_block"), new ResourceLocation("block/stripped_bamboo_block_top"));
     }
 
     public void thinLogBlock(Block block, ResourceLocation texture_side, ResourceLocation texture_top) {
@@ -67,7 +71,8 @@ public class ModelAndBlockStateProvider extends BlockStateProvider {
         ModelFile block_model_vertical_north_south_jungle_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_jungle_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_leaves_tint")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/jungle_leaves")).renderType("cutout");
         ModelFile block_model_vertical_north_south_mangrove_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_mangrove_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_leaves_tint")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/mangrove_leaves")).renderType("cutout");
         ModelFile block_model_vertical_north_south_azalea_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_azalea_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_leaves")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/azalea_leaves")).renderType("cutout");
-        ModelFile block_model_vertical_north_south_flowering_azalea_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_flowering_azalea_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_leaves")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/flowering_azalea_leaves")).renderType("cutout");
+        ModelFile block_model_vertical_north_south_flowering_azalea_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_flowering_azalea_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_leaves")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/flowering_azalea_leaves")).renderType("cutout");
+        ModelFile block_model_vertical_north_south_cherry_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_cherry_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_leaves")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/cherry_leaves")).renderType("cutout");
         ModelFile block_model_vertical_north_south_snow_layer_1 = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_snow_layer_1", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_snow_layer_1")).texture("log_side", texture_side).texture("log_top", texture_top).texture("snow", new ResourceLocation("block/snow"));
         ModelFile block_model_vertical_north_south_snow_layer_2 = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_snow_layer_2", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_snow_layer_2")).texture("log_side", texture_side).texture("log_top", texture_top).texture("snow", new ResourceLocation("block/snow"));
         ModelFile block_model_vertical_north_south_snow_layer_3 = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_north_south_snow_layer_3", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_north_south_snow_layer_3")).texture("log_side", texture_side).texture("log_top", texture_top).texture("snow", new ResourceLocation("block/snow"));
@@ -103,7 +108,8 @@ public class ModelAndBlockStateProvider extends BlockStateProvider {
         ModelFile block_model_vertical_east_west_jungle_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_jungle_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_leaves_tint")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/jungle_leaves")).renderType("cutout");
         ModelFile block_model_vertical_east_west_mangrove_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_mangrove_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_leaves_tint")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/mangrove_leaves")).renderType("cutout");
         ModelFile block_model_vertical_east_west_azalea_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_azalea_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_leaves")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/azalea_leaves")).renderType("cutout");
-        ModelFile block_model_vertical_east_west_flowering_azalea_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_flowering_azalea_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_leaves")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/flowering_azalea_leaves")).renderType("cutout");
+        ModelFile block_model_vertical_east_west_flowering_azalea_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_flowering_azalea_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_leaves")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/flowering_azalea_leaves")).renderType("cutout");
+        ModelFile block_model_vertical_east_west_cherry_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_cherry_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_leaves")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/cherry_leaves")).renderType("cutout");
         ModelFile block_model_vertical_east_west_snow_layer_1 = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_snow_layer_1", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_snow_layer_1")).texture("log_side", texture_side).texture("log_top", texture_top).texture("snow", new ResourceLocation("block/snow"));
         ModelFile block_model_vertical_east_west_snow_layer_2 = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_snow_layer_2", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_snow_layer_2")).texture("log_side", texture_side).texture("log_top", texture_top).texture("snow", new ResourceLocation("block/snow"));
         ModelFile block_model_vertical_east_west_snow_layer_3 = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_vertical_east_west_snow_layer_3", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_vertical_east_west_snow_layer_3")).texture("log_side", texture_side).texture("log_top", texture_top).texture("snow", new ResourceLocation("block/snow"));
@@ -139,7 +145,8 @@ public class ModelAndBlockStateProvider extends BlockStateProvider {
         ModelFile block_model_horizontal_jungle_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_jungle_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_leaves_tint")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/jungle_leaves")).renderType("cutout");
         ModelFile block_model_horizontal_mangrove_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_mangrove_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_leaves_tint")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/mangrove_leaves")).renderType("cutout");
         ModelFile block_model_horizontal_azalea_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_azalea_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_leaves")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/azalea_leaves")).renderType("cutout");
-        ModelFile block_model_horizontal_flowering_azalea_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_flowering_azalea_carpet", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_leaves")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/flowering_azalea_leaves")).renderType("cutout");
+        ModelFile block_model_horizontal_flowering_azalea_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_flowering_azalea_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_leaves")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/flowering_azalea_leaves")).renderType("cutout");
+        ModelFile block_model_horizontal_cherry_leaves = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_cherry_leaves", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_leaves")).texture("log_side", texture_side).texture("log_top", texture_top).texture("leaves", new ResourceLocation("block/cherry_leaves")).renderType("cutout");
         ModelFile block_model_horizontal_snow_layer_1 = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_snow_layer_1", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_snow_layer_1")).texture("log_side", texture_side).texture("log_top", texture_top).texture("snow", new ResourceLocation("block/snow"));
         ModelFile block_model_horizontal_snow_layer_2 = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_snow_layer_2", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_snow_layer_2")).texture("log_side", texture_side).texture("log_top", texture_top).texture("snow", new ResourceLocation("block/snow"));
         ModelFile block_model_horizontal_snow_layer_3 = models().withExistingParent(DataProvider.getRegistryName(block.asItem()) + "_horizontal_snow_layer_3", new ResourceLocation(ThinLogs.MOD_ID, "generation/thin_log_horizontal_snow_layer_3")).texture("log_side", texture_side).texture("log_top", texture_top).texture("snow", new ResourceLocation("block/snow"));
@@ -178,6 +185,7 @@ public class ModelAndBlockStateProvider extends BlockStateProvider {
                     case MANGROVE_LEAVES -> block_model_vertical_east_west_mangrove_leaves;
                     case AZALEA_LEAVES -> block_model_vertical_east_west_azalea_leaves;
                     case FLOWERING_AZALEA_LEAVES -> block_model_vertical_east_west_flowering_azalea_leaves;
+                    case CHERRY_LEAVES -> block_model_vertical_east_west_cherry_leaves;
                     case SNOW_LAYER_1 -> block_model_vertical_east_west_snow_layer_1;
                     case SNOW_LAYER_2 -> block_model_vertical_east_west_snow_layer_2;
                     case SNOW_LAYER_3 -> block_model_vertical_east_west_snow_layer_3;
@@ -216,6 +224,7 @@ public class ModelAndBlockStateProvider extends BlockStateProvider {
                     case MANGROVE_LEAVES -> block_model_horizontal_mangrove_leaves;
                     case AZALEA_LEAVES -> block_model_horizontal_azalea_leaves;
                     case FLOWERING_AZALEA_LEAVES -> block_model_horizontal_flowering_azalea_leaves;
+                    case CHERRY_LEAVES -> block_model_horizontal_cherry_leaves;
                     case SNOW_LAYER_1 -> block_model_horizontal_snow_layer_1;
                     case SNOW_LAYER_2 -> block_model_horizontal_snow_layer_2;
                     case SNOW_LAYER_3 -> block_model_horizontal_snow_layer_3;
@@ -254,6 +263,7 @@ public class ModelAndBlockStateProvider extends BlockStateProvider {
                     case MANGROVE_LEAVES -> block_model_vertical_north_south_mangrove_leaves;
                     case AZALEA_LEAVES -> block_model_vertical_north_south_azalea_leaves;
                     case FLOWERING_AZALEA_LEAVES -> block_model_vertical_north_south_flowering_azalea_leaves;
+                    case CHERRY_LEAVES -> block_model_vertical_north_south_cherry_leaves;
                     case SNOW_LAYER_1 -> block_model_vertical_north_south_snow_layer_1;
                     case SNOW_LAYER_2 -> block_model_vertical_north_south_snow_layer_2;
                     case SNOW_LAYER_3 -> block_model_vertical_north_south_snow_layer_3;

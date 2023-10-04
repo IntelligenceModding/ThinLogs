@@ -36,7 +36,7 @@ public class ClientEvents {
                         return BiomeColors.getAverageFoliageColor(level, pos);
                     }
                     return FoliageColor.getDefaultColor();
-                }, ModBlocks.THIN_OAK_LOG.get(), ModBlocks.THIN_STRIPPED_OAK_LOG.get(), ModBlocks.THIN_BIRCH_LOG.get(), ModBlocks.THIN_STRIPPED_BIRCH_LOG.get(), ModBlocks.THIN_SPRUCE_LOG.get(), ModBlocks.THIN_STRIPPED_SPRUCE_LOG.get(), ModBlocks.THIN_DARK_OAK_LOG.get(), ModBlocks.THIN_STRIPPED_DARK_OAK_LOG.get(), ModBlocks.THIN_ACACIA_LOG.get(), ModBlocks.THIN_STRIPPED_ACACIA_LOG.get(), ModBlocks.THIN_JUNGLE_LOG.get(), ModBlocks.THIN_STRIPPED_JUNGLE_LOG.get(), ModBlocks.THIN_MANGROVE_LOG.get(), ModBlocks.THIN_STRIPPED_MANGROVE_LOG.get(),ModBlocks.THIN_CRIMSON_STEM.get(), ModBlocks.THIN_STRIPPED_CRIMSON_STEM.get(), ModBlocks.THIN_WARPED_STEM.get(), ModBlocks.THIN_STRIPPED_WARPED_STEM.get());
+                }, ModBlocks.THIN_OAK_LOG.get(), ModBlocks.THIN_STRIPPED_OAK_LOG.get(), ModBlocks.THIN_BIRCH_LOG.get(), ModBlocks.THIN_STRIPPED_BIRCH_LOG.get(), ModBlocks.THIN_SPRUCE_LOG.get(), ModBlocks.THIN_STRIPPED_SPRUCE_LOG.get(), ModBlocks.THIN_DARK_OAK_LOG.get(), ModBlocks.THIN_STRIPPED_DARK_OAK_LOG.get(), ModBlocks.THIN_ACACIA_LOG.get(), ModBlocks.THIN_STRIPPED_ACACIA_LOG.get(), ModBlocks.THIN_JUNGLE_LOG.get(), ModBlocks.THIN_STRIPPED_JUNGLE_LOG.get(), ModBlocks.THIN_MANGROVE_LOG.get(), ModBlocks.THIN_STRIPPED_MANGROVE_LOG.get(),ModBlocks.THIN_CRIMSON_STEM.get(), ModBlocks.THIN_STRIPPED_CRIMSON_STEM.get(), ModBlocks.THIN_WARPED_STEM.get(), ModBlocks.THIN_STRIPPED_WARPED_STEM.get(), ModBlocks.THIN_CHERRY_LOG.get(), ModBlocks.THIN_STRIPPED_CHERRY_LOG.get(), ModBlocks.THIN_BAMBOO_BLOCK.get(), ModBlocks.THIN_STRIPPED_BAMBOO_BLOCK.get());
 
     }
 }
