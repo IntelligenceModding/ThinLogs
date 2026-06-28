@@ -2,10 +2,9 @@ package de.artemis.thinlogs.common.data;
 
 import de.artemis.thinlogs.ThinLogs;
 import de.artemis.thinlogs.common.registration.ModBlocks;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 
-public class LanguageProvider extends net.minecraftforge.common.data.LanguageProvider {
+public class LanguageProvider extends net.neoforged.neoforge.common.data.LanguageProvider {
 
     public LanguageProvider(PackOutput packOutput, String locale) {
         super(packOutput, ThinLogs.MOD_ID, locale);
@@ -37,5 +36,4 @@ public class LanguageProvider extends net.minecraftforge.common.data.LanguagePro
         add(ModBlocks.THIN_BAMBOO_BLOCK.get(), "Thin Bamboo Block");
         add(ModBlocks.THIN_STRIPPED_BAMBOO_BLOCK.get(), "Thin Stripped Bamboo Block");
     }
-
 }

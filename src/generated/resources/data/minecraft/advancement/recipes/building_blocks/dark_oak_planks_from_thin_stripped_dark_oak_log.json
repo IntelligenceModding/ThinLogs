@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:dark_oak_planks_from_thin_stripped_dark_oak_log"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_thin_stripped_dark_oak": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thinlogs:thin_stripped_dark_oak_log"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_thin_stripped_dark_oak"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:dark_oak_planks_from_thin_stripped_dark_oak_log"
+    ]
+  }
+}

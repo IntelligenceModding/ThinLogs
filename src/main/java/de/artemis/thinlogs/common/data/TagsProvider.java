@@ -5,6 +5,7 @@ import de.artemis.thinlogs.common.registration.ModBlocks;
 import de.artemis.thinlogs.common.registration.ModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -12,8 +13,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -40,7 +40,7 @@ public class TagsProvider {
         }
 
         private ResourceKey<Block> getKey(Block block) {
-            return ForgeRegistries.BLOCKS.getResourceKey(block).get();
+            return BuiltInRegistries.BLOCK.getResourceKey(block).orElseThrow();
         }
 
         @NotNull
@@ -70,7 +70,7 @@ public class TagsProvider {
         }
 
         private ResourceKey<Item> getKey(Item item) {
-            return ForgeRegistries.ITEMS.getResourceKey(item).get();
+            return BuiltInRegistries.ITEM.getResourceKey(item).orElseThrow();
         }
 
         @NotNull

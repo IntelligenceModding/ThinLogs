@@ -11,11 +11,11 @@ public class ModTags {
         public static final TagKey<net.minecraft.world.item.Item> CAN_BE_APPLIED_ON_THIN_LOGS = tag("can_be_applied_on_thin_logs");
 
         private static TagKey<net.minecraft.world.item.Item> tag(String name) {
-            return ItemTags.create(new ResourceLocation(ThinLogs.MOD_ID, name));
+            return ItemTags.create(ResourceLocation.fromNamespaceAndPath(ThinLogs.MOD_ID, name));
         }
 
         private static TagKey<net.minecraft.world.item.Item> forgeTag(String name) {
-            return ItemTags.create(new ResourceLocation("forge", name));
+            return ItemTags.create(ResourceLocation.fromNamespaceAndPath("forge", name));
         }
     }
 }

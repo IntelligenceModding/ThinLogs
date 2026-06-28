@@ -9,6 +9,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -29,8 +30,8 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.ToolAction;
-import net.minecraftforge.common.ToolActions;
+import net.neoforged.neoforge.common.ItemAbilities;
+import net.neoforged.neoforge.common.ItemAbility;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -213,24 +214,24 @@ public class ThinLogBlock extends RotatedPillarBlock {
 
     //Stripping
     @Override
-    public @Nullable BlockState getToolModifiedState(BlockState blockState, UseOnContext context, ToolAction toolAction, boolean simulate) {
-        if (toolAction == ToolActions.AXE_STRIP && !stripped) {
-            return ModBlocks.THIN_STRIPPED_OAK_LOG.get().defaultBlockState().setValue(AXIS, blockState.getValue(AXIS)).setValue(APPLIED_ON_THIN_LOG_BLOCK, blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK));
+    public @Nullable BlockState getToolModifiedState(BlockState blockState, UseOnContext context, ItemAbility itemAbility, boolean simulate) {
+        if (itemAbility == ItemAbilities.AXE_STRIP && !stripped) {
+            BlockState strippedState = getStrippedState(blockState);
+            if (strippedState != null) {
+                return strippedState;
+            }
         }
         return null;
     }
 
     @Override
-    public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
-        interactionHand = InteractionHand.MAIN_HAND;
-        ItemStack itemStackInHand = player.getItemInHand(interactionHand);
+    protected InteractionResult useWithoutItem(BlockState blockState, Level level, BlockPos blockPos, Player player, BlockHitResult blockHitResult) {
         Block appliedBlock = Block.byItem(blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).getItem().get());
 
         // Removing an applied Block
-        if (itemStackInHand.isEmpty() && !blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).equals(AppliedOnThinLogBlock.DEFAULT)) {
-            System.out.println("1");
+        if (!blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).equals(AppliedOnThinLogBlock.DEFAULT)) {
             level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.DEFAULT), 3);
-            level.playSound(player, blockPos, appliedBlock.getSoundType(blockState).getBreakSound(), SoundSource.BLOCKS, 1.0F, 1.0F);
+            level.playSound(player, blockPos, appliedBlock.defaultBlockState().getSoundType().getBreakSound(), SoundSource.BLOCKS, 1.0F, 1.0F);
 
             if (!player.isCreative() && !level.isClientSide) {
                 if (player.canTakeItem(new ItemStack(Block.byItem(blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).getItem().get())))) {
@@ -297,12 +298,15 @@ public class ThinLogBlock extends RotatedPillarBlock {
                 }
             }
 
-            return InteractionResult.SUCCESS;
+            return InteractionResult.sidedSuccess(level.isClientSide);
         }
+        return InteractionResult.PASS;
+    }
 
+    @Override
+    protected ItemInteractionResult useItemOn(ItemStack itemStackInHand, BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
         // Applying a block to the log
         if (itemStackInHand.is(ModTags.Item.CAN_BE_APPLIED_ON_THIN_LOGS)) {
-            System.out.println("2");
             boolean appliedBlockIsDefault = blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).equals(AppliedOnThinLogBlock.DEFAULT);
             boolean success = false;
 
@@ -417,21 +421,21 @@ public class ThinLogBlock extends RotatedPillarBlock {
             }
 
             if (itemStackInHand.getItem() instanceof BlockItem blockItem && success) {
-                SoundEvent soundEvent = blockItem.getBlock().getSoundType(blockState).getPlaceSound();
+                SoundEvent soundEvent = blockItem.getBlock().defaultBlockState().getSoundType().getPlaceSound();
                 level.playSound(player, blockPos, soundEvent, SoundSource.BLOCKS, 1.0F, 1.0F);
 
                 if (!player.isCreative()) {
                     itemStackInHand.shrink(1);
                 }
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.sidedSuccess(level.isClientSide);
             }
         }
-        return InteractionResult.PASS;
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
     @Override
-    public boolean onDestroyedByPlayer(BlockState blockState, Level level, BlockPos blockPos, Player player, boolean willHarvest, FluidState fluid) {
-        level.playSound(player, blockPos, Block.byItem(blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).getItem().get()).getSoundType(blockState).getBreakSound(), SoundSource.BLOCKS, 0.5F, 1.0F);
+    public BlockState playerWillDestroy(Level level, BlockPos blockPos, BlockState blockState, Player player) {
+        level.playSound(player, blockPos, Block.byItem(blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).getItem().get()).defaultBlockState().getSoundType().getBreakSound(), SoundSource.BLOCKS, 0.5F, 1.0F);
         Block appliedBlock = Block.byItem(blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).getItem().get());
 
         if (!player.isCreative() && !level.isClientSide) {
@@ -490,7 +494,7 @@ public class ThinLogBlock extends RotatedPillarBlock {
             }
         }
 
-        return super.onDestroyedByPlayer(blockState, level, blockPos, player, willHarvest, fluid);
+        return super.playerWillDestroy(level, blockPos, blockState, player);
     }
 
     @Override
@@ -501,5 +505,38 @@ public class ThinLogBlock extends RotatedPillarBlock {
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
         pBuilder.add(AXIS).add(APPLIED_ON_THIN_LOG_BLOCK);
+    }
+
+    private @Nullable BlockState getStrippedState(BlockState blockState) {
+        if (this == ModBlocks.THIN_OAK_LOG.get()) {
+            return withCopiedProperties(ModBlocks.THIN_STRIPPED_OAK_LOG.get(), blockState);
+        } else if (this == ModBlocks.THIN_BIRCH_LOG.get()) {
+            return withCopiedProperties(ModBlocks.THIN_STRIPPED_BIRCH_LOG.get(), blockState);
+        } else if (this == ModBlocks.THIN_SPRUCE_LOG.get()) {
+            return withCopiedProperties(ModBlocks.THIN_STRIPPED_SPRUCE_LOG.get(), blockState);
+        } else if (this == ModBlocks.THIN_DARK_OAK_LOG.get()) {
+            return withCopiedProperties(ModBlocks.THIN_STRIPPED_DARK_OAK_LOG.get(), blockState);
+        } else if (this == ModBlocks.THIN_ACACIA_LOG.get()) {
+            return withCopiedProperties(ModBlocks.THIN_STRIPPED_ACACIA_LOG.get(), blockState);
+        } else if (this == ModBlocks.THIN_JUNGLE_LOG.get()) {
+            return withCopiedProperties(ModBlocks.THIN_STRIPPED_JUNGLE_LOG.get(), blockState);
+        } else if (this == ModBlocks.THIN_MANGROVE_LOG.get()) {
+            return withCopiedProperties(ModBlocks.THIN_STRIPPED_MANGROVE_LOG.get(), blockState);
+        } else if (this == ModBlocks.THIN_CHERRY_LOG.get()) {
+            return withCopiedProperties(ModBlocks.THIN_STRIPPED_CHERRY_LOG.get(), blockState);
+        } else if (this == ModBlocks.THIN_BAMBOO_BLOCK.get()) {
+            return withCopiedProperties(ModBlocks.THIN_STRIPPED_BAMBOO_BLOCK.get(), blockState);
+        } else if (this == ModBlocks.THIN_CRIMSON_STEM.get()) {
+            return withCopiedProperties(ModBlocks.THIN_STRIPPED_CRIMSON_STEM.get(), blockState);
+        } else if (this == ModBlocks.THIN_WARPED_STEM.get()) {
+            return withCopiedProperties(ModBlocks.THIN_STRIPPED_WARPED_STEM.get(), blockState);
+        }
+        return null;
+    }
+
+    private BlockState withCopiedProperties(Block block, BlockState blockState) {
+        return block.defaultBlockState()
+                .setValue(AXIS, blockState.getValue(AXIS))
+                .setValue(APPLIED_ON_THIN_LOG_BLOCK, blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK));
     }
 }
