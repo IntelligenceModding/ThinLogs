@@ -2,20 +2,24 @@ package de.artemis.thinlogs.common.registration;
 
 import de.artemis.thinlogs.ThinLogs;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.block.Block;
 
-public class ModTags {
+public final class ModTags {
+    private ModTags() {
+    }
 
-    public static class Item {
-        public static final TagKey<net.minecraft.world.item.Item> CAN_BE_APPLIED_ON_THIN_LOGS = tag("can_be_applied_on_thin_logs");
+    public static final class BlockTagsSet {
+        public static final TagKey<Block> THIN_LOG_OVERLAY_LEAVES = blockTag("thin_log_overlay_leaves");
+        public static final TagKey<Block> THIN_LOG_OVERLAY_CARPETS = blockTag("thin_log_overlay_carpets");
+        public static final TagKey<Block> THIN_LOG_OVERLAY_SNOW = blockTag("thin_log_overlay_snow");
 
-        private static TagKey<net.minecraft.world.item.Item> tag(String name) {
-            return ItemTags.create(ResourceLocation.fromNamespaceAndPath(ThinLogs.MOD_ID, name));
+        private BlockTagsSet() {
         }
 
-        private static TagKey<net.minecraft.world.item.Item> forgeTag(String name) {
-            return ItemTags.create(ResourceLocation.fromNamespaceAndPath("forge", name));
+        private static TagKey<Block> blockTag(String name) {
+            return BlockTags.create(ResourceLocation.fromNamespaceAndPath(ThinLogs.MOD_ID, name));
         }
     }
 }

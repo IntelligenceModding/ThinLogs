@@ -23,7 +23,6 @@ public class DataProvider {
         generator.addProvider(event.includeClient(), new ItemModelProvider(generator.getPackOutput(), existingFileHelper));
         generator.addProvider(event.includeClient(), new LanguageProvider(generator.getPackOutput(), "en_us"));
         generator.addProvider(event.includeServer(), new BlockLootTablesProvider(generator.getPackOutput(), future));
-        generator.addProvider(event.includeServer(), new TagsProvider.ItemTagsProvider(generator.getPackOutput(), future, existingFileHelper));
         generator.addProvider(event.includeServer(), new TagsProvider.BlockTagsProvider(generator.getPackOutput(), future, existingFileHelper));
         generator.addProvider(event.includeServer(), new RecipesProvider(generator.getPackOutput(), future));
     }

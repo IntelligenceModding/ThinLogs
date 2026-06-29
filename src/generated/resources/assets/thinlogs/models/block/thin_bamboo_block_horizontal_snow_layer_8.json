@@ -1,8 +1,0 @@
-{
-  "parent": "thinlogs:generation/thin_log_horizontal_snow_layer_8",
-  "textures": {
-    "log_side": "minecraft:block/bamboo_block",
-    "log_top": "minecraft:block/bamboo_block_top",
-    "snow": "minecraft:block/snow"
-  }
-}

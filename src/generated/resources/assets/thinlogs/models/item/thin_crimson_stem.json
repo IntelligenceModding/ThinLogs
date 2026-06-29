@@ -1,7 +1,3 @@
 {
-  "parent": "thinlogs:generation/thin_log_horizontal",
-  "textures": {
-    "log_side": "minecraft:block/crimson_stem",
-    "log_top": "minecraft:block/crimson_stem_top"
-  }
+  "parent": "thinlogs:block/thin_crimson_stem_inventory"
 }

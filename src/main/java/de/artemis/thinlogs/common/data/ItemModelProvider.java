@@ -2,45 +2,21 @@ package de.artemis.thinlogs.common.data;
 
 import de.artemis.thinlogs.ThinLogs;
 import de.artemis.thinlogs.common.registration.ModBlocks;
+import de.artemis.thinlogs.common.registration.ThinLogSet;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 public class ItemModelProvider extends net.neoforged.neoforge.client.model.generators.ItemModelProvider {
-
     public ItemModelProvider(PackOutput packOutput, ExistingFileHelper existingFileHelper) {
         super(packOutput, ThinLogs.MOD_ID, existingFileHelper);
     }
 
     @Override
     protected void registerModels() {
-        thinLogBlock(ModBlocks.THIN_OAK_LOG.get(), ResourceLocation.withDefaultNamespace("block/oak_log"), ResourceLocation.withDefaultNamespace("block/oak_log_top"));
-        thinLogBlock(ModBlocks.THIN_STRIPPED_OAK_LOG.get(), ResourceLocation.withDefaultNamespace("block/stripped_oak_log"), ResourceLocation.withDefaultNamespace("block/stripped_oak_log_top"));
-        thinLogBlock(ModBlocks.THIN_BIRCH_LOG.get(), ResourceLocation.withDefaultNamespace("block/birch_log"), ResourceLocation.withDefaultNamespace("block/birch_log_top"));
-        thinLogBlock(ModBlocks.THIN_STRIPPED_BIRCH_LOG.get(), ResourceLocation.withDefaultNamespace("block/stripped_birch_log"), ResourceLocation.withDefaultNamespace("block/stripped_birch_log_top"));
-        thinLogBlock(ModBlocks.THIN_SPRUCE_LOG.get(), ResourceLocation.withDefaultNamespace("block/spruce_log"), ResourceLocation.withDefaultNamespace("block/spruce_log_top"));
-        thinLogBlock(ModBlocks.THIN_STRIPPED_SPRUCE_LOG.get(), ResourceLocation.withDefaultNamespace("block/stripped_spruce_log"), ResourceLocation.withDefaultNamespace("block/stripped_spruce_log_top"));
-        thinLogBlock(ModBlocks.THIN_DARK_OAK_LOG.get(), ResourceLocation.withDefaultNamespace("block/dark_oak_log"), ResourceLocation.withDefaultNamespace("block/dark_oak_log_top"));
-        thinLogBlock(ModBlocks.THIN_STRIPPED_DARK_OAK_LOG.get(), ResourceLocation.withDefaultNamespace("block/stripped_dark_oak_log"), ResourceLocation.withDefaultNamespace("block/stripped_dark_oak_log_top"));
-        thinLogBlock(ModBlocks.THIN_ACACIA_LOG.get(), ResourceLocation.withDefaultNamespace("block/acacia_log"), ResourceLocation.withDefaultNamespace("block/acacia_log_top"));
-        thinLogBlock(ModBlocks.THIN_STRIPPED_ACACIA_LOG.get(), ResourceLocation.withDefaultNamespace("block/stripped_acacia_log"), ResourceLocation.withDefaultNamespace("block/stripped_acacia_log_top"));
-        thinLogBlock(ModBlocks.THIN_JUNGLE_LOG.get(), ResourceLocation.withDefaultNamespace("block/jungle_log"), ResourceLocation.withDefaultNamespace("block/jungle_log_top"));
-        thinLogBlock(ModBlocks.THIN_STRIPPED_JUNGLE_LOG.get(), ResourceLocation.withDefaultNamespace("block/stripped_jungle_log"), ResourceLocation.withDefaultNamespace("block/stripped_jungle_log_top"));
-        thinLogBlock(ModBlocks.THIN_MANGROVE_LOG.get(), ResourceLocation.withDefaultNamespace("block/mangrove_log"), ResourceLocation.withDefaultNamespace("block/mangrove_log_top"));
-        thinLogBlock(ModBlocks.THIN_STRIPPED_MANGROVE_LOG.get(), ResourceLocation.withDefaultNamespace("block/stripped_mangrove_log"), ResourceLocation.withDefaultNamespace("block/stripped_mangrove_log_top"));
-        thinLogBlock(ModBlocks.THIN_CRIMSON_STEM.get(), ResourceLocation.withDefaultNamespace("block/crimson_stem"), ResourceLocation.withDefaultNamespace("block/crimson_stem_top"));
-        thinLogBlock(ModBlocks.THIN_STRIPPED_CRIMSON_STEM.get(), ResourceLocation.withDefaultNamespace("block/stripped_crimson_stem"), ResourceLocation.withDefaultNamespace("block/stripped_crimson_stem_top"));
-        thinLogBlock(ModBlocks.THIN_WARPED_STEM.get(), ResourceLocation.withDefaultNamespace("block/warped_stem"), ResourceLocation.withDefaultNamespace("block/warped_stem_top"));
-        thinLogBlock(ModBlocks.THIN_STRIPPED_WARPED_STEM.get(), ResourceLocation.withDefaultNamespace("block/stripped_warped_stem"), ResourceLocation.withDefaultNamespace("block/stripped_warped_stem_top"));
-        thinLogBlock(ModBlocks.THIN_CHERRY_LOG.get(), ResourceLocation.withDefaultNamespace("block/cherry_log"), ResourceLocation.withDefaultNamespace("block/cherry_log_top"));
-        thinLogBlock(ModBlocks.THIN_STRIPPED_CHERRY_LOG.get(), ResourceLocation.withDefaultNamespace("block/stripped_cherry_log"), ResourceLocation.withDefaultNamespace("block/stripped_cherry_log_top"));
-        thinLogBlock(ModBlocks.THIN_BAMBOO_BLOCK.get(), ResourceLocation.withDefaultNamespace("block/bamboo_block"), ResourceLocation.withDefaultNamespace("block/bamboo_block_top"));
-        thinLogBlock(ModBlocks.THIN_STRIPPED_BAMBOO_BLOCK.get(), ResourceLocation.withDefaultNamespace("block/stripped_bamboo_block"), ResourceLocation.withDefaultNamespace("block/stripped_bamboo_block_top"));
-    }
-
-    public void thinLogBlock(Block block, ResourceLocation texture_side, ResourceLocation texture_top) {
-        withExistingParent(DataProvider.getRegistryName(block.asItem()), ResourceLocation.fromNamespaceAndPath(ThinLogs.MOD_ID, "generation/thin_log_horizontal")).texture("log_side", texture_side).texture("log_top", texture_top);
+        for (ThinLogSet set : ModBlocks.allSets()) {
+            withExistingParent(DataProvider.getRegistryName(set.thinBlock().get().asItem()), ResourceLocation.fromNamespaceAndPath(ThinLogs.MOD_ID, "block/" + set.definition().thinId() + "_inventory"));
+            withExistingParent(DataProvider.getRegistryName(set.strippedThinBlock().get().asItem()), ResourceLocation.fromNamespaceAndPath(ThinLogs.MOD_ID, "block/" + set.definition().strippedThinId() + "_inventory"));
+        }
     }
 }
-

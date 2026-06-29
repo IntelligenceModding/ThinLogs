@@ -1,17 +1,15 @@
 package de.artemis.thinlogs.common.blocks;
 
-import de.artemis.thinlogs.common.ModUtil;
-import de.artemis.thinlogs.common.blockStateProperties.AppliedOnThinLogBlock;
-import de.artemis.thinlogs.common.registration.ModBlocks;
-import de.artemis.thinlogs.common.registration.ModTags;
+import de.artemis.thinlogs.common.blockStateProperties.AnchorFace;
+import de.artemis.thinlogs.common.blockStateProperties.CoreOrientation;
+import de.artemis.thinlogs.common.blockStateProperties.ModBlockStateProperties;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -19,524 +17,225 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.tags.BlockTags;
 import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.ItemAbility;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.stream.Stream;
+import java.util.function.Supplier;
 
-import static de.artemis.thinlogs.common.blockStateProperties.ModBlockStateProperties.APPLIED_ON_THIN_LOG_BLOCK;
+public class ThinLogBlock extends Block implements EntityBlock {
+    private final boolean stripped;
+    @Nullable
+    private final Supplier<Block> strippedVariant;
 
-public class ThinLogBlock extends RotatedPillarBlock {
-    protected final boolean stripped;
-    protected static final VoxelShape VOXEL_SHAPE_HORIZONTAL = Block.box(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D);
-    protected static final VoxelShape VOXEL_SHAPE_HORIZONTAL_CARPET = Stream.of(Block.box(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D), Block.box(12.0D, 0.0D, 4.0D, 16.0D, 1.0D, 12.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 4.0D), Block.box(0.0D, 0.0D, 12.0D, 16.0D, 1.0D, 16.0D), Block.box(0.0D, 0.0D, 4.0D, 4.0D, 1.0D, 12.0D)).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
-    protected static final VoxelShape VOXEL_SHAPE_HORIZONTAL_SNOW_LAYER_1 = Stream.of(Block.box(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D), Block.box(12.0D, 0.0D, 4.0D, 16.0D, 2.0D, 12.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 4.0D), Block.box(0.0D, 0.0D, 12.0D, 16.0D, 2.0D, 16.0D), Block.box(0.0D, 0.0D, 4.0D, 4.0D, 2.0D, 12.0D)).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
-    protected static final VoxelShape VOXEL_SHAPE_HORIZONTAL_SNOW_LAYER_2 = Stream.of(Block.box(0.0D, 0.0D, 4.0D, 4.0D, 4.0D, 12.0D), Block.box(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D), Block.box(12.0D, 0.0D, 4.0D, 16.0D, 4.0D, 12.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 4.0D), Block.box(0.0D, 0.0D, 12.0D, 16.0D, 4.0D, 16.0D)).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
-    protected static final VoxelShape VOXEL_SHAPE_HORIZONTAL_SNOW_LAYER_3 = Stream.of(Block.box(0.0D, 0.0D, 4.0D, 4.0D, 6.0D, 12.0D), Block.box(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D), Block.box(12.0D, 0.0D, 4.0D, 16.0D, 6.0D, 12.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 4.0D), Block.box(0.0D, 0.0D, 12.0D, 16.0D, 6.0D, 16.0D)).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
-    protected static final VoxelShape VOXEL_SHAPE_HORIZONTAL_SNOW_LAYER_4 = Stream.of(Block.box(0.0D, 0.0D, 4.0D, 4.0D, 8.0D, 12.0D), Block.box(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D), Block.box(12.0D, 0.0D, 4.0D, 16.0D, 8.0D, 12.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 4.0D), Block.box(0.0D, 0.0D, 12.0D, 16.0D, 8.0D, 16.0D)).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
-    protected static final VoxelShape VOXEL_SHAPE_HORIZONTAL_SNOW_LAYER_5 = Stream.of(Block.box(0.0D, 0.0D, 4.0D, 4.0D, 10.0D, 12.0D), Block.box(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D), Block.box(12.0D, 0.0D, 4.0D, 16.0D, 10.0D, 12.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 10.0D, 4.0D), Block.box(0.0D, 0.0D, 12.0D, 16.0D, 10.0D, 16.0D)).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
-    protected static final VoxelShape VOXEL_SHAPE_HORIZONTAL_SNOW_LAYER_6 = Stream.of(Block.box(0.0D, 0.0D, 4.0D, 4.0D, 12.0D, 12.0D), Block.box(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D), Block.box(12.0D, 0.0D, 4.0D, 16.0D, 12.0D, 12.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 4.0D), Block.box(0.0D, 0.0D, 12.0D, 16.0D, 12.0D, 16.0D)).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
-    protected static final VoxelShape VOXEL_SHAPE_HORIZONTAL_SNOW_LAYER_7 = Stream.of(Block.box(0.0D, 0.0D, 4.0D, 4.0D, 14.0D, 12.0D), Block.box(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D), Block.box(12.0D, 0.0D, 4.0D, 16.0D, 14.0D, 12.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 4.0D), Block.box(0.0D, 0.0D, 12.0D, 16.0D, 14.0D, 16.0D)).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
-    protected static final VoxelShape VOXEL_SHAPE_HORIZONTAL_FULL_BLOCK = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-    protected static final VoxelShape VOXEL_SHAPE_VERTICAL = Block.box(4.0D, 4.0D, 0.0D, 12.0D, 12.0D, 16.0D);
-    protected static final VoxelShape VOXEL_SHAPE_VERTICAL_CARPET = Shapes.join(Block.box(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D), Block.box(4.0D, 4.0D, 0.0D, 12.0D, 12.0D, 16.0D), BooleanOp.OR);
-    protected static final VoxelShape VOXEL_SHAPE_VERTICAL_SNOW_LAYER_1 = Shapes.join(Block.box(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D), Block.box(4.0D, 4.0D, 0.0D, 12.0D, 12.0D, 16.0D), BooleanOp.OR);
-    protected static final VoxelShape VOXEL_SHAPE_VERTICAL_SNOW_LAYER_2 = Shapes.join(Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D), Block.box(4.0D, 4.0D, 0.0D, 12.0D, 12.0D, 16.0D), BooleanOp.OR);
-    protected static final VoxelShape VOXEL_SHAPE_VERTICAL_SNOW_LAYER_3 = Stream.of(Block.box(4.0D, 4.0D, 0.0D, 12.0D, 12.0D, 16.0D), Block.box(12.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 4.0D, 6.0D, 16.0D), Block.box(4.0D, 0.0D, 0.0D, 12.0D, 4.0D, 16.0D)).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
-    protected static final VoxelShape VOXEL_SHAPE_VERTICAL_SNOW_LAYER_4 = Stream.of(Block.box(4.0D, 4.0D, 0.0D, 12.0D, 12.0D, 16.0D), Block.box(12.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 4.0D, 8.0D, 16.0D), Block.box(4.0D, 0.0D, 0.0D, 12.0D, 4.0D, 16.0D)).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
-    protected static final VoxelShape VOXEL_SHAPE_VERTICAL_SNOW_LAYER_5 = Stream.of(Block.box(0.0D, 0.0D, 0.0D, 4.0D, 10.0D, 16.0D), Block.box(4.0D, 0.0D, 0.0D, 12.0D, 4.0D, 16.0D), Block.box(4.0D, 4.0D, 0.0D, 12.0D, 12.0D, 16.0D), Block.box(12.0D, 0.0D, 0.0D, 16.0D, 10.0D, 16.0D)).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
-    protected static final VoxelShape VOXEL_SHAPE_VERTICAL_SNOW_LAYER_6 = Stream.of(Block.box(4.0D, 4.0D, 0.0D, 12.0D, 12.0D, 16.0D), Block.box(12.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 4.0D, 12.0D, 16.0D), Block.box(4.0D, 0.0D, 0.0D, 12.0D, 4.0D, 16.0D)).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
-    protected static final VoxelShape VOXEL_SHAPE_VERTICAL_SNOW_LAYER_7 = Stream.of(Block.box(0.0D, 0.0D, 0.0D, 4.0D, 14.0D, 16.0D), Block.box(4.0D, 0.0D, 0.0D, 12.0D, 4.0D, 16.0D), Block.box(4.0D, 12.0D, 0.0D, 12.0D, 14.0D, 16.0D), Block.box(4.0D, 4.0D, 0.0D, 12.0D, 12.0D, 16.0D), Block.box(12.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D)).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
-    protected static final VoxelShape VOXEL_SHAPE_VERTICAL_FULL_BLOCK = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-
-    public ThinLogBlock(Properties properties, boolean stripped) {
-        super(properties.noOcclusion());
+    public ThinLogBlock(Properties properties, boolean stripped, @Nullable Supplier<Block> strippedVariant) {
+        super(properties.noOcclusion().pushReaction(PushReaction.NORMAL));
         this.stripped = stripped;
+        this.strippedVariant = strippedVariant;
+        registerDefaultState(defaultBlockState()
+                .setValue(ModBlockStateProperties.NORTH, false)
+                .setValue(ModBlockStateProperties.EAST, false)
+                .setValue(ModBlockStateProperties.SOUTH, false)
+                .setValue(ModBlockStateProperties.WEST, false)
+                .setValue(ModBlockStateProperties.UP, false)
+                .setValue(ModBlockStateProperties.DOWN, false)
+                .setValue(ModBlockStateProperties.ANCHOR_FACE, AnchorFace.NONE)
+                .setValue(ModBlockStateProperties.CORE_ORIENTATION, CoreOrientation.VERTICAL));
     }
 
     @Override
     public @NotNull VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
-        return switch (blockState.getValue(AXIS)) {
-            case X -> switch (blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK)) {
-                case MOSS_CARPET -> ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_CARPET);
-                case WHITE_CARPET -> ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_CARPET);
-                case ORANGE_CARPET -> ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_CARPET);
-                case MAGENTA_CARPET ->
-                        ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_CARPET);
-                case LIGHT_BLUE_CARPET ->
-                        ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_CARPET);
-                case YELLOW_CARPET -> ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_CARPET);
-                case LIME_CARPET -> ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_CARPET);
-                case PINK_CARPET -> ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_CARPET);
-                case GRAY_CARPET -> ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_CARPET);
-                case LIGHT_GRAY_CARPET ->
-                        ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_CARPET);
-                case CYAN_CARPET -> ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_CARPET);
-                case PURPLE_CARPET -> ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_CARPET);
-                case BLUE_CARPET -> ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_CARPET);
-                case BROWN_CARPET -> ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_CARPET);
-                case GREEN_CARPET -> ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_CARPET);
-                case RED_CARPET -> ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_CARPET);
-                case BLACK_CARPET -> ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_CARPET);
-                case OAK_LEAVES ->
-                        ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_FULL_BLOCK);
-                case BIRCH_LEAVES ->
-                        ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_FULL_BLOCK);
-                case SPRUCE_LEAVES ->
-                        ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_FULL_BLOCK);
-                case DARK_OAK_LEAVES ->
-                        ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_FULL_BLOCK);
-                case ACACIA_LEAVES ->
-                        ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_FULL_BLOCK);
-                case JUNGLE_LEAVES ->
-                        ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_FULL_BLOCK);
-                case MANGROVE_LEAVES ->
-                        ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_FULL_BLOCK);
-                case AZALEA_LEAVES ->
-                        ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_FULL_BLOCK);
-                case FLOWERING_AZALEA_LEAVES ->
-                        ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_FULL_BLOCK);
-                case CHERRY_LEAVES ->
-                        ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_FULL_BLOCK);
-                case SNOW_LAYER_1 ->
-                        ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_SNOW_LAYER_1);
-                case SNOW_LAYER_2 ->
-                        ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_SNOW_LAYER_2);
-                case SNOW_LAYER_3 ->
-                        ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_SNOW_LAYER_3);
-                case SNOW_LAYER_4 ->
-                        ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_SNOW_LAYER_4);
-                case SNOW_LAYER_5 ->
-                        ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_SNOW_LAYER_5);
-                case SNOW_LAYER_6 ->
-                        ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_SNOW_LAYER_6);
-                case SNOW_LAYER_7 ->
-                        ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_SNOW_LAYER_7);
-                case SNOW_LAYER_8 ->
-                        ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_FULL_BLOCK);
-                case SNOW_BLOCK ->
-                        ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL_FULL_BLOCK);
-                case DEFAULT -> ModUtil.rotateShape(Direction.NORTH, Direction.EAST, VOXEL_SHAPE_VERTICAL);
-            };
-            case Y -> switch (blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK)) {
-                case MOSS_CARPET -> VOXEL_SHAPE_HORIZONTAL_CARPET;
-                case WHITE_CARPET -> VOXEL_SHAPE_HORIZONTAL_CARPET;
-                case ORANGE_CARPET -> VOXEL_SHAPE_HORIZONTAL_CARPET;
-                case MAGENTA_CARPET -> VOXEL_SHAPE_HORIZONTAL_CARPET;
-                case LIGHT_BLUE_CARPET -> VOXEL_SHAPE_HORIZONTAL_CARPET;
-                case YELLOW_CARPET -> VOXEL_SHAPE_HORIZONTAL_CARPET;
-                case LIME_CARPET -> VOXEL_SHAPE_HORIZONTAL_CARPET;
-                case PINK_CARPET -> VOXEL_SHAPE_HORIZONTAL_CARPET;
-                case GRAY_CARPET -> VOXEL_SHAPE_HORIZONTAL_CARPET;
-                case LIGHT_GRAY_CARPET -> VOXEL_SHAPE_HORIZONTAL_CARPET;
-                case CYAN_CARPET -> VOXEL_SHAPE_HORIZONTAL_CARPET;
-                case PURPLE_CARPET -> VOXEL_SHAPE_HORIZONTAL_CARPET;
-                case BLUE_CARPET -> VOXEL_SHAPE_HORIZONTAL_CARPET;
-                case BROWN_CARPET -> VOXEL_SHAPE_HORIZONTAL_CARPET;
-                case GREEN_CARPET -> VOXEL_SHAPE_HORIZONTAL_CARPET;
-                case RED_CARPET -> VOXEL_SHAPE_HORIZONTAL_CARPET;
-                case BLACK_CARPET -> VOXEL_SHAPE_HORIZONTAL_CARPET;
-                case OAK_LEAVES -> VOXEL_SHAPE_HORIZONTAL_FULL_BLOCK;
-                case BIRCH_LEAVES -> VOXEL_SHAPE_HORIZONTAL_FULL_BLOCK;
-                case SPRUCE_LEAVES -> VOXEL_SHAPE_HORIZONTAL_FULL_BLOCK;
-                case DARK_OAK_LEAVES -> VOXEL_SHAPE_HORIZONTAL_FULL_BLOCK;
-                case ACACIA_LEAVES -> VOXEL_SHAPE_HORIZONTAL_FULL_BLOCK;
-                case JUNGLE_LEAVES -> VOXEL_SHAPE_HORIZONTAL_FULL_BLOCK;
-                case MANGROVE_LEAVES -> VOXEL_SHAPE_HORIZONTAL_FULL_BLOCK;
-                case AZALEA_LEAVES -> VOXEL_SHAPE_HORIZONTAL_FULL_BLOCK;
-                case FLOWERING_AZALEA_LEAVES -> VOXEL_SHAPE_HORIZONTAL_FULL_BLOCK;
-                case CHERRY_LEAVES -> VOXEL_SHAPE_HORIZONTAL_FULL_BLOCK;
-                case SNOW_LAYER_1 -> VOXEL_SHAPE_HORIZONTAL_SNOW_LAYER_1;
-                case SNOW_LAYER_2 -> VOXEL_SHAPE_HORIZONTAL_SNOW_LAYER_2;
-                case SNOW_LAYER_3 -> VOXEL_SHAPE_HORIZONTAL_SNOW_LAYER_3;
-                case SNOW_LAYER_4 -> VOXEL_SHAPE_HORIZONTAL_SNOW_LAYER_4;
-                case SNOW_LAYER_5 -> VOXEL_SHAPE_HORIZONTAL_SNOW_LAYER_5;
-                case SNOW_LAYER_6 -> VOXEL_SHAPE_HORIZONTAL_SNOW_LAYER_6;
-                case SNOW_LAYER_7 -> VOXEL_SHAPE_HORIZONTAL_SNOW_LAYER_7;
-                case SNOW_LAYER_8 -> VOXEL_SHAPE_HORIZONTAL_FULL_BLOCK;
-                case SNOW_BLOCK -> VOXEL_SHAPE_HORIZONTAL_FULL_BLOCK;
-                case DEFAULT -> VOXEL_SHAPE_HORIZONTAL;
-            };
-            case Z -> switch (blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK)) {
-                case MOSS_CARPET -> VOXEL_SHAPE_VERTICAL_CARPET;
-                case WHITE_CARPET -> VOXEL_SHAPE_VERTICAL_CARPET;
-                case ORANGE_CARPET -> VOXEL_SHAPE_VERTICAL_CARPET;
-                case MAGENTA_CARPET -> VOXEL_SHAPE_VERTICAL_CARPET;
-                case LIGHT_BLUE_CARPET -> VOXEL_SHAPE_VERTICAL_CARPET;
-                case YELLOW_CARPET -> VOXEL_SHAPE_VERTICAL_CARPET;
-                case LIME_CARPET -> VOXEL_SHAPE_VERTICAL_CARPET;
-                case PINK_CARPET -> VOXEL_SHAPE_VERTICAL_CARPET;
-                case GRAY_CARPET -> VOXEL_SHAPE_VERTICAL_CARPET;
-                case LIGHT_GRAY_CARPET -> VOXEL_SHAPE_VERTICAL_CARPET;
-                case CYAN_CARPET -> VOXEL_SHAPE_VERTICAL_CARPET;
-                case PURPLE_CARPET -> VOXEL_SHAPE_VERTICAL_CARPET;
-                case BLUE_CARPET -> VOXEL_SHAPE_VERTICAL_CARPET;
-                case BROWN_CARPET -> VOXEL_SHAPE_VERTICAL_CARPET;
-                case GREEN_CARPET -> VOXEL_SHAPE_VERTICAL_CARPET;
-                case RED_CARPET -> VOXEL_SHAPE_VERTICAL_CARPET;
-                case BLACK_CARPET -> VOXEL_SHAPE_VERTICAL_CARPET;
-                case OAK_LEAVES -> VOXEL_SHAPE_VERTICAL_FULL_BLOCK;
-                case BIRCH_LEAVES -> VOXEL_SHAPE_VERTICAL_FULL_BLOCK;
-                case SPRUCE_LEAVES -> VOXEL_SHAPE_VERTICAL_FULL_BLOCK;
-                case DARK_OAK_LEAVES -> VOXEL_SHAPE_VERTICAL_FULL_BLOCK;
-                case ACACIA_LEAVES -> VOXEL_SHAPE_VERTICAL_FULL_BLOCK;
-                case JUNGLE_LEAVES -> VOXEL_SHAPE_VERTICAL_FULL_BLOCK;
-                case MANGROVE_LEAVES -> VOXEL_SHAPE_VERTICAL_FULL_BLOCK;
-                case AZALEA_LEAVES -> VOXEL_SHAPE_VERTICAL_FULL_BLOCK;
-                case FLOWERING_AZALEA_LEAVES -> VOXEL_SHAPE_VERTICAL_FULL_BLOCK;
-                case CHERRY_LEAVES -> VOXEL_SHAPE_VERTICAL_FULL_BLOCK;
-                case SNOW_LAYER_1 -> VOXEL_SHAPE_VERTICAL_SNOW_LAYER_1;
-                case SNOW_LAYER_2 -> VOXEL_SHAPE_VERTICAL_SNOW_LAYER_2;
-                case SNOW_LAYER_3 -> VOXEL_SHAPE_VERTICAL_SNOW_LAYER_3;
-                case SNOW_LAYER_4 -> VOXEL_SHAPE_VERTICAL_SNOW_LAYER_4;
-                case SNOW_LAYER_5 -> VOXEL_SHAPE_VERTICAL_SNOW_LAYER_5;
-                case SNOW_LAYER_6 -> VOXEL_SHAPE_VERTICAL_SNOW_LAYER_6;
-                case SNOW_LAYER_7 -> VOXEL_SHAPE_VERTICAL_SNOW_LAYER_7;
-                case SNOW_LAYER_8 -> VOXEL_SHAPE_VERTICAL_FULL_BLOCK;
-                case SNOW_BLOCK -> VOXEL_SHAPE_VERTICAL_FULL_BLOCK;
-                case DEFAULT -> VOXEL_SHAPE_VERTICAL;
-            };
-        };
+        return ThinLogGeometry.shape(blockState);
     }
 
-    //Stripping
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(
+                ModBlockStateProperties.NORTH,
+                ModBlockStateProperties.EAST,
+                ModBlockStateProperties.SOUTH,
+                ModBlockStateProperties.WEST,
+                ModBlockStateProperties.UP,
+                ModBlockStateProperties.DOWN,
+                ModBlockStateProperties.ANCHOR_FACE,
+                ModBlockStateProperties.CORE_ORIENTATION
+        );
+    }
+
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        BlockPos pos = context.getClickedPos();
+        LevelAccessor level = context.getLevel();
+        Direction anchorDirection = context.getClickedFace().getOpposite();
+        BlockPos anchorPos = pos.relative(anchorDirection);
+        BlockState anchorState = level.getBlockState(anchorPos);
+
+        BlockState placedState = defaultBlockState();
+        if (!canHardConnectTo(anchorState) && isValidAnchor(anchorState, level, anchorPos, anchorDirection)) {
+            placedState = placedState.setValue(ModBlockStateProperties.ANCHOR_FACE, AnchorFace.fromDirection(anchorDirection));
+        }
+
+        return updateConnections(placedState, level, pos);
+    }
+
+    @Override
+    protected @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos currentPos, BlockPos neighborPos) {
+        AnchorFace anchorFace = state.getValue(ModBlockStateProperties.ANCHOR_FACE);
+        if (anchorFace.direction() == direction && !isValidAnchor(neighborState, level, neighborPos, direction)) {
+            state = state.setValue(ModBlockStateProperties.ANCHOR_FACE, AnchorFace.NONE);
+        }
+        return updateConnections(state, level, currentPos);
+    }
+
     @Override
     public @Nullable BlockState getToolModifiedState(BlockState blockState, UseOnContext context, ItemAbility itemAbility, boolean simulate) {
-        if (itemAbility == ItemAbilities.AXE_STRIP && !stripped) {
-            BlockState strippedState = getStrippedState(blockState);
-            if (strippedState != null) {
-                return strippedState;
-            }
+        if (itemAbility == ItemAbilities.AXE_STRIP && !stripped && strippedVariant != null) {
+            return copyConnections(strippedVariant.get().defaultBlockState(), blockState);
         }
         return null;
     }
 
     @Override
-    protected InteractionResult useWithoutItem(BlockState blockState, Level level, BlockPos blockPos, Player player, BlockHitResult blockHitResult) {
-        Block appliedBlock = Block.byItem(blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).getItem().get());
-
-        // Removing an applied Block
-        if (!blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).equals(AppliedOnThinLogBlock.DEFAULT)) {
-            level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.DEFAULT), 3);
-            level.playSound(player, blockPos, appliedBlock.defaultBlockState().getSoundType().getBreakSound(), SoundSource.BLOCKS, 1.0F, 1.0F);
-
-            if (!player.isCreative() && !level.isClientSide) {
-                if (player.canTakeItem(new ItemStack(Block.byItem(blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).getItem().get())))) {
-                    if (blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).equals(AppliedOnThinLogBlock.SNOW_LAYER_2)) {
-                        for (int i = 0; i < 2; i++) {
-                            if (!player.getInventory().add(new ItemStack(appliedBlock))) {
-                                ItemEntity itemEntity = new ItemEntity(level, blockPos.getX() + 0.5F, blockPos.getY() + 0.5F, blockPos.getZ() + 0.5F, new ItemStack(appliedBlock));
-                                itemEntity.setDefaultPickUpDelay();
-                                level.addFreshEntity(itemEntity);
-                            }
-                        }
-                    } else if (blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).equals(AppliedOnThinLogBlock.SNOW_LAYER_3)) {
-                        for (int i = 0; i < 3; i++) {
-                            if (!player.getInventory().add(new ItemStack(appliedBlock))) {
-                                ItemEntity itemEntity = new ItemEntity(level, blockPos.getX() + 0.5F, blockPos.getY() + 0.5F, blockPos.getZ() + 0.5F, new ItemStack(appliedBlock));
-                                itemEntity.setDefaultPickUpDelay();
-                                level.addFreshEntity(itemEntity);
-                            }
-                        }
-                    } else if (blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).equals(AppliedOnThinLogBlock.SNOW_LAYER_4)) {
-                        for (int i = 0; i < 4; i++) {
-                            if (!player.getInventory().add(new ItemStack(appliedBlock))) {
-                                ItemEntity itemEntity = new ItemEntity(level, blockPos.getX() + 0.5F, blockPos.getY() + 0.5F, blockPos.getZ() + 0.5F, new ItemStack(appliedBlock));
-                                itemEntity.setDefaultPickUpDelay();
-                                level.addFreshEntity(itemEntity);
-                            }
-                        }
-                    } else if (blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).equals(AppliedOnThinLogBlock.SNOW_LAYER_5)) {
-                        for (int i = 0; i < 5; i++) {
-                            if (!player.getInventory().add(new ItemStack(appliedBlock))) {
-                                ItemEntity itemEntity = new ItemEntity(level, blockPos.getX() + 0.5F, blockPos.getY() + 0.5F, blockPos.getZ() + 0.5F, new ItemStack(appliedBlock));
-                                itemEntity.setDefaultPickUpDelay();
-                                level.addFreshEntity(itemEntity);
-                            }
-                        }
-                    } else if (blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).equals(AppliedOnThinLogBlock.SNOW_LAYER_6)) {
-                        for (int i = 0; i < 6; i++) {
-                            if (!player.getInventory().add(new ItemStack(appliedBlock))) {
-                                ItemEntity itemEntity = new ItemEntity(level, blockPos.getX() + 0.5F, blockPos.getY() + 0.5F, blockPos.getZ() + 0.5F, new ItemStack(appliedBlock));
-                                itemEntity.setDefaultPickUpDelay();
-                                level.addFreshEntity(itemEntity);
-                            }
-                        }
-                    } else if (blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).equals(AppliedOnThinLogBlock.SNOW_LAYER_7)) {
-                        for (int i = 0; i < 7; i++) {
-                            if (!player.getInventory().add(new ItemStack(appliedBlock))) {
-                                ItemEntity itemEntity = new ItemEntity(level, blockPos.getX() + 0.5F, blockPos.getY() + 0.5F, blockPos.getZ() + 0.5F, new ItemStack(appliedBlock));
-                                itemEntity.setDefaultPickUpDelay();
-                                level.addFreshEntity(itemEntity);
-                            }
-                        }
-                    } else if (blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).equals(AppliedOnThinLogBlock.SNOW_LAYER_8)) {
-                        for (int i = 0; i < 8; i++) {
-                            if (!player.getInventory().add(new ItemStack(appliedBlock))) {
-                                ItemEntity itemEntity = new ItemEntity(level, blockPos.getX() + 0.5F, blockPos.getY() + 0.5F, blockPos.getZ() + 0.5F, new ItemStack(appliedBlock));
-                                itemEntity.setDefaultPickUpDelay();
-                                level.addFreshEntity(itemEntity);
-                            }
-                        }
-                    } else {
-                        player.addItem(new ItemStack(Block.byItem(blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).getItem().get())));
-
-                    }
-                }
-            }
-
-            return InteractionResult.sidedSuccess(level.isClientSide);
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+        ThinLogBlockEntity blockEntity = getThinLogBlockEntity(level, pos);
+        if (blockEntity == null || blockEntity.getOverlayState() == null) {
+            return InteractionResult.PASS;
         }
-        return InteractionResult.PASS;
+
+        if (!level.isClientSide) {
+            ItemStack drop = ThinLogOverlay.dropStack(blockEntity.getOverlayState());
+            if (!player.addItem(drop)) {
+                Block.popResource(level, pos, drop);
+            }
+            blockEntity.clearOverlay();
+        }
+
+        return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack itemStackInHand, BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
-        // Applying a block to the log
-        if (itemStackInHand.is(ModTags.Item.CAN_BE_APPLIED_ON_THIN_LOGS)) {
-            boolean appliedBlockIsDefault = blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).equals(AppliedOnThinLogBlock.DEFAULT);
-            boolean success = false;
+    protected ItemInteractionResult useItemOn(ItemStack itemStack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand interactionHand, BlockHitResult hitResult) {
+        if (!(itemStack.getItem() instanceof BlockItem blockItem)) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
 
-            if (itemStackInHand.is(Blocks.MOSS_CARPET.asItem()) && appliedBlockIsDefault) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.MOSS_CARPET), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.WHITE_CARPET.asItem()) && appliedBlockIsDefault) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.WHITE_CARPET), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.ORANGE_CARPET.asItem()) && appliedBlockIsDefault) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.ORANGE_CARPET), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.MAGENTA_CARPET.asItem()) && appliedBlockIsDefault) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.MAGENTA_CARPET), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.LIGHT_BLUE_CARPET.asItem()) && appliedBlockIsDefault) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.LIGHT_BLUE_CARPET), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.YELLOW_CARPET.asItem()) && appliedBlockIsDefault) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.YELLOW_CARPET), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.LIME_CARPET.asItem()) && appliedBlockIsDefault) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.LIME_CARPET), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.PINK_CARPET.asItem()) && appliedBlockIsDefault) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.PINK_CARPET), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.GRAY_CARPET.asItem()) && appliedBlockIsDefault) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.GRAY_CARPET), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.LIGHT_GRAY_CARPET.asItem()) && appliedBlockIsDefault) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.LIGHT_GRAY_CARPET), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.CYAN_CARPET.asItem()) && appliedBlockIsDefault) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.CYAN_CARPET), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.PURPLE_CARPET.asItem()) && appliedBlockIsDefault) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.PURPLE_CARPET), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.BLUE_CARPET.asItem()) && appliedBlockIsDefault) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.BLUE_CARPET), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.BROWN_CARPET.asItem()) && appliedBlockIsDefault) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.BROWN_CARPET), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.GREEN_CARPET.asItem()) && appliedBlockIsDefault) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.GREEN_CARPET), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.RED_CARPET.asItem()) && appliedBlockIsDefault) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.RED_CARPET), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.BLACK_CARPET.asItem()) && appliedBlockIsDefault) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.BLACK_CARPET), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.OAK_LEAVES.asItem()) && appliedBlockIsDefault) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.OAK_LEAVES), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.BIRCH_LEAVES.asItem()) && appliedBlockIsDefault) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.BIRCH_LEAVES), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.SPRUCE_LEAVES.asItem()) && appliedBlockIsDefault) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.SPRUCE_LEAVES), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.DARK_OAK_LEAVES.asItem()) && appliedBlockIsDefault) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.DARK_OAK_LEAVES), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.ACACIA_LEAVES.asItem()) && appliedBlockIsDefault) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.ACACIA_LEAVES), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.JUNGLE_LEAVES.asItem()) && appliedBlockIsDefault) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.JUNGLE_LEAVES), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.MANGROVE_LEAVES.asItem()) && appliedBlockIsDefault) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.MANGROVE_LEAVES), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.AZALEA_LEAVES.asItem()) && appliedBlockIsDefault) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.AZALEA_LEAVES), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.FLOWERING_AZALEA_LEAVES.asItem()) && appliedBlockIsDefault) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.FLOWERING_AZALEA_LEAVES), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.CHERRY_LEAVES.asItem()) && appliedBlockIsDefault) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.CHERRY_LEAVES), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.SNOW_BLOCK.asItem()) && appliedBlockIsDefault) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.SNOW_BLOCK), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.SNOW.asItem()) && appliedBlockIsDefault) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.SNOW_LAYER_1), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.SNOW.asItem()) && blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).equals(AppliedOnThinLogBlock.SNOW_LAYER_1)) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.SNOW_LAYER_2), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.SNOW.asItem()) && blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).equals(AppliedOnThinLogBlock.SNOW_LAYER_2)) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.SNOW_LAYER_3), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.SNOW.asItem()) && blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).equals(AppliedOnThinLogBlock.SNOW_LAYER_3)) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.SNOW_LAYER_4), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.SNOW.asItem()) && blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).equals(AppliedOnThinLogBlock.SNOW_LAYER_4)) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.SNOW_LAYER_5), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.SNOW.asItem()) && blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).equals(AppliedOnThinLogBlock.SNOW_LAYER_5)) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.SNOW_LAYER_6), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.SNOW.asItem()) && blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).equals(AppliedOnThinLogBlock.SNOW_LAYER_6)) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.SNOW_LAYER_7), 3);
-                success = true;
-            } else if (itemStackInHand.is(Blocks.SNOW.asItem()) && blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).equals(AppliedOnThinLogBlock.SNOW_LAYER_7)) {
-                level.setBlock(blockPos, blockState.setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.SNOW_LAYER_8), 3);
-                success = true;
-            }
+        ThinLogBlockEntity blockEntity = getThinLogBlockEntity(level, pos);
+        if (blockEntity == null) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
 
-            if (itemStackInHand.getItem() instanceof BlockItem blockItem && success) {
-                SoundEvent soundEvent = blockItem.getBlock().defaultBlockState().getSoundType().getPlaceSound();
-                level.playSound(player, blockPos, soundEvent, SoundSource.BLOCKS, 1.0F, 1.0F);
+        BlockState candidateOverlay = blockItem.getBlock().defaultBlockState();
+        if (!ThinLogOverlay.canApply(blockEntity.getOverlayState(), candidateOverlay)) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
 
-                if (!player.isCreative()) {
-                    itemStackInHand.shrink(1);
-                }
-                return ItemInteractionResult.sidedSuccess(level.isClientSide);
+        BlockState nextOverlay = ThinLogOverlay.nextOverlayState(blockEntity.getOverlayState(), candidateOverlay);
+        if (!level.isClientSide) {
+            blockEntity.setOverlayState(nextOverlay);
+            SoundEvent soundEvent = blockItem.getBlock().defaultBlockState().getSoundType().getPlaceSound();
+            level.playSound(null, pos, soundEvent, SoundSource.BLOCKS, 1.0F, 1.0F);
+            if (!player.isCreative()) {
+                itemStack.shrink(1);
             }
         }
-        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+
+        return ItemInteractionResult.sidedSuccess(level.isClientSide);
     }
 
     @Override
-    public BlockState playerWillDestroy(Level level, BlockPos blockPos, BlockState blockState, Player player) {
-        level.playSound(player, blockPos, Block.byItem(blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).getItem().get()).defaultBlockState().getSoundType().getBreakSound(), SoundSource.BLOCKS, 0.5F, 1.0F);
-        Block appliedBlock = Block.byItem(blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).getItem().get());
-
+    public @NotNull BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         if (!player.isCreative() && !level.isClientSide) {
-            if (blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).equals(AppliedOnThinLogBlock.SNOW_LAYER_2)) {
-                for (int i = 0; i < 2; i++) {
-                    ItemEntity itemEntity = new ItemEntity(level, blockPos.getX() + 0.5F, blockPos.getY() + 0.5F, blockPos.getZ() + 0.5F, new ItemStack(appliedBlock));
-                    itemEntity.setDefaultPickUpDelay();
-                    level.addFreshEntity(itemEntity);
-                }
-            } else if (blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).equals(AppliedOnThinLogBlock.SNOW_LAYER_3)) {
-                for (int i = 0; i < 3; i++) {
-                    ItemEntity itemEntity = new ItemEntity(level, blockPos.getX() + 0.5F, blockPos.getY() + 0.5F, blockPos.getZ() + 0.5F, new ItemStack(appliedBlock));
-                    itemEntity.setDefaultPickUpDelay();
-                    level.addFreshEntity(itemEntity);
-
-                }
-            } else if (blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).equals(AppliedOnThinLogBlock.SNOW_LAYER_4)) {
-                for (int i = 0; i < 4; i++) {
-                    ItemEntity itemEntity = new ItemEntity(level, blockPos.getX() + 0.5F, blockPos.getY() + 0.5F, blockPos.getZ() + 0.5F, new ItemStack(appliedBlock));
-                    itemEntity.setDefaultPickUpDelay();
-                    level.addFreshEntity(itemEntity);
-
-                }
-            } else if (blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).equals(AppliedOnThinLogBlock.SNOW_LAYER_5)) {
-                for (int i = 0; i < 5; i++) {
-                    ItemEntity itemEntity = new ItemEntity(level, blockPos.getX() + 0.5F, blockPos.getY() + 0.5F, blockPos.getZ() + 0.5F, new ItemStack(appliedBlock));
-                    itemEntity.setDefaultPickUpDelay();
-                    level.addFreshEntity(itemEntity);
-
-                }
-            } else if (blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).equals(AppliedOnThinLogBlock.SNOW_LAYER_6)) {
-                for (int i = 0; i < 6; i++) {
-                    ItemEntity itemEntity = new ItemEntity(level, blockPos.getX() + 0.5F, blockPos.getY() + 0.5F, blockPos.getZ() + 0.5F, new ItemStack(appliedBlock));
-                    itemEntity.setDefaultPickUpDelay();
-                    level.addFreshEntity(itemEntity);
-
-                }
-            } else if (blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).equals(AppliedOnThinLogBlock.SNOW_LAYER_7)) {
-                for (int i = 0; i < 7; i++) {
-                    ItemEntity itemEntity = new ItemEntity(level, blockPos.getX() + 0.5F, blockPos.getY() + 0.5F, blockPos.getZ() + 0.5F, new ItemStack(appliedBlock));
-                    itemEntity.setDefaultPickUpDelay();
-                    level.addFreshEntity(itemEntity);
-
-                }
-            } else if (blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK).equals(AppliedOnThinLogBlock.SNOW_LAYER_8)) {
-                for (int i = 0; i < 8; i++) {
-                    ItemEntity itemEntity = new ItemEntity(level, blockPos.getX() + 0.5F, blockPos.getY() + 0.5F, blockPos.getZ() + 0.5F, new ItemStack(appliedBlock));
-                    itemEntity.setDefaultPickUpDelay();
-                    level.addFreshEntity(itemEntity);
-
-                }
-            } else {
-                ItemEntity itemEntity = new ItemEntity(level, blockPos.getX() + 0.5F, blockPos.getY() + 0.5F, blockPos.getZ() + 0.5F, new ItemStack(appliedBlock));
-                itemEntity.setDefaultPickUpDelay();
-                level.addFreshEntity(itemEntity);
+            ThinLogBlockEntity blockEntity = getThinLogBlockEntity(level, pos);
+            if (blockEntity != null && blockEntity.getOverlayState() != null) {
+                ThinLogOverlay.drop(level, pos, blockEntity.getOverlayState());
+                blockEntity.clearOverlay();
             }
         }
 
-        return super.playerWillDestroy(level, blockPos, blockState, player);
+        return super.playerWillDestroy(level, pos, state, player);
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        return this.defaultBlockState().setValue(AXIS, pContext.getClickedFace().getAxis()).setValue(APPLIED_ON_THIN_LOG_BLOCK, AppliedOnThinLogBlock.DEFAULT);
-    }
-
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
-        pBuilder.add(AXIS).add(APPLIED_ON_THIN_LOG_BLOCK);
-    }
-
-    private @Nullable BlockState getStrippedState(BlockState blockState) {
-        if (this == ModBlocks.THIN_OAK_LOG.get()) {
-            return withCopiedProperties(ModBlocks.THIN_STRIPPED_OAK_LOG.get(), blockState);
-        } else if (this == ModBlocks.THIN_BIRCH_LOG.get()) {
-            return withCopiedProperties(ModBlocks.THIN_STRIPPED_BIRCH_LOG.get(), blockState);
-        } else if (this == ModBlocks.THIN_SPRUCE_LOG.get()) {
-            return withCopiedProperties(ModBlocks.THIN_STRIPPED_SPRUCE_LOG.get(), blockState);
-        } else if (this == ModBlocks.THIN_DARK_OAK_LOG.get()) {
-            return withCopiedProperties(ModBlocks.THIN_STRIPPED_DARK_OAK_LOG.get(), blockState);
-        } else if (this == ModBlocks.THIN_ACACIA_LOG.get()) {
-            return withCopiedProperties(ModBlocks.THIN_STRIPPED_ACACIA_LOG.get(), blockState);
-        } else if (this == ModBlocks.THIN_JUNGLE_LOG.get()) {
-            return withCopiedProperties(ModBlocks.THIN_STRIPPED_JUNGLE_LOG.get(), blockState);
-        } else if (this == ModBlocks.THIN_MANGROVE_LOG.get()) {
-            return withCopiedProperties(ModBlocks.THIN_STRIPPED_MANGROVE_LOG.get(), blockState);
-        } else if (this == ModBlocks.THIN_CHERRY_LOG.get()) {
-            return withCopiedProperties(ModBlocks.THIN_STRIPPED_CHERRY_LOG.get(), blockState);
-        } else if (this == ModBlocks.THIN_BAMBOO_BLOCK.get()) {
-            return withCopiedProperties(ModBlocks.THIN_STRIPPED_BAMBOO_BLOCK.get(), blockState);
-        } else if (this == ModBlocks.THIN_CRIMSON_STEM.get()) {
-            return withCopiedProperties(ModBlocks.THIN_STRIPPED_CRIMSON_STEM.get(), blockState);
-        } else if (this == ModBlocks.THIN_WARPED_STEM.get()) {
-            return withCopiedProperties(ModBlocks.THIN_STRIPPED_WARPED_STEM.get(), blockState);
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+        if (!state.is(newState.getBlock())) {
+            ThinLogBlockEntity blockEntity = getThinLogBlockEntity(level, pos);
+            if (blockEntity != null && blockEntity.getOverlayState() != null) {
+                ThinLogOverlay.drop(level, pos, blockEntity.getOverlayState());
+                blockEntity.clearOverlay();
+            }
         }
-        return null;
+        super.onRemove(state, level, pos, newState, movedByPiston);
     }
 
-    private BlockState withCopiedProperties(Block block, BlockState blockState) {
-        return block.defaultBlockState()
-                .setValue(AXIS, blockState.getValue(AXIS))
-                .setValue(APPLIED_ON_THIN_LOG_BLOCK, blockState.getValue(APPLIED_ON_THIN_LOG_BLOCK));
+    @Override
+    public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new ThinLogBlockEntity(pos, state);
+    }
+
+    private static boolean canHardConnectTo(BlockState state) {
+        return state.getBlock() instanceof ThinLogBlock || state.is(BlockTags.LOGS);
+    }
+
+    private static boolean isValidAnchor(BlockState state, LevelAccessor level, BlockPos neighborPos, Direction direction) {
+        return !canHardConnectTo(state) && state.isFaceSturdy(level, neighborPos, direction.getOpposite());
+    }
+
+    private static BlockState updateConnections(BlockState state, LevelAccessor level, BlockPos pos) {
+        AnchorFace anchorFace = state.getValue(ModBlockStateProperties.ANCHOR_FACE);
+        for (Direction direction : Direction.values()) {
+            BlockPos neighborPos = pos.relative(direction);
+            BlockState neighborState = level.getBlockState(neighborPos);
+            boolean connected = canHardConnectTo(neighborState)
+                    || (anchorFace.direction() == direction && isValidAnchor(neighborState, level, neighborPos, direction));
+            state = state.setValue(ModBlockStateProperties.connection(direction), connected);
+        }
+        return state.setValue(ModBlockStateProperties.CORE_ORIENTATION, resolveCoreOrientation(state));
+    }
+
+    private static BlockState copyConnections(BlockState target, BlockState source) {
+        for (Direction direction : Direction.values()) {
+            target = target.setValue(ModBlockStateProperties.connection(direction), source.getValue(ModBlockStateProperties.connection(direction)));
+        }
+        return target
+                .setValue(ModBlockStateProperties.ANCHOR_FACE, source.getValue(ModBlockStateProperties.ANCHOR_FACE))
+                .setValue(ModBlockStateProperties.CORE_ORIENTATION, source.getValue(ModBlockStateProperties.CORE_ORIENTATION));
+    }
+
+    private static CoreOrientation resolveCoreOrientation(BlockState state) {
+        boolean x = state.getValue(ModBlockStateProperties.EAST) || state.getValue(ModBlockStateProperties.WEST);
+        boolean y = state.getValue(ModBlockStateProperties.UP) || state.getValue(ModBlockStateProperties.DOWN);
+        boolean z = state.getValue(ModBlockStateProperties.NORTH) || state.getValue(ModBlockStateProperties.SOUTH);
+
+        if (y) {
+            return CoreOrientation.VERTICAL;
+        }
+        if (x && z) {
+            return CoreOrientation.JUNCTION;
+        }
+        if (x) {
+            return CoreOrientation.EAST_WEST;
+        }
+        if (z) {
+            return CoreOrientation.NORTH_SOUTH;
+        }
+        return CoreOrientation.VERTICAL;
+    }
+
+    @Nullable
+    private static ThinLogBlockEntity getThinLogBlockEntity(Level level, BlockPos pos) {
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+        return blockEntity instanceof ThinLogBlockEntity thinLogBlockEntity ? thinLogBlockEntity : null;
     }
 }

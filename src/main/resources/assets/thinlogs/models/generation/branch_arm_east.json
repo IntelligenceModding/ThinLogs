@@ -1,0 +1,19 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "#log_side"
+  },
+  "elements": [
+    {
+      "from": [11, 5, 5],
+      "to": [16, 11, 11],
+      "faces": {
+        "down": { "texture": "#log_side", "uv": [5, 5, 11, 10], "rotation": 90 },
+        "up": { "texture": "#log_side", "uv": [5, 5, 11, 10], "rotation": 90 },
+        "north": { "texture": "#log_side", "uv": [5, 5, 11, 10], "rotation": 90 },
+        "south": { "texture": "#log_side", "uv": [5, 5, 11, 10], "rotation": 90 },
+        "east": { "texture": "#log_side" }
+      }
+    }
+  ]
+}

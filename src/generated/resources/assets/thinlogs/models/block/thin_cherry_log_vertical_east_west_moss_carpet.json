@@ -1,8 +1,0 @@
-{
-  "parent": "thinlogs:generation/thin_log_vertical_east_west_carpet",
-  "textures": {
-    "carpet": "minecraft:block/moss_block",
-    "log_side": "minecraft:block/cherry_log",
-    "log_top": "minecraft:block/cherry_log_top"
-  }
-}

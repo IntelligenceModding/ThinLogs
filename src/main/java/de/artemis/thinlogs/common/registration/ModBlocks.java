@@ -1,90 +1,101 @@
 package de.artemis.thinlogs.common.registration;
 
-import de.artemis.thinlogs.ThinLogs;
 import de.artemis.thinlogs.common.blocks.ThinLogBlock;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.registries.DeferredBlock;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 
-public class ModBlocks {
-    private static <T extends Block> DeferredBlock<T> register(String name, Supplier<T> block) {
-        DeferredBlock<T> toReturn = Registration.BLOCKS.register(name, block);
-        Registration.ITEMS.register(name, () -> new BlockItem(toReturn.get(), new Item.Properties()));
+public final class ModBlocks {
+    private static final List<ThinLogSet> THIN_LOG_SETS = new ArrayList<>();
+    private static final Set<String> EXPECTED_VANILLA_THIN_IDS = Set.of(
+            "thin_oak_log",
+            "thin_spruce_log",
+            "thin_birch_log",
+            "thin_jungle_log",
+            "thin_acacia_log",
+            "thin_dark_oak_log",
+            "thin_mangrove_log",
+            "thin_cherry_log",
+            "thin_bamboo_block",
+            "thin_crimson_stem",
+            "thin_warped_stem"
+    );
 
-        return toReturn;
+    public static final ThinLogSet OAK = registerSet(ThinLogSetDefinition.log("oak", () -> Blocks.OAK_LOG, () -> Blocks.STRIPPED_OAK_LOG, () -> Blocks.OAK_PLANKS));
+    public static final ThinLogSet BIRCH = registerSet(ThinLogSetDefinition.log("birch", () -> Blocks.BIRCH_LOG, () -> Blocks.STRIPPED_BIRCH_LOG, () -> Blocks.BIRCH_PLANKS));
+    public static final ThinLogSet SPRUCE = registerSet(ThinLogSetDefinition.log("spruce", () -> Blocks.SPRUCE_LOG, () -> Blocks.STRIPPED_SPRUCE_LOG, () -> Blocks.SPRUCE_PLANKS));
+    public static final ThinLogSet DARK_OAK = registerSet(ThinLogSetDefinition.log("dark_oak", () -> Blocks.DARK_OAK_LOG, () -> Blocks.STRIPPED_DARK_OAK_LOG, () -> Blocks.DARK_OAK_PLANKS));
+    public static final ThinLogSet ACACIA = registerSet(ThinLogSetDefinition.log("acacia", () -> Blocks.ACACIA_LOG, () -> Blocks.STRIPPED_ACACIA_LOG, () -> Blocks.ACACIA_PLANKS));
+    public static final ThinLogSet JUNGLE = registerSet(ThinLogSetDefinition.log("jungle", () -> Blocks.JUNGLE_LOG, () -> Blocks.STRIPPED_JUNGLE_LOG, () -> Blocks.JUNGLE_PLANKS));
+    public static final ThinLogSet MANGROVE = registerSet(ThinLogSetDefinition.log("mangrove", () -> Blocks.MANGROVE_LOG, () -> Blocks.STRIPPED_MANGROVE_LOG, () -> Blocks.MANGROVE_PLANKS));
+    public static final ThinLogSet CHERRY = registerSet(ThinLogSetDefinition.log("cherry", () -> Blocks.CHERRY_LOG, () -> Blocks.STRIPPED_CHERRY_LOG, () -> Blocks.CHERRY_PLANKS));
+    public static final ThinLogSet BAMBOO = registerSet(ThinLogSetDefinition.bamboo(() -> Blocks.BAMBOO_BLOCK, () -> Blocks.STRIPPED_BAMBOO_BLOCK, () -> Blocks.BAMBOO_PLANKS));
+    public static final ThinLogSet CRIMSON = registerSet(ThinLogSetDefinition.stem("crimson", () -> Blocks.CRIMSON_STEM, () -> Blocks.STRIPPED_CRIMSON_STEM, () -> Blocks.CRIMSON_PLANKS));
+    public static final ThinLogSet WARPED = registerSet(ThinLogSetDefinition.stem("warped", () -> Blocks.WARPED_STEM, () -> Blocks.STRIPPED_WARPED_STEM, () -> Blocks.WARPED_PLANKS));
+
+    static {
+        validateVanillaCoverage();
+    }
+
+    private ModBlocks() {
+    }
+
+    private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> blockSupplier) {
+        DeferredBlock<T> registeredBlock = Registration.BLOCKS.register(name, blockSupplier);
+        Registration.ITEMS.register(name, () -> new BlockItem(registeredBlock.get(), new Item.Properties()));
+        return registeredBlock;
+    }
+
+    public static ThinLogSet registerSet(ThinLogSetDefinition definition) {
+        @SuppressWarnings("unchecked")
+        DeferredBlock<ThinLogBlock>[] strippedHolder = new DeferredBlock[1];
+
+        DeferredBlock<ThinLogBlock> thinBlock = registerBlock(definition.thinId(), () -> new ThinLogBlock(definition.createProperties(), false, () -> strippedHolder[0].get()));
+        DeferredBlock<ThinLogBlock> strippedThinBlock = registerBlock(definition.strippedThinId(), () -> new ThinLogBlock(definition.createProperties(), true, null));
+        strippedHolder[0] = strippedThinBlock;
+
+        ThinLogSet set = new ThinLogSet(definition, thinBlock, strippedThinBlock);
+        THIN_LOG_SETS.add(set);
+        return set;
+    }
+
+    public static List<ThinLogSet> allSets() {
+        return List.copyOf(THIN_LOG_SETS);
+    }
+
+    public static Block[] allThinLogBlocks() {
+        return THIN_LOG_SETS.stream()
+                .flatMap(set -> set.allBlocks().stream())
+                .toArray(Block[]::new);
+    }
+
+    private static void validateVanillaCoverage() {
+        Set<String> registeredThinIds = new LinkedHashSet<>();
+        for (ThinLogSet set : THIN_LOG_SETS) {
+            if (!registeredThinIds.add(set.definition().thinId())) {
+                throw new IllegalStateException("Duplicate thin log set registered for id " + set.definition().thinId());
+            }
+        }
+
+        if (!registeredThinIds.equals(EXPECTED_VANILLA_THIN_IDS)) {
+            Set<String> missing = new LinkedHashSet<>(EXPECTED_VANILLA_THIN_IDS);
+            missing.removeAll(registeredThinIds);
+
+            Set<String> unexpected = new LinkedHashSet<>(registeredThinIds);
+            unexpected.removeAll(EXPECTED_VANILLA_THIN_IDS);
+
+            throw new IllegalStateException("Thin log set coverage mismatch. Missing=" + missing + ", unexpected=" + unexpected);
+        }
     }
 
     public static void register() {
     }
-
-    public static final DeferredBlock<ThinLogBlock> THIN_OAK_LOG = register("thin_oak_log",
-            () -> new ThinLogBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F).sound(SoundType.WOOD), false));
-
-    public static final DeferredBlock<ThinLogBlock> THIN_STRIPPED_OAK_LOG = register("thin_stripped_oak_log",
-            () -> new ThinLogBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F).sound(SoundType.WOOD), true));
-
-    public static final DeferredBlock<ThinLogBlock> THIN_BIRCH_LOG = register("thin_birch_log",
-            () -> new ThinLogBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F).sound(SoundType.WOOD), false));
-
-    public static final DeferredBlock<ThinLogBlock> THIN_STRIPPED_BIRCH_LOG = register("thin_stripped_birch_log",
-            () -> new ThinLogBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F).sound(SoundType.WOOD), true));
-
-    public static final DeferredBlock<ThinLogBlock> THIN_SPRUCE_LOG = register("thin_spruce_log",
-            () -> new ThinLogBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F).sound(SoundType.WOOD), false));
-
-    public static final DeferredBlock<ThinLogBlock> THIN_STRIPPED_SPRUCE_LOG = register("thin_stripped_spruce_log",
-            () -> new ThinLogBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F).sound(SoundType.WOOD), true));
-
-    public static final DeferredBlock<ThinLogBlock> THIN_DARK_OAK_LOG = register("thin_dark_oak_log",
-            () -> new ThinLogBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F).sound(SoundType.WOOD), false));
-
-    public static final DeferredBlock<ThinLogBlock> THIN_STRIPPED_DARK_OAK_LOG = register("thin_stripped_dark_oak_log",
-            () -> new ThinLogBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F).sound(SoundType.WOOD), true));
-
-    public static final DeferredBlock<ThinLogBlock> THIN_ACACIA_LOG = register("thin_acacia_log",
-            () -> new ThinLogBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F).sound(SoundType.WOOD), false));
-
-    public static final DeferredBlock<ThinLogBlock> THIN_STRIPPED_ACACIA_LOG = register("thin_stripped_acacia_log",
-            () -> new ThinLogBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F).sound(SoundType.WOOD), true));
-
-    public static final DeferredBlock<ThinLogBlock> THIN_JUNGLE_LOG = register("thin_jungle_log",
-            () -> new ThinLogBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F).sound(SoundType.WOOD), false));
-
-    public static final DeferredBlock<ThinLogBlock> THIN_STRIPPED_JUNGLE_LOG = register("thin_stripped_jungle_log",
-            () -> new ThinLogBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F).sound(SoundType.WOOD), true));
-
-    public static final DeferredBlock<ThinLogBlock> THIN_MANGROVE_LOG = register("thin_mangrove_log",
-            () -> new ThinLogBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F).sound(SoundType.WOOD), false));
-
-    public static final DeferredBlock<ThinLogBlock> THIN_STRIPPED_MANGROVE_LOG = register("thin_stripped_mangrove_log",
-            () -> new ThinLogBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F).sound(SoundType.WOOD), true));
-
-    public static final DeferredBlock<ThinLogBlock> THIN_CHERRY_LOG = register("thin_cherry_log",
-            () -> new ThinLogBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F).sound(SoundType.WOOD), false));
-
-    public static final DeferredBlock<ThinLogBlock> THIN_STRIPPED_CHERRY_LOG = register("thin_stripped_cherry_log",
-            () -> new ThinLogBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F).sound(SoundType.WOOD), true));
-
-    public static final DeferredBlock<ThinLogBlock> THIN_BAMBOO_BLOCK = register("thin_bamboo_block",
-            () -> new ThinLogBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F).sound(SoundType.BAMBOO_WOOD), false));
-
-    public static final DeferredBlock<ThinLogBlock> THIN_STRIPPED_BAMBOO_BLOCK = register("thin_stripped_bamboo_log",
-            () -> new ThinLogBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F).sound(SoundType.BAMBOO_WOOD), true));
-
-    public static final DeferredBlock<ThinLogBlock> THIN_CRIMSON_STEM = register("thin_crimson_stem",
-            () -> new ThinLogBlock(BlockBehaviour.Properties.of().strength(2.0F).sound(SoundType.WOOD), false));
-
-    public static final DeferredBlock<ThinLogBlock> THIN_STRIPPED_CRIMSON_STEM = register("thin_stripped_crimson_stem",
-            () -> new ThinLogBlock(BlockBehaviour.Properties.of().strength(2.0F).sound(SoundType.WOOD), true));
-
-    public static final DeferredBlock<ThinLogBlock> THIN_WARPED_STEM = register("thin_warped_stem",
-            () -> new ThinLogBlock(BlockBehaviour.Properties.of().strength(2.0F).sound(SoundType.WOOD), false));
-
-    public static final DeferredBlock<ThinLogBlock> THIN_STRIPPED_WARPED_STEM = register("thin_stripped_warped_stem",
-            () -> new ThinLogBlock(BlockBehaviour.Properties.of().strength(2.0F).sound(SoundType.WOOD), true));
 }

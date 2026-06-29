@@ -1,7 +1,3 @@
 {
-  "parent": "thinlogs:generation/thin_log_horizontal",
-  "textures": {
-    "log_side": "minecraft:block/oak_log",
-    "log_top": "minecraft:block/oak_log_top"
-  }
+  "parent": "thinlogs:block/thin_oak_log_inventory"
 }

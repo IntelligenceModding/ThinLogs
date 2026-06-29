@@ -1,0 +1,7 @@
+{
+  "parent": "thinlogs:generation/branch_inventory",
+  "textures": {
+    "log_side": "minecraft:block/spruce_log",
+    "log_top": "minecraft:block/spruce_log_top"
+  }
+}
