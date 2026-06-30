@@ -1,7 +1,13 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_cherry": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thinlogs:thin_cherry_log"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_thin_cherry_log": {
       "conditions": {
         "items": [
           {
@@ -10,18 +16,12 @@
         ]
       },
       "trigger": "minecraft:inventory_changed"
-    },
-    "has_the_recipe": {
-      "conditions": {
-        "recipe": "thinlogs:thin_cherry_log"
-      },
-      "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
       "has_the_recipe",
-      "has_cherry"
+      "has_thin_cherry_log"
     ]
   ],
   "rewards": {

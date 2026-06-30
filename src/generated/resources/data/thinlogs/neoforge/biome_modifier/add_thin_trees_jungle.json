@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "minecraft:jungle",
+  "features": "thinlogs:thin_trees_jungle",
+  "step": "vegetal_decoration"
+}

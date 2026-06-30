@@ -12,7 +12,7 @@
         "up": { "texture": "#log_side", "uv": [5, 5, 11, 10], "rotation": 90 },
         "north": { "texture": "#log_side", "uv": [5, 5, 11, 10], "rotation": 90 },
         "south": { "texture": "#log_side", "uv": [5, 5, 11, 10], "rotation": 90 },
-        "west": { "texture": "#log_side" }
+        "west": { "texture": "#log_top" }
       }
     }
   ]

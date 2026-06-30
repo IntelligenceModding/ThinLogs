@@ -61,6 +61,25 @@ public final class ThinLogGeometry {
         return shape;
     }
 
+    public static VoxelShape surfaceOverlayShape(BlockState state, float heightPixels) {
+        VoxelShape shape = Shapes.empty();
+        for (Cuboid cuboid : cuboids(state)) {
+            shape = Shapes.join(
+                    shape,
+                    Block.box(
+                            cuboid.minX(),
+                            cuboid.maxY(),
+                            cuboid.minZ(),
+                            cuboid.maxX(),
+                            Math.min(16.0F, cuboid.maxY() + heightPixels),
+                            cuboid.maxZ()
+                    ),
+                    BooleanOp.OR
+            );
+        }
+        return shape;
+    }
+
     static int connectionMask(BlockState state) {
         int mask = 0;
         for (Direction direction : Direction.values()) {

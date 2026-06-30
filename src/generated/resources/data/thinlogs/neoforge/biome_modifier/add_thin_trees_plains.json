@@ -1,0 +1,11 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": [
+    "minecraft:plains",
+    "minecraft:sunflower_plains",
+    "minecraft:deep_dark",
+    "minecraft:dripstone_caves"
+  ],
+  "features": "thinlogs:thin_trees_plains",
+  "step": "vegetal_decoration"
+}

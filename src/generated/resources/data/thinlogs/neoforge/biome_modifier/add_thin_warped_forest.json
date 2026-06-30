@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "minecraft:warped_forest",
+  "features": "thinlogs:thin_warped_fungi",
+  "step": "vegetal_decoration"
+}

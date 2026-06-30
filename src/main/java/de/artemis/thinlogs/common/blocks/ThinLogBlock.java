@@ -6,6 +6,7 @@ import de.artemis.thinlogs.common.blockStateProperties.ModBlockStateProperties;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -20,12 +21,17 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.SnowyDirtBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.tags.BlockTags;
 import net.neoforged.neoforge.common.ItemAbilities;
@@ -36,6 +42,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Supplier;
 
 public class ThinLogBlock extends Block implements EntityBlock {
+    private static final int BLOCK_ENTITY_SYNC_FLAGS = 3 | 8;
     private final boolean stripped;
     @Nullable
     private final Supplier<Block> strippedVariant;
@@ -57,7 +64,26 @@ public class ThinLogBlock extends Block implements EntityBlock {
 
     @Override
     public @NotNull VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
-        return ThinLogGeometry.shape(blockState);
+        return combinedShape(blockState, blockGetter, blockPos, collisionContext, false);
+    }
+
+    @Override
+    public @NotNull VoxelShape getCollisionShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
+        return combinedShape(blockState, blockGetter, blockPos, collisionContext, true);
+    }
+
+    @Override
+    public @NotNull VoxelShape getInteractionShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos) {
+        return combinedShape(blockState, blockGetter, blockPos, CollisionContext.empty(), false);
+    }
+
+    @Override
+    public @NotNull VoxelShape getBlockSupportShape(BlockState state, BlockGetter blockGetter, BlockPos pos) {
+        ThinLogBlockEntity blockEntity = getThinLogBlockEntity(blockGetter, pos);
+        if (blockEntity != null && ThinLogOverlay.type(blockEntity.getFoliageOverlayState()) == ThinLogOverlay.OverlayType.LEAVES) {
+            return Shapes.block();
+        }
+        return super.getBlockSupportShape(state, blockGetter, pos);
     }
 
     @Override
@@ -96,7 +122,11 @@ public class ThinLogBlock extends Block implements EntityBlock {
         if (anchorFace.direction() == direction && !isValidAnchor(neighborState, level, neighborPos, direction)) {
             state = state.setValue(ModBlockStateProperties.ANCHOR_FACE, AnchorFace.NONE);
         }
-        return updateConnections(state, level, currentPos);
+        state = updateConnections(state, level, currentPos);
+        if (direction == Direction.DOWN && level instanceof Level actualLevel) {
+            dropUnsupportedOverlay(actualLevel, currentPos, state);
+        }
+        return state;
     }
 
     @Override
@@ -109,58 +139,39 @@ public class ThinLogBlock extends Block implements EntityBlock {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-        ThinLogBlockEntity blockEntity = getThinLogBlockEntity(level, pos);
-        if (blockEntity == null || blockEntity.getOverlayState() == null) {
-            return InteractionResult.PASS;
-        }
-
-        if (!level.isClientSide) {
-            ItemStack drop = ThinLogOverlay.dropStack(blockEntity.getOverlayState());
-            if (!player.addItem(drop)) {
-                Block.popResource(level, pos, drop);
-            }
-            blockEntity.clearOverlay();
-        }
-
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.PASS;
     }
 
     @Override
     protected ItemInteractionResult useItemOn(ItemStack itemStack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand interactionHand, BlockHitResult hitResult) {
-        if (!(itemStack.getItem() instanceof BlockItem blockItem)) {
+        ItemInteractionResult connectionResult = tryToggleConnection(itemStack, state, level, pos, player, hitResult);
+        if (connectionResult.consumesAction()) {
+            return connectionResult;
+        }
+
+        if (overlayCandidateState(itemStack) != null) {
+            return tryApplyOverlay(itemStack, level, pos, player);
+        }
+
+        if (itemStack.getItem() instanceof BlockItem) {
             return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
 
-        ThinLogBlockEntity blockEntity = getThinLogBlockEntity(level, pos);
-        if (blockEntity == null) {
-            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-        }
-
-        BlockState candidateOverlay = blockItem.getBlock().defaultBlockState();
-        if (!ThinLogOverlay.canApply(blockEntity.getOverlayState(), candidateOverlay)) {
-            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-        }
-
-        BlockState nextOverlay = ThinLogOverlay.nextOverlayState(blockEntity.getOverlayState(), candidateOverlay);
-        if (!level.isClientSide) {
-            blockEntity.setOverlayState(nextOverlay);
-            SoundEvent soundEvent = blockItem.getBlock().defaultBlockState().getSoundType().getPlaceSound();
-            level.playSound(null, pos, soundEvent, SoundSource.BLOCKS, 1.0F, 1.0F);
-            if (!player.isCreative()) {
-                itemStack.shrink(1);
-            }
-        }
-
-        return ItemInteractionResult.sidedSuccess(level.isClientSide);
+        return tryRemoveOverlay(itemStack, level, pos, player);
     }
 
     @Override
     public @NotNull BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
-        if (!player.isCreative() && !level.isClientSide) {
-            ThinLogBlockEntity blockEntity = getThinLogBlockEntity(level, pos);
-            if (blockEntity != null && blockEntity.getOverlayState() != null) {
-                ThinLogOverlay.drop(level, pos, blockEntity.getOverlayState());
-                blockEntity.clearOverlay();
+        if (!level.isClientSide) {
+            ThinLogBlockEntity blockEntity = getOrCreateThinLogBlockEntity(level, pos, state);
+            if (blockEntity != null) {
+                if (!player.isCreative()) {
+                    ThinLogOverlay.drop(level, pos, blockEntity.getSurfaceOverlayState());
+                    ThinLogOverlay.drop(level, pos, blockEntity.getFoliageOverlayState());
+                }
+                blockEntity.clearSurfaceOverlay();
+                blockEntity.clearFoliageOverlay();
+                updateBelowSnowyState(level, pos, null, null);
             }
         }
 
@@ -169,11 +180,28 @@ public class ThinLogBlock extends Block implements EntityBlock {
 
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+        if (newState.getBlock() instanceof ThinLogBlock) {
+            ThinLogBlockEntity previousBlockEntity = getThinLogBlockEntity(level, pos);
+            super.onRemove(state, level, pos, newState, movedByPiston);
+            if (previousBlockEntity != null) {
+                ThinLogBlockEntity replacementBlockEntity = getOrCreateThinLogBlockEntity(level, pos, newState);
+                if (replacementBlockEntity != null) {
+                    previousBlockEntity.copyPersistentStateTo(replacementBlockEntity);
+                    updateBelowSnowyState(level, pos, replacementBlockEntity.getFoliageOverlayState(), replacementBlockEntity.getSurfaceOverlayState());
+                    syncThinLogBlockEntity(level, pos);
+                }
+            }
+            return;
+        }
+
         if (!state.is(newState.getBlock())) {
-            ThinLogBlockEntity blockEntity = getThinLogBlockEntity(level, pos);
-            if (blockEntity != null && blockEntity.getOverlayState() != null) {
-                ThinLogOverlay.drop(level, pos, blockEntity.getOverlayState());
-                blockEntity.clearOverlay();
+            ThinLogBlockEntity blockEntity = getOrCreateThinLogBlockEntity(level, pos, state);
+            if (blockEntity != null) {
+                ThinLogOverlay.drop(level, pos, blockEntity.getSurfaceOverlayState());
+                ThinLogOverlay.drop(level, pos, blockEntity.getFoliageOverlayState());
+                blockEntity.clearSurfaceOverlay();
+                blockEntity.clearFoliageOverlay();
+                updateBelowSnowyState(level, pos, null, null);
             }
         }
         super.onRemove(state, level, pos, newState, movedByPiston);
@@ -194,11 +222,15 @@ public class ThinLogBlock extends Block implements EntityBlock {
 
     private static BlockState updateConnections(BlockState state, LevelAccessor level, BlockPos pos) {
         AnchorFace anchorFace = state.getValue(ModBlockStateProperties.ANCHOR_FACE);
+        ThinLogBlockEntity blockEntity = getThinLogBlockEntity(level, pos);
         for (Direction direction : Direction.values()) {
             BlockPos neighborPos = pos.relative(direction);
             BlockState neighborState = level.getBlockState(neighborPos);
             boolean connected = canHardConnectTo(neighborState)
                     || (anchorFace.direction() == direction && isValidAnchor(neighborState, level, neighborPos, direction));
+            if (blockEntity != null && blockEntity.isConnectionDisabled(direction)) {
+                connected = false;
+            }
             state = state.setValue(ModBlockStateProperties.connection(direction), connected);
         }
         return state.setValue(ModBlockStateProperties.CORE_ORIENTATION, resolveCoreOrientation(state));
@@ -214,28 +246,340 @@ public class ThinLogBlock extends Block implements EntityBlock {
     }
 
     private static CoreOrientation resolveCoreOrientation(BlockState state) {
-        boolean x = state.getValue(ModBlockStateProperties.EAST) || state.getValue(ModBlockStateProperties.WEST);
-        boolean y = state.getValue(ModBlockStateProperties.UP) || state.getValue(ModBlockStateProperties.DOWN);
-        boolean z = state.getValue(ModBlockStateProperties.NORTH) || state.getValue(ModBlockStateProperties.SOUTH);
+        boolean east = state.getValue(ModBlockStateProperties.EAST);
+        boolean west = state.getValue(ModBlockStateProperties.WEST);
+        boolean up = state.getValue(ModBlockStateProperties.UP);
+        boolean down = state.getValue(ModBlockStateProperties.DOWN);
+        boolean north = state.getValue(ModBlockStateProperties.NORTH);
+        boolean south = state.getValue(ModBlockStateProperties.SOUTH);
+        boolean x = east || west;
+        boolean y = up || down;
+        boolean z = north || south;
 
-        if (y) {
+        if (y && !x && !z) {
             return CoreOrientation.VERTICAL;
         }
-        if (x && z) {
-            return CoreOrientation.JUNCTION;
-        }
-        if (x) {
+        if (x && !y && !z) {
             return CoreOrientation.EAST_WEST;
         }
-        if (z) {
+        if (z && !x && !y) {
             return CoreOrientation.NORTH_SOUTH;
         }
-        return CoreOrientation.VERTICAL;
+        return CoreOrientation.JUNCTION;
+    }
+
+    private static BlockState resolveOverlayState(BlockState candidateOverlay) {
+        if (ThinLogOverlay.type(candidateOverlay) == ThinLogOverlay.OverlayType.LEAVES) {
+            if (candidateOverlay.hasProperty(LeavesBlock.PERSISTENT)) {
+                candidateOverlay = candidateOverlay.setValue(LeavesBlock.PERSISTENT, true);
+            }
+            if (candidateOverlay.hasProperty(LeavesBlock.DISTANCE)) {
+                candidateOverlay = candidateOverlay.setValue(LeavesBlock.DISTANCE, 1);
+            }
+        }
+        return candidateOverlay;
+    }
+
+    private static VoxelShape combinedShape(BlockState state, BlockGetter blockGetter, BlockPos pos, CollisionContext collisionContext, boolean collision) {
+        VoxelShape shape = ThinLogGeometry.shape(state);
+        ThinLogBlockEntity blockEntity = getThinLogBlockEntity(blockGetter, pos);
+        if (blockEntity == null) {
+            return shape;
+        }
+
+        shape = joinOverlayShape(shape, blockEntity.getFoliageOverlayState(), state, blockGetter, pos, collisionContext, collision);
+        return joinOverlayShape(shape, blockEntity.getSurfaceOverlayState(), state, blockGetter, pos, collisionContext, collision);
+    }
+
+    private static VoxelShape joinOverlayShape(VoxelShape shape, @Nullable BlockState overlayState, BlockState baseState, BlockGetter blockGetter, BlockPos pos, CollisionContext collisionContext, boolean collision) {
+        if (overlayState == null) {
+            return shape;
+        }
+
+        VoxelShape overlayShape = overlayShapeFor(overlayState, baseState, blockGetter, pos, collisionContext, collision);
+        if (overlayShape.isEmpty()) {
+            return shape;
+        }
+
+        return Shapes.join(shape, overlayShape, BooleanOp.OR);
+    }
+
+    private static VoxelShape overlayShapeFor(BlockState overlayState, BlockState baseState, BlockGetter blockGetter, BlockPos pos, CollisionContext collisionContext, boolean collision) {
+        ThinLogOverlay.OverlayType overlayType = ThinLogOverlay.type(overlayState);
+        if (overlayType == ThinLogOverlay.OverlayType.NONE) {
+            return Shapes.empty();
+        }
+        if (overlayType == ThinLogOverlay.OverlayType.LEAVES && collision) {
+            return Shapes.block();
+        }
+        return collision
+                ? overlayState.getCollisionShape(blockGetter, pos, collisionContext)
+                : overlayState.getShape(blockGetter, pos, collisionContext);
+    }
+
+    public static ItemInteractionResult tryToggleConnection(ItemStack itemStack, BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+        if (!player.isShiftKeyDown() || !itemStack.canPerformAction(ItemAbilities.AXE_STRIP)) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+
+        ThinLogBlockEntity blockEntity = getOrCreateThinLogBlockEntity(level, pos, state);
+        if (blockEntity == null) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+
+        Direction direction = resolveConnectionDirection(hitResult, pos);
+        if (!canToggleConnection(state, level, pos, blockEntity, direction)) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+
+        if (!level.isClientSide) {
+            boolean disabled = !blockEntity.isConnectionDisabled(direction);
+            boolean changed = blockEntity.setConnectionDisabled(direction, disabled);
+
+            BlockPos neighborPos = pos.relative(direction);
+            BlockState neighborState = level.getBlockState(neighborPos);
+            if (neighborState.getBlock() instanceof ThinLogBlock) {
+                ThinLogBlockEntity neighborBlockEntity = getOrCreateThinLogBlockEntity(level, neighborPos, neighborState);
+                if (neighborBlockEntity != null) {
+                    changed |= neighborBlockEntity.setConnectionDisabled(direction.getOpposite(), disabled);
+                    updateThinLogState(level, neighborPos, neighborState);
+                }
+            }
+
+            updateThinLogState(level, pos, state);
+            if (changed) {
+                syncThinLogBlockEntity(level, pos);
+                if (neighborState.getBlock() instanceof ThinLogBlock) {
+                    syncThinLogBlockEntity(level, neighborPos);
+                }
+            }
+            level.playSound(null, pos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, disabled ? 0.9F : 1.1F);
+        }
+
+        return ItemInteractionResult.sidedSuccess(level.isClientSide);
+    }
+
+    private static boolean canToggleConnection(BlockState state, Level level, BlockPos pos, ThinLogBlockEntity blockEntity, Direction direction) {
+        if (blockEntity.isConnectionDisabled(direction)) {
+            return true;
+        }
+
+        BlockPos neighborPos = pos.relative(direction);
+        BlockState neighborState = level.getBlockState(neighborPos);
+        AnchorFace anchorFace = state.getValue(ModBlockStateProperties.ANCHOR_FACE);
+
+        return canHardConnectTo(neighborState)
+                || (anchorFace.direction() == direction && isValidAnchor(neighborState, level, neighborPos, direction));
+    }
+
+    private static Direction resolveConnectionDirection(BlockHitResult hitResult, BlockPos pos) {
+        Vec3 localHit = hitResult.getLocation().subtract(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
+        double absX = Math.abs(localHit.x);
+        double absY = Math.abs(localHit.y);
+        double absZ = Math.abs(localHit.z);
+
+        if (absX > absY && absX > absZ) {
+            return localHit.x >= 0.0D ? Direction.EAST : Direction.WEST;
+        }
+        if (absY > absZ) {
+            return localHit.y >= 0.0D ? Direction.UP : Direction.DOWN;
+        }
+        if (absZ > 0.0D) {
+            return localHit.z >= 0.0D ? Direction.SOUTH : Direction.NORTH;
+        }
+        return hitResult.getDirection();
+    }
+
+    private static void updateThinLogState(Level level, BlockPos pos, BlockState state) {
+        BlockState updatedState = updateConnections(state, level, pos);
+        if (updatedState != state) {
+            level.setBlock(pos, updatedState, 3);
+        }
+    }
+
+    public static void refreshThinLogState(Level level, BlockPos pos) {
+        BlockState state = level.getBlockState(pos);
+        if (state.getBlock() instanceof ThinLogBlock) {
+            updateThinLogState(level, pos, state);
+        }
+    }
+
+    private static void syncThinLogBlockEntity(Level level, BlockPos pos) {
+        BlockState state = level.getBlockState(pos);
+        if (state.getBlock() instanceof ThinLogBlock) {
+            level.sendBlockUpdated(pos, state, state, BLOCK_ENTITY_SYNC_FLAGS);
+        }
+    }
+
+    public static ItemInteractionResult tryApplyOverlay(ItemStack itemStack, Level level, BlockPos pos, Player player) {
+        BlockState candidateOverlay = overlayCandidateState(itemStack);
+        if (candidateOverlay == null) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+
+        BlockState state = level.getBlockState(pos);
+        if (!(state.getBlock() instanceof ThinLogBlock)) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+
+        ThinLogBlockEntity blockEntity = getOrCreateThinLogBlockEntity(level, pos, state);
+        if (blockEntity == null) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+
+        BlockState foliageOverlayState = blockEntity.getFoliageOverlayState();
+        BlockState surfaceOverlayState = blockEntity.getSurfaceOverlayState();
+        ThinLogOverlay.OverlayType overlayType = ThinLogOverlay.type(candidateOverlay);
+
+        if (overlayType == ThinLogOverlay.OverlayType.LEAVES) {
+            if (!ThinLogOverlay.canApplyFoliage(foliageOverlayState, surfaceOverlayState, candidateOverlay)) {
+                return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            }
+        } else if (!ThinLogOverlay.canApplySurface(surfaceOverlayState, candidateOverlay, level, pos, foliageOverlayState)) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+
+        if (!level.isClientSide) {
+            if (overlayType == ThinLogOverlay.OverlayType.LEAVES) {
+                blockEntity.setFoliageOverlayState(candidateOverlay);
+            } else {
+                blockEntity.setSurfaceOverlayState(ThinLogOverlay.nextSurfaceState(surfaceOverlayState, candidateOverlay));
+            }
+            updateBelowSnowyState(level, pos, blockEntity.getFoliageOverlayState(), blockEntity.getSurfaceOverlayState());
+            SoundEvent soundEvent = candidateOverlay.getSoundType().getPlaceSound();
+            level.playSound(null, pos, soundEvent, SoundSource.BLOCKS, 1.0F, 1.0F);
+            if (!player.isCreative()) {
+                itemStack.shrink(1);
+            }
+        }
+
+        return ItemInteractionResult.sidedSuccess(level.isClientSide);
+    }
+
+    public static boolean shouldInterceptRightClick(ItemStack itemStack, Player player) {
+        if (player.isShiftKeyDown() && itemStack.canPerformAction(ItemAbilities.AXE_STRIP)) {
+            return true;
+        }
+        if (canRemoveOverlayWithItem(itemStack)) {
+            return true;
+        }
+        return overlayCandidateState(itemStack) != null;
+    }
+
+    public static boolean canRemoveOverlayWithItem(ItemStack itemStack) {
+        return supportsOverlayRemovalInteraction(itemStack);
+    }
+
+    public static ItemInteractionResult tryRemoveOverlay(ItemStack itemStack, Level level, BlockPos pos, Player player) {
+        if (!supportsOverlayRemovalInteraction(itemStack)) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+
+        BlockState state = level.getBlockState(pos);
+        if (!(state.getBlock() instanceof ThinLogBlock)) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+
+        ThinLogBlockEntity blockEntity = getOrCreateThinLogBlockEntity(level, pos, state);
+        if (blockEntity == null) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+
+        BlockState removedOverlayState = blockEntity.getSurfaceOverlayState() != null
+                ? blockEntity.getSurfaceOverlayState()
+                : blockEntity.getFoliageOverlayState();
+        if (removedOverlayState == null) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+
+        if (!level.isClientSide) {
+            if (!player.isCreative()) {
+                ItemStack drop = ThinLogOverlay.dropStack(removedOverlayState);
+                if (!player.addItem(drop)) {
+                    Block.popResource(level, pos, drop);
+                }
+            }
+            SoundEvent soundEvent = removedOverlayState.getSoundType().getBreakSound();
+            if (blockEntity.getSurfaceOverlayState() != null) {
+                blockEntity.clearSurfaceOverlay();
+            } else {
+                blockEntity.clearFoliageOverlay();
+            }
+            updateBelowSnowyState(level, pos, blockEntity.getFoliageOverlayState(), blockEntity.getSurfaceOverlayState());
+            level.playSound(null, pos, soundEvent, SoundSource.BLOCKS, 1.0F, 1.0F);
+        }
+
+        return ItemInteractionResult.sidedSuccess(level.isClientSide);
+    }
+
+    private static boolean supportsOverlayRemovalInteraction(ItemStack itemStack) {
+        return itemStack.isEmpty() || !(itemStack.getItem() instanceof BlockItem);
     }
 
     @Nullable
-    private static ThinLogBlockEntity getThinLogBlockEntity(Level level, BlockPos pos) {
-        BlockEntity blockEntity = level.getBlockEntity(pos);
+    private static BlockState overlayCandidateState(ItemStack itemStack) {
+        if (!(itemStack.getItem() instanceof BlockItem blockItem)) {
+            return null;
+        }
+
+        BlockState candidateOverlay = resolveOverlayState(blockItem.getBlock().defaultBlockState());
+        return ThinLogOverlay.type(candidateOverlay) == ThinLogOverlay.OverlayType.NONE ? null : candidateOverlay;
+    }
+
+    private static void dropUnsupportedOverlay(Level level, BlockPos pos, BlockState state) {
+        ThinLogBlockEntity blockEntity = getOrCreateThinLogBlockEntity(level, pos, state);
+        if (blockEntity == null) {
+            return;
+        }
+
+        BlockState foliageOverlayState = blockEntity.getFoliageOverlayState();
+        BlockState surfaceOverlayState = blockEntity.getSurfaceOverlayState();
+        if (surfaceOverlayState == null || ThinLogOverlay.canSurfaceSurviveAt(surfaceOverlayState, level, pos, foliageOverlayState)) {
+            return;
+        }
+
+        ThinLogOverlay.drop(level, pos, surfaceOverlayState);
+        blockEntity.clearSurfaceOverlay();
+        updateBelowSnowyState(level, pos, foliageOverlayState, null);
+    }
+
+    private static void updateBelowSnowyState(Level level, BlockPos pos, @Nullable BlockState foliageOverlayState, @Nullable BlockState surfaceOverlayState) {
+        BlockPos belowPos = pos.below();
+        BlockState belowState = level.getBlockState(belowPos);
+        if (!belowState.hasProperty(SnowyDirtBlock.SNOWY)) {
+            return;
+        }
+
+        boolean snowy = foliageOverlayState == null && ThinLogOverlay.type(surfaceOverlayState) == ThinLogOverlay.OverlayType.SNOW;
+        if (belowState.getValue(SnowyDirtBlock.SNOWY) != snowy) {
+            level.setBlock(belowPos, belowState.setValue(SnowyDirtBlock.SNOWY, snowy), 3);
+        }
+    }
+
+    @Nullable
+    private static ThinLogBlockEntity getThinLogBlockEntity(BlockGetter blockGetter, BlockPos pos) {
+        BlockEntity blockEntity = blockGetter.getBlockEntity(pos);
         return blockEntity instanceof ThinLogBlockEntity thinLogBlockEntity ? thinLogBlockEntity : null;
     }
+
+    @Nullable
+    private static ThinLogBlockEntity getOrCreateThinLogBlockEntity(Level level, BlockPos pos, BlockState state) {
+        ThinLogBlockEntity thinLogBlockEntity = getThinLogBlockEntity(level, pos);
+        if (thinLogBlockEntity != null) {
+            return thinLogBlockEntity;
+        }
+
+        if (!(state.getBlock() instanceof ThinLogBlock thinLogBlock)) {
+            return null;
+        }
+
+        ThinLogBlockEntity created = (ThinLogBlockEntity) thinLogBlock.newBlockEntity(pos, state);
+        if (created == null) {
+            return null;
+        }
+
+        level.setBlockEntity(created);
+        return created;
+    }
+
 }
