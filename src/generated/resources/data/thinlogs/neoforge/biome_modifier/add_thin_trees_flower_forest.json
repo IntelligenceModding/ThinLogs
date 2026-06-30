@@ -1,6 +1,0 @@
-{
-  "type": "neoforge:add_features",
-  "biomes": "minecraft:flower_forest",
-  "features": "thinlogs:thin_trees_flower_forest",
-  "step": "vegetal_decoration"
-}

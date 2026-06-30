@@ -1,7 +1,0 @@
-{
-  "parent": "thinlogs:generation/branch_arm_west",
-  "textures": {
-    "log_side": "minecraft:block/stripped_jungle_log",
-    "log_top": "minecraft:block/stripped_jungle_log_top"
-  }
-}

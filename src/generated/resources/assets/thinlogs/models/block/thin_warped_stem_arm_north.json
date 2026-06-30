@@ -1,7 +1,0 @@
-{
-  "parent": "thinlogs:generation/branch_arm_north",
-  "textures": {
-    "log_side": "minecraft:block/warped_stem",
-    "log_top": "minecraft:block/warped_stem_top"
-  }
-}

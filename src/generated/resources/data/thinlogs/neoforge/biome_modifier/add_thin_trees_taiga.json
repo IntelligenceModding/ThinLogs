@@ -1,9 +1,0 @@
-{
-  "type": "neoforge:add_features",
-  "biomes": [
-    "minecraft:taiga",
-    "minecraft:snowy_taiga"
-  ],
-  "features": "thinlogs:thin_trees_taiga",
-  "step": "vegetal_decoration"
-}
