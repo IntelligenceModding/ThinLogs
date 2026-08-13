@@ -9,7 +9,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.IntProvider;
-import net.minecraft.world.level.LevelSimulatedReader;
+import net.minecraft.util.valueproviders.IntProviders;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
@@ -23,9 +24,9 @@ public class ConnectedBranchingTrunkPlacer extends TrunkPlacer {
     public static final MapCodec<ConnectedBranchingTrunkPlacer> CODEC = RecordCodecBuilder.mapCodec(
             instance -> trunkPlacerParts(instance)
                     .and(instance.group(
-                            IntProvider.POSITIVE_CODEC.fieldOf("branch_steps").forGetter(placer -> placer.branchSteps),
+                            IntProviders.POSITIVE_CODEC.fieldOf("branch_steps").forGetter(placer -> placer.branchSteps),
                             Codec.floatRange(0.0F, 1.0F).fieldOf("branch_probability").forGetter(placer -> placer.branchProbability),
-                            IntProvider.NON_NEGATIVE_CODEC.fieldOf("horizontal_length").forGetter(placer -> placer.horizontalLength)
+                            IntProviders.NON_NEGATIVE_CODEC.fieldOf("horizontal_length").forGetter(placer -> placer.horizontalLength)
                     ))
                     .apply(instance, ConnectedBranchingTrunkPlacer::new)
     );
@@ -55,14 +56,14 @@ public class ConnectedBranchingTrunkPlacer extends TrunkPlacer {
 
     @Override
     public List<FoliagePlacer.FoliageAttachment> placeTrunk(
-            LevelSimulatedReader level,
+            WorldGenLevel level,
             BiConsumer<BlockPos, BlockState> blockSetter,
             RandomSource random,
             int freeTreeHeight,
             BlockPos pos,
             TreeConfiguration config
     ) {
-        setDirtAt(level, blockSetter, random, pos.below(), config);
+        placeBelowTrunkBlock(level, blockSetter, random, pos.below(), config);
         List<FoliagePlacer.FoliageAttachment> attachments = Lists.newArrayList();
         BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
 
@@ -84,7 +85,7 @@ public class ConnectedBranchingTrunkPlacer extends TrunkPlacer {
     }
 
     private void placeBranch(
-            LevelSimulatedReader level,
+            WorldGenLevel level,
             BiConsumer<BlockPos, BlockState> blockSetter,
             RandomSource random,
             TreeConfiguration config,

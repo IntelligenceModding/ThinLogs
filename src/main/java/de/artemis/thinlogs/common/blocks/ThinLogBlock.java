@@ -23,10 +23,10 @@ import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.LeavesBlock;
-import net.minecraft.world.level.block.SnowyDirtBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -562,13 +562,13 @@ public class ThinLogBlock extends Block implements EntityBlock {
     private static void updateBelowSnowyState(Level level, BlockPos pos, @Nullable BlockState foliageOverlayState, @Nullable BlockState surfaceOverlayState) {
         BlockPos belowPos = pos.below();
         BlockState belowState = level.getBlockState(belowPos);
-        if (!belowState.hasProperty(SnowyDirtBlock.SNOWY)) {
+        if (!belowState.hasProperty(BlockStateProperties.SNOWY)) {
             return;
         }
 
         boolean snowy = foliageOverlayState == null && ThinLogOverlay.type(surfaceOverlayState) == ThinLogOverlay.OverlayType.SNOW;
-        if (belowState.getValue(SnowyDirtBlock.SNOWY) != snowy) {
-            level.setBlock(belowPos, belowState.setValue(SnowyDirtBlock.SNOWY, snowy), 3);
+        if (belowState.getValue(BlockStateProperties.SNOWY) != snowy) {
+            level.setBlock(belowPos, belowState.setValue(BlockStateProperties.SNOWY, snowy), 3);
         }
     }
 

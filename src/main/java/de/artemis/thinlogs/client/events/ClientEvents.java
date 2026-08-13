@@ -7,8 +7,10 @@ import de.artemis.thinlogs.common.blocks.ThinLogBlockEntity;
 import de.artemis.thinlogs.common.blocks.ThinLogOverlay;
 import de.artemis.thinlogs.common.registration.ModBlockEntities;
 import de.artemis.thinlogs.common.registration.ModBlocks;
+import net.minecraft.client.color.block.BlockColors;
+import net.minecraft.client.color.block.BlockTintSource;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.IEventBus;
@@ -16,6 +18,8 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+
+import java.util.List;
 
 public final class ClientEvents {
     private ClientEvents() {
@@ -38,19 +42,16 @@ public final class ClientEvents {
     }
 
     @SubscribeEvent
-    public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
-        event.register(
-                (state, level, pos, tintIndex) -> delegatedLeafColor(level, pos, tintIndex, event),
-                ModBlocks.allThinLogBlocks()
-        );
+    public static void registerBlockColors(RegisterColorHandlersEvent.BlockTintSources event) {
+        event.register(List.of(new ThinLogOverlayTintSource(event.getBlockColors())), ModBlocks.allThinLogBlocks());
     }
 
     private static boolean shouldWrap(BlockState state) {
         return state.getBlock() instanceof ThinLogBlock;
     }
 
-    private static int delegatedLeafColor(BlockAndTintGetter level, BlockPos pos, int tintIndex, RegisterColorHandlersEvent.Block event) {
-        if (level == null || pos == null || tintIndex < 0) {
+    private static int delegatedLeafColor(BlockColors blockColors, BlockAndTintGetter level, BlockPos pos, int tintIndex) {
+        if (tintIndex < 0) {
             return -1;
         }
 
@@ -64,7 +65,19 @@ public final class ClientEvents {
             return -1;
         }
 
-        return event.getBlockColors().getColor(foliageOverlayState, level, pos, tintIndex);
+        BlockTintSource tintSource = blockColors.getTintSource(foliageOverlayState, tintIndex);
+        return tintSource == null ? -1 : tintSource.colorInWorld(foliageOverlayState, level, pos);
     }
 
+    private record ThinLogOverlayTintSource(BlockColors blockColors) implements BlockTintSource {
+        @Override
+        public int color(BlockState state) {
+            return -1;
+        }
+
+        @Override
+        public int colorInWorld(BlockState state, BlockAndTintGetter level, BlockPos pos) {
+            return delegatedLeafColor(blockColors, level, pos, 0);
+        }
+    }
 }

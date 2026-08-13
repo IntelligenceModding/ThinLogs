@@ -16,7 +16,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.SnowLayerBlock;
-import net.minecraft.world.level.block.SnowyDirtBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -77,7 +76,7 @@ public class ThinTreeFeature extends Feature<TreeConfiguration> {
             return;
         }
 
-        BlockState leafOverlaySample = normalizeLeafOverlayState(configuration.foliageProvider.getState(RandomSource.create(0L), origin));
+        BlockState leafOverlaySample = normalizeLeafOverlayState(configuration.foliageProvider.getState(level, RandomSource.create(0L), origin));
         restoreSupportBlocks(level, thinLogPositions, originalStates);
 
         for (BlockPos pos : thinLogPositions) {
@@ -269,13 +268,13 @@ public class ThinTreeFeature extends Feature<TreeConfiguration> {
     private static void updateBelowSnowyState(WorldGenLevel level, BlockPos pos, BlockState foliageOverlayState, BlockState surfaceOverlayState) {
         BlockPos belowPos = pos.below();
         BlockState belowState = level.getBlockState(belowPos);
-        if (!belowState.hasProperty(SnowyDirtBlock.SNOWY)) {
+        if (!belowState.hasProperty(BlockStateProperties.SNOWY)) {
             return;
         }
 
         boolean snowy = foliageOverlayState == null && ThinLogOverlay.type(surfaceOverlayState) == ThinLogOverlay.OverlayType.SNOW;
-        if (belowState.getValue(SnowyDirtBlock.SNOWY) != snowy) {
-            level.setBlock(belowPos, belowState.setValue(SnowyDirtBlock.SNOWY, snowy), 19);
+        if (belowState.getValue(BlockStateProperties.SNOWY) != snowy) {
+            level.setBlock(belowPos, belowState.setValue(BlockStateProperties.SNOWY, snowy), 19);
         }
     }
 

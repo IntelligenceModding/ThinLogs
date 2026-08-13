@@ -7,7 +7,7 @@ import de.artemis.thinlogs.common.registration.ModTrunkPlacers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.LevelSimulatedReader;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
@@ -34,14 +34,14 @@ public class ConnectedForkingTrunkPlacer extends TrunkPlacer {
 
     @Override
     public List<FoliagePlacer.FoliageAttachment> placeTrunk(
-            LevelSimulatedReader level,
+            WorldGenLevel level,
             BiConsumer<BlockPos, BlockState> blockSetter,
             RandomSource random,
             int freeTreeHeight,
             BlockPos pos,
             TreeConfiguration config
     ) {
-        setDirtAt(level, blockSetter, random, pos.below(), config);
+        placeBelowTrunkBlock(level, blockSetter, random, pos.below(), config);
         List<FoliagePlacer.FoliageAttachment> attachments = Lists.newArrayList();
         Direction primaryDirection = Direction.Plane.HORIZONTAL.getRandomDirection(random);
         int bendStart = freeTreeHeight - random.nextInt(4) - 1;
@@ -97,7 +97,7 @@ public class ConnectedForkingTrunkPlacer extends TrunkPlacer {
     }
 
     private void placeConnector(
-            LevelSimulatedReader level,
+            WorldGenLevel level,
             BiConsumer<BlockPos, BlockState> blockSetter,
             RandomSource random,
             BlockPos connectorPos,

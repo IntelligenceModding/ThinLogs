@@ -110,10 +110,10 @@ public final class ThinLogOverlay {
     private static boolean canSupportSnow(LevelReader level, BlockPos pos, @Nullable BlockState supportState) {
         BlockState resolvedSupportState = supportState != null ? supportState : level.getBlockState(pos.below());
         BlockPos supportPos = supportState != null ? pos : pos.below();
-        if (resolvedSupportState.is(BlockTags.SNOW_LAYER_CANNOT_SURVIVE_ON)) {
+        if (resolvedSupportState.is(BlockTags.CANNOT_SUPPORT_SNOW_LAYER)) {
             return false;
         }
-        if (resolvedSupportState.is(BlockTags.SNOW_LAYER_CAN_SURVIVE_ON)) {
+        if (resolvedSupportState.is(BlockTags.SUPPORT_OVERRIDE_SNOW_LAYER)) {
             return true;
         }
         return Block.isFaceFull(resolvedSupportState.getCollisionShape(level, supportPos), net.minecraft.core.Direction.UP)

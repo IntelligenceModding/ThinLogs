@@ -180,7 +180,8 @@ public final class ModTreeConfiguredFeatures {
                 leafProvider(Blocks.MANGROVE_LEAVES),
                 new RandomSpreadFoliagePlacer(ConstantInt.of(3), ConstantInt.of(0), ConstantInt.of(2), 70),
                 Optional.of(mangroveRootPlacer(blocks, UniformInt.of(1, 3))),
-                new TwoLayersFeatureSize(2, 0, 2)
+                new TwoLayersFeatureSize(2, 0, 2),
+                TreeConfiguration.PLACE_BELOW_OVERWORLD_TRUNKS
         ).ignoreVines().build());
 
         register(context, THIN_TALL_MANGROVE, ModFeatures.THIN_TREE.get(), new TreeConfiguration.TreeConfigurationBuilder(
@@ -189,7 +190,8 @@ public final class ModTreeConfiguredFeatures {
                 leafProvider(Blocks.MANGROVE_LEAVES),
                 new RandomSpreadFoliagePlacer(ConstantInt.of(3), ConstantInt.of(0), ConstantInt.of(2), 70),
                 Optional.of(mangroveRootPlacer(blocks, UniformInt.of(3, 7))),
-                new TwoLayersFeatureSize(3, 0, 2)
+                new TwoLayersFeatureSize(3, 0, 2),
+                TreeConfiguration.PLACE_BELOW_OVERWORLD_TRUNKS
         ).ignoreVines().build());
 
         register(context, THIN_CRIMSON_FUNGUS, Feature.HUGE_FUNGUS, new HugeFungusConfiguration(
