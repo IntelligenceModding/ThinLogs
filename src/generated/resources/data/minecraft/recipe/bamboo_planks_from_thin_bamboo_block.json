@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "building",
   "ingredients": [
-    {
-      "item": "thinlogs:thin_bamboo_block"
-    }
+    "thinlogs:thin_bamboo_block"
   ],
   "result": {
     "count": 1,

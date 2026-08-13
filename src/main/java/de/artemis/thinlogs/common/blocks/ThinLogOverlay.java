@@ -130,7 +130,7 @@ public final class ThinLogOverlay {
     }
 
     public static void drop(Level level, BlockPos pos, @Nullable BlockState overlayState) {
-        if (overlayState == null || level.isClientSide) {
+        if (overlayState == null || level.isClientSide()) {
             return;
         }
         Block.popResource(level, pos, dropStack(overlayState));

@@ -4,15 +4,13 @@ import de.artemis.thinlogs.ThinLogs;
 import de.artemis.thinlogs.common.blocks.ThinLogBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
-@EventBusSubscriber(modid = ThinLogs.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public final class CommonEvents {
     private CommonEvents() {
     }
@@ -31,7 +29,7 @@ public final class CommonEvents {
             return;
         }
 
-        ItemInteractionResult result = ThinLogBlock.tryToggleConnection(
+        InteractionResult result = ThinLogBlock.tryToggleConnection(
                 itemStack,
                 level.getBlockState(event.getPos()),
                 level,
@@ -57,7 +55,7 @@ public final class CommonEvents {
 
         if (result.consumesAction()) {
             event.setCanceled(true);
-            event.setCancellationResult(result.result());
+            event.setCancellationResult(result);
         }
     }
 }

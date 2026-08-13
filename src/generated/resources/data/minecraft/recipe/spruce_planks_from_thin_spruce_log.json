@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "building",
   "ingredients": [
-    {
-      "item": "thinlogs:thin_spruce_log"
-    }
+    "thinlogs:thin_spruce_log"
   ],
   "result": {
     "count": 1,

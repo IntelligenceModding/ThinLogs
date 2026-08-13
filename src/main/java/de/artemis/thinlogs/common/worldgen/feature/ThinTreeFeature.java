@@ -40,6 +40,10 @@ public class ThinTreeFeature extends Feature<TreeConfiguration> {
 
     @Override
     public boolean place(FeaturePlaceContext<TreeConfiguration> context) {
+        if (!hasValidBaseSupport(context.level(), context.origin())) {
+            return false;
+        }
+
         Map<BlockPos, BlockState> originalStates = snapshotArea(context.level(), context.origin());
         boolean placed = Feature.TREE.place(
                 context.config(),
@@ -54,6 +58,17 @@ public class ThinTreeFeature extends Feature<TreeConfiguration> {
 
         postProcess(context.level(), context.origin(), context.config(), originalStates);
         return true;
+    }
+
+    private static boolean hasValidBaseSupport(WorldGenLevel level, BlockPos origin) {
+        BlockState supportState = level.getBlockState(origin.below());
+        return !isCanopyOrLogSupport(supportState);
+    }
+
+    private static boolean isCanopyOrLogSupport(BlockState state) {
+        return state.is(BlockTags.LEAVES)
+                || state.is(BlockTags.LOGS)
+                || state.getBlock() instanceof ThinLogBlock;
     }
 
     private static void postProcess(WorldGenLevel level, BlockPos origin, TreeConfiguration configuration, Map<BlockPos, BlockState> originalStates) {
@@ -233,6 +248,9 @@ public class ThinTreeFeature extends Feature<TreeConfiguration> {
             BlockPos belowPos = pos.below();
             BlockState originalState = originalStates.get(belowPos);
             if (originalState == null || originalState.isAir()) {
+                continue;
+            }
+            if (isCanopyOrLogSupport(originalState)) {
                 continue;
             }
 

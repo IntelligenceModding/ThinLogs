@@ -9,9 +9,13 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.neoforged.neoforge.client.model.data.ModelData;
+import net.minecraft.world.level.storage.TagValueInput;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.model.data.ModelData;
 import org.jetbrains.annotations.Nullable;
 
 public class ThinLogBlockEntity extends BlockEntity {
@@ -101,19 +105,19 @@ public class ThinLogBlockEntity extends BlockEntity {
     @Override
     public void onLoad() {
         super.onLoad();
-        if (level != null && !level.isClientSide) {
+        if (level != null && !level.isClientSide()) {
             ThinLogBlock.refreshThinLogState(level, worldPosition);
         }
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.saveAdditional(tag, registries);
+    protected void saveAdditional(ValueOutput tag) {
+        super.saveAdditional(tag);
         if (foliageOverlayState != null) {
-            tag.put(FOLIAGE_OVERLAY_KEY, NbtUtils.writeBlockState(foliageOverlayState));
+            tag.store(FOLIAGE_OVERLAY_KEY, CompoundTag.CODEC, NbtUtils.writeBlockState(foliageOverlayState));
         }
         if (surfaceOverlayState != null) {
-            tag.put(SURFACE_OVERLAY_KEY, NbtUtils.writeBlockState(surfaceOverlayState));
+            tag.store(SURFACE_OVERLAY_KEY, CompoundTag.CODEC, NbtUtils.writeBlockState(surfaceOverlayState));
         }
         if (disabledConnectionMask != 0) {
             tag.putInt(DISABLED_CONNECTION_MASK_KEY, disabledConnectionMask);
@@ -121,24 +125,25 @@ public class ThinLogBlockEntity extends BlockEntity {
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.loadAdditional(tag, registries);
-        foliageOverlayState = tag.contains(FOLIAGE_OVERLAY_KEY)
-                ? NbtUtils.readBlockState(registries.lookupOrThrow(net.minecraft.core.registries.Registries.BLOCK), tag.getCompound(FOLIAGE_OVERLAY_KEY))
-                : null;
-        surfaceOverlayState = tag.contains(SURFACE_OVERLAY_KEY)
-                ? NbtUtils.readBlockState(registries.lookupOrThrow(net.minecraft.core.registries.Registries.BLOCK), tag.getCompound(SURFACE_OVERLAY_KEY))
-                : null;
-        if (tag.contains(OVERLAY_KEY)) {
-            BlockState legacyOverlayState = NbtUtils.readBlockState(registries.lookupOrThrow(net.minecraft.core.registries.Registries.BLOCK), tag.getCompound(OVERLAY_KEY));
+    protected void loadAdditional(ValueInput tag) {
+        super.loadAdditional(tag);
+        var blocks = tag.lookup().lookupOrThrow(net.minecraft.core.registries.Registries.BLOCK);
+        foliageOverlayState = tag.read(FOLIAGE_OVERLAY_KEY, CompoundTag.CODEC)
+                .map(overlayTag -> NbtUtils.readBlockState(blocks, overlayTag))
+                .orElse(null);
+        surfaceOverlayState = tag.read(SURFACE_OVERLAY_KEY, CompoundTag.CODEC)
+                .map(overlayTag -> NbtUtils.readBlockState(blocks, overlayTag))
+                .orElse(null);
+        tag.read(OVERLAY_KEY, CompoundTag.CODEC).ifPresent(legacyTag -> {
+            BlockState legacyOverlayState = NbtUtils.readBlockState(blocks, legacyTag);
             switch (ThinLogOverlay.type(legacyOverlayState)) {
                 case LEAVES -> foliageOverlayState = legacyOverlayState;
                 case CARPET, SNOW -> surfaceOverlayState = legacyOverlayState;
                 case NONE -> {
                 }
             }
-        }
-        disabledConnectionMask = tag.getInt(DISABLED_CONNECTION_MASK_KEY);
+        });
+        disabledConnectionMask = tag.getIntOr(DISABLED_CONNECTION_MASK_KEY, 0);
     }
 
     @Override
@@ -153,32 +158,42 @@ public class ThinLogBlockEntity extends BlockEntity {
 
     @Override
     public ModelData getModelData() {
-        if (ThinLogOverlay.type(foliageOverlayState) != ThinLogOverlay.OverlayType.LEAVES) {
+        ModelData.Builder modelData = ModelData.builder();
+        boolean hasOverlay = false;
+
+        if (ThinLogOverlay.type(foliageOverlayState) == ThinLogOverlay.OverlayType.LEAVES) {
+            modelData.with(ThinLogModelData.FOLIAGE_OVERLAY, foliageOverlayState);
+            hasOverlay = true;
+        }
+        if (ThinLogOverlay.type(surfaceOverlayState) != ThinLogOverlay.OverlayType.NONE) {
+            modelData.with(ThinLogModelData.SURFACE_OVERLAY, surfaceOverlayState);
+            hasOverlay = true;
+        }
+
+        if (!hasOverlay) {
             return ModelData.EMPTY;
         }
 
-        return ModelData.of(ThinLogModelData.FOLIAGE_OVERLAY, foliageOverlayState);
+        return modelData.build();
     }
 
-    @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider lookupProvider) {
+    public void onDataPacket(Connection connection, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider lookupProvider) {
         CompoundTag tag = pkt.getTag();
         if (tag != null) {
-            loadAdditional(tag, lookupProvider);
+            loadAdditional(TagValueInput.create(ProblemReporter.DISCARDING, lookupProvider, tag));
             requestModelDataUpdate();
             rerenderClientBlock();
         }
     }
 
-    @Override
     public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider registries) {
-        loadAdditional(tag, registries);
+        loadAdditional(TagValueInput.create(ProblemReporter.DISCARDING, registries, tag));
         requestModelDataUpdate();
         rerenderClientBlock();
     }
 
     private void rerenderClientBlock() {
-        if (level != null && level.isClientSide) {
+        if (level != null && level.isClientSide()) {
             BlockState state = getBlockState();
             level.sendBlockUpdated(worldPosition, state, state, MODEL_DATA_UPDATE_FLAGS);
         }

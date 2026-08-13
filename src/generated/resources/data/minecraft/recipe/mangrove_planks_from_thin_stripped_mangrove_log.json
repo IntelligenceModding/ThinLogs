@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "building",
   "ingredients": [
-    {
-      "item": "thinlogs:thin_stripped_mangrove_log"
-    }
+    "thinlogs:thin_stripped_mangrove_log"
   ],
   "result": {
     "count": 1,

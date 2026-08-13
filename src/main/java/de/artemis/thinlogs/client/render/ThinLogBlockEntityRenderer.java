@@ -2,38 +2,48 @@ package de.artemis.thinlogs.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import de.artemis.thinlogs.common.blocks.ThinLogBlockEntity;
-import de.artemis.thinlogs.common.blocks.ThinLogOverlay;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
+import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
+import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.Nullable;
 
-public class ThinLogBlockEntityRenderer implements BlockEntityRenderer<ThinLogBlockEntity> {
+public class ThinLogBlockEntityRenderer implements BlockEntityRenderer<ThinLogBlockEntity, ThinLogBlockEntityRenderer.ThinLogRenderState> {
     public ThinLogBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
     }
 
     @Override
-    public void render(ThinLogBlockEntity blockEntity, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
-        if (blockEntity.getLevel() == null) {
-            return;
-        }
-
-        renderOverlay(blockEntity.getSurfaceOverlayState(), poseStack, bufferSource, packedLight, packedOverlay);
-    }
-
-    private void renderOverlay(BlockState overlayState, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
-        if (overlayState == null || ThinLogOverlay.type(overlayState) == ThinLogOverlay.OverlayType.NONE) {
-            return;
-        }
-
-        poseStack.pushPose();
-        Minecraft.getInstance().getBlockRenderer().renderSingleBlock(overlayState, poseStack, bufferSource, packedLight, packedOverlay);
-        poseStack.popPose();
+    public ThinLogRenderState createRenderState() {
+        return new ThinLogRenderState();
     }
 
     @Override
-    public boolean shouldRenderOffScreen(ThinLogBlockEntity blockEntity) {
+    public void extractRenderState(
+            ThinLogBlockEntity blockEntity,
+            ThinLogRenderState renderState,
+            float partialTick,
+            Vec3 cameraPosition,
+            ModelFeatureRenderer.@Nullable CrumblingOverlay breakProgress
+    ) {
+        BlockEntityRenderer.super.extractRenderState(blockEntity, renderState, partialTick, cameraPosition, breakProgress);
+        renderState.surfaceOverlayState = blockEntity.getSurfaceOverlayState();
+    }
+
+    @Override
+    public void submit(ThinLogRenderState renderState, PoseStack poseStack, SubmitNodeCollector nodeCollector, CameraRenderState cameraRenderState) {
+    }
+
+    @Override
+    public boolean shouldRenderOffScreen() {
         return false;
+    }
+
+    public static class ThinLogRenderState extends BlockEntityRenderState {
+        @Nullable
+        public BlockState surfaceOverlayState;
     }
 }

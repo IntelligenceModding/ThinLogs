@@ -7,7 +7,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 public final class ModBlockEntities {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ThinLogBlockEntity>> THIN_LOG = Registration.BLOCK_ENTITY_TYPES.register(
             "thin_log",
-            () -> BlockEntityType.Builder.of(ThinLogBlockEntity::new, ModBlocks.allThinLogBlocks()).build(null)
+            () -> new BlockEntityType<>(ThinLogBlockEntity::new, ModBlocks.allThinLogBlocks())
     );
 
     private ModBlockEntities() {

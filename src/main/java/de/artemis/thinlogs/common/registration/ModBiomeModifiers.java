@@ -5,7 +5,7 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.neoforged.neoforge.common.world.BiomeModifier;
@@ -19,7 +19,6 @@ public final class ModBiomeModifiers {
     public static final ResourceKey<BiomeModifier> ADD_THIN_GROVE = key("add_thin_grove");
     public static final ResourceKey<BiomeModifier> ADD_THIN_MANGROVE_SWAMP = key("add_thin_mangrove_swamp");
     public static final ResourceKey<BiomeModifier> ADD_THIN_MEADOW = key("add_thin_meadow");
-    public static final ResourceKey<BiomeModifier> ADD_THIN_SNOWY = key("add_thin_snowy");
     public static final ResourceKey<BiomeModifier> ADD_THIN_SWAMP = key("add_thin_swamp");
     public static final ResourceKey<BiomeModifier> ADD_THIN_TREES_BIRCH = key("add_thin_trees_birch");
     public static final ResourceKey<BiomeModifier> ADD_THIN_TREES_FLOWER_FOREST = key("add_thin_trees_flower_forest");
@@ -27,6 +26,7 @@ public final class ModBiomeModifiers {
     public static final ResourceKey<BiomeModifier> ADD_THIN_TREES_JUNGLE = key("add_thin_trees_jungle");
     public static final ResourceKey<BiomeModifier> ADD_THIN_TREES_OLD_GROWTH_PINE_TAIGA = key("add_thin_trees_old_growth_pine_taiga");
     public static final ResourceKey<BiomeModifier> ADD_THIN_TREES_OLD_GROWTH_SPRUCE_TAIGA = key("add_thin_trees_old_growth_spruce_taiga");
+    public static final ResourceKey<BiomeModifier> ADD_THIN_TREES_PALE_GARDEN = key("add_thin_trees_pale_garden");
     public static final ResourceKey<BiomeModifier> ADD_THIN_TREES_PLAINS = key("add_thin_trees_plains");
     public static final ResourceKey<BiomeModifier> ADD_THIN_TREES_SAVANNA = key("add_thin_trees_savanna");
     public static final ResourceKey<BiomeModifier> ADD_THIN_TREES_SPARSE_JUNGLE = key("add_thin_trees_sparse_jungle");
@@ -73,14 +73,6 @@ public final class ModBiomeModifiers {
                 HolderSet.direct(placedFeatures.getOrThrow(ModPlacedFeatures.THIN_TREES_MEADOW)),
                 GenerationStep.Decoration.VEGETAL_DECORATION
         ));
-        context.register(ADD_THIN_SNOWY, new BiomeModifiers.AddFeaturesBiomeModifier(
-                HolderSet.direct(
-                        biomes.getOrThrow(Biomes.SNOWY_PLAINS),
-                        biomes.getOrThrow(Biomes.ICE_SPIKES)
-                ),
-                HolderSet.direct(placedFeatures.getOrThrow(ModPlacedFeatures.THIN_TREES_SNOWY)),
-                GenerationStep.Decoration.VEGETAL_DECORATION
-        ));
         context.register(ADD_THIN_SWAMP, new BiomeModifiers.AddFeaturesBiomeModifier(
                 HolderSet.direct(biomes.getOrThrow(Biomes.SWAMP)),
                 HolderSet.direct(placedFeatures.getOrThrow(ModPlacedFeatures.THIN_TREES_SWAMP)),
@@ -116,12 +108,15 @@ public final class ModBiomeModifiers {
                 HolderSet.direct(placedFeatures.getOrThrow(ModPlacedFeatures.THIN_TREES_OLD_GROWTH_SPRUCE_TAIGA)),
                 GenerationStep.Decoration.VEGETAL_DECORATION
         ));
+        context.register(ADD_THIN_TREES_PALE_GARDEN, new BiomeModifiers.AddFeaturesBiomeModifier(
+                HolderSet.direct(biomes.getOrThrow(Biomes.PALE_GARDEN)),
+                HolderSet.direct(placedFeatures.getOrThrow(ModPlacedFeatures.THIN_TREES_PALE_GARDEN)),
+                GenerationStep.Decoration.VEGETAL_DECORATION
+        ));
         context.register(ADD_THIN_TREES_PLAINS, new BiomeModifiers.AddFeaturesBiomeModifier(
                 HolderSet.direct(
                         biomes.getOrThrow(Biomes.PLAINS),
-                        biomes.getOrThrow(Biomes.SUNFLOWER_PLAINS),
-                        biomes.getOrThrow(Biomes.DEEP_DARK),
-                        biomes.getOrThrow(Biomes.DRIPSTONE_CAVES)
+                        biomes.getOrThrow(Biomes.SUNFLOWER_PLAINS)
                 ),
                 HolderSet.direct(placedFeatures.getOrThrow(ModPlacedFeatures.THIN_TREES_PLAINS)),
                 GenerationStep.Decoration.VEGETAL_DECORATION
@@ -176,7 +171,7 @@ public final class ModBiomeModifiers {
     private static ResourceKey<BiomeModifier> key(String name) {
         return ResourceKey.create(
                 NeoForgeRegistries.Keys.BIOME_MODIFIERS,
-                ResourceLocation.fromNamespaceAndPath(ThinLogs.MOD_ID, name)
+                Identifier.fromNamespaceAndPath(ThinLogs.MOD_ID, name)
         );
     }
 }

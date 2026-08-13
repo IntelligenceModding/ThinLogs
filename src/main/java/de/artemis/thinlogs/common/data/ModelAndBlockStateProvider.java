@@ -1,85 +1,157 @@
 package de.artemis.thinlogs.common.data;
 
-import de.artemis.thinlogs.common.blockStateProperties.CoreOrientation;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import de.artemis.thinlogs.ThinLogs;
+import de.artemis.thinlogs.common.blockStateProperties.CoreOrientation;
 import de.artemis.thinlogs.common.blockStateProperties.ModBlockStateProperties;
 import de.artemis.thinlogs.common.registration.ModBlocks;
 import de.artemis.thinlogs.common.registration.ThinLogSet;
+import net.minecraft.client.data.models.BlockModelGenerators;
+import net.minecraft.client.data.models.ItemModelGenerators;
+import net.minecraft.client.data.models.ModelProvider;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
-import net.neoforged.neoforge.client.model.generators.ModelFile;
-import net.neoforged.neoforge.client.model.generators.MultiPartBlockStateBuilder;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import org.jspecify.annotations.NonNull;
 
-public class ModelAndBlockStateProvider extends BlockStateProvider {
-    public ModelAndBlockStateProvider(PackOutput packOutput, ExistingFileHelper exFileHelper) {
-        super(packOutput, ThinLogs.MOD_ID, exFileHelper);
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Stream;
+
+public class ModelAndBlockStateProvider extends ModelProvider {
+    private final PackOutput.PathProvider blockstates;
+    private final PackOutput.PathProvider blockModels;
+    private final PackOutput.PathProvider items;
+
+    public ModelAndBlockStateProvider(PackOutput output) {
+        super(output, ThinLogs.MOD_ID);
+        this.blockstates = output.createPathProvider(PackOutput.Target.RESOURCE_PACK, "blockstates");
+        this.blockModels = output.createPathProvider(PackOutput.Target.RESOURCE_PACK, "models/block");
+        this.items = output.createPathProvider(PackOutput.Target.RESOURCE_PACK, "items");
     }
 
     @Override
-    protected void registerStatesAndModels() {
+    protected void registerModels(@NonNull BlockModelGenerators blockModels, @NonNull ItemModelGenerators itemModels) {
+    }
+
+    @Override
+    public @NonNull CompletableFuture<?> run(@NonNull CachedOutput output) {
+        List<CompletableFuture<?>> futures = new ArrayList<>();
+
         for (ThinLogSet set : ModBlocks.allSets()) {
-            branchBlock(set.thinBlock().get(), set.definition().thinId(), set.definition().sideTexture(), set.definition().endTexture());
-            branchBlock(set.strippedThinBlock().get(), set.definition().strippedThinId(), set.definition().strippedSideTexture(), set.definition().strippedEndTexture());
+            addThinLog(futures, output, set.definition().thinId(), set.definition().sideTexture().toString(), set.definition().endTexture().toString());
+            addThinLog(futures, output, set.definition().strippedThinId(), set.definition().strippedSideTexture().toString(), set.definition().strippedEndTexture().toString());
         }
+
+        return CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new));
     }
 
-    private void branchBlock(Block block, String modelName, ResourceLocation sideTexture, ResourceLocation endTexture) {
-        ModelFile coreVertical = models().withExistingParent("block/" + modelName + "_core_vertical", modLoc("generation/branch_core_vertical"))
-                .texture("log_side", sideTexture)
-                .texture("log_top", endTexture);
-        ModelFile coreEastWest = models().withExistingParent("block/" + modelName + "_core_east_west", modLoc("generation/branch_core_east_west"))
-                .texture("log_side", sideTexture)
-                .texture("log_top", endTexture);
-        ModelFile coreNorthSouth = models().withExistingParent("block/" + modelName + "_core_north_south", modLoc("generation/branch_core_north_south"))
-                .texture("log_side", sideTexture)
-                .texture("log_top", endTexture);
-        ModelFile coreJunction = models().withExistingParent("block/" + modelName + "_core_junction", modLoc("generation/branch_core_junction"))
-                .texture("log_side", sideTexture)
-                .texture("log_top", endTexture);
-        ModelFile armNorth = models().withExistingParent("block/" + modelName + "_arm_north", modLoc("generation/branch_arm_north"))
-                .texture("log_side", sideTexture)
-                .texture("log_top", endTexture);
-        ModelFile armSouth = models().withExistingParent("block/" + modelName + "_arm_south", modLoc("generation/branch_arm_south"))
-                .texture("log_side", sideTexture)
-                .texture("log_top", endTexture);
-        ModelFile armEast = models().withExistingParent("block/" + modelName + "_arm_east", modLoc("generation/branch_arm_east"))
-                .texture("log_side", sideTexture)
-                .texture("log_top", endTexture);
-        ModelFile armWest = models().withExistingParent("block/" + modelName + "_arm_west", modLoc("generation/branch_arm_west"))
-                .texture("log_side", sideTexture)
-                .texture("log_top", endTexture);
-        ModelFile armUp = models().withExistingParent("block/" + modelName + "_arm_up", modLoc("generation/branch_arm_up"))
-                .texture("log_side", sideTexture)
-                .texture("log_top", endTexture);
-        ModelFile armDown = models().withExistingParent("block/" + modelName + "_arm_down", modLoc("generation/branch_arm_down"))
-                .texture("log_side", sideTexture)
-                .texture("log_top", endTexture);
-        models().withExistingParent("block/" + modelName + "_inventory", modLoc("generation/branch_inventory"))
-                .texture("log_side", sideTexture)
-                .texture("log_top", endTexture);
+    private void addThinLog(List<CompletableFuture<?>> futures, CachedOutput output, String id, String sideTexture, String endTexture) {
+        futures.add(saveBlockState(output, id));
+        futures.add(saveItemModel(output, id));
 
-        MultiPartBlockStateBuilder builder = getMultipartBuilder(block);
-        builder.part().modelFile(coreVertical).addModel().condition(ModBlockStateProperties.CORE_ORIENTATION, CoreOrientation.VERTICAL).end();
-        builder.part().modelFile(coreEastWest).addModel().condition(ModBlockStateProperties.CORE_ORIENTATION, CoreOrientation.EAST_WEST).end();
-        builder.part().modelFile(coreNorthSouth).addModel().condition(ModBlockStateProperties.CORE_ORIENTATION, CoreOrientation.NORTH_SOUTH).end();
-        builder.part().modelFile(coreJunction).addModel().condition(ModBlockStateProperties.CORE_ORIENTATION, CoreOrientation.JUNCTION).end();
-        addArm(builder, armNorth, Direction.NORTH);
-        addArm(builder, armSouth, Direction.SOUTH);
-        addArm(builder, armEast, Direction.EAST);
-        addArm(builder, armWest, Direction.WEST);
-        addArm(builder, armUp, Direction.UP);
-        addArm(builder, armDown, Direction.DOWN);
+        for (CoreOrientation orientation : CoreOrientation.values()) {
+            futures.add(saveBlockModel(output, id + "_core_" + orientation.getSerializedName(), "generation/branch_core_" + orientation.getSerializedName(), sideTexture, endTexture));
+        }
+
+        for (Direction direction : Direction.values()) {
+            futures.add(saveBlockModel(output, id + "_arm_" + direction.getSerializedName(), "generation/branch_arm_" + direction.getSerializedName(), sideTexture, endTexture));
+        }
+
+        futures.add(saveBlockModel(output, id + "_inventory", "generation/branch_inventory", sideTexture, endTexture));
     }
 
-    private void addArm(MultiPartBlockStateBuilder builder, ModelFile armModel, Direction direction) {
-        builder.part()
-                .modelFile(armModel)
-                .addModel()
-                .condition(ModBlockStateProperties.connection(direction), true)
-                .end();
+    private CompletableFuture<?> saveBlockState(CachedOutput output, String id) {
+        JsonObject root = new JsonObject();
+        JsonArray multipart = new JsonArray();
+
+        for (CoreOrientation orientation : CoreOrientation.values()) {
+            JsonObject part = new JsonObject();
+            part.add("when", condition(ModBlockStateProperties.CORE_ORIENTATION.getName(), orientation.getSerializedName()));
+            part.add("apply", model("block/" + id + "_core_" + orientation.getSerializedName()));
+            multipart.add(part);
+        }
+
+        for (Direction direction : Direction.values()) {
+            JsonObject part = new JsonObject();
+            part.add("when", condition(ModBlockStateProperties.connection(direction).getName(), "true"));
+            part.add("apply", model("block/" + id + "_arm_" + direction.getSerializedName()));
+            multipart.add(part);
+        }
+
+        root.add("multipart", multipart);
+        return save(output, root, blockstates.json(modId(id)));
+    }
+
+    private CompletableFuture<?> saveBlockModel(CachedOutput output, String modelName, String parent, String sideTexture, String endTexture) {
+        JsonObject root = new JsonObject();
+        root.addProperty("parent", modPath(parent));
+
+        JsonObject textures = new JsonObject();
+        textures.addProperty("log_side", sideTexture);
+        textures.addProperty("log_top", endTexture);
+        root.add("textures", textures);
+
+        return save(output, root, blockModels.json(modId(modelName)));
+    }
+
+    private CompletableFuture<?> saveItemModel(CachedOutput output, String id) {
+        JsonObject root = new JsonObject();
+        JsonObject model = new JsonObject();
+        model.addProperty("type", "minecraft:model");
+        model.addProperty("model", modPath("block/" + id + "_inventory"));
+        root.add("model", model);
+        return save(output, root, items.json(modId(id)));
+    }
+
+    private static JsonObject condition(String property, String value) {
+        JsonObject condition = new JsonObject();
+        condition.addProperty(property, value);
+        return condition;
+    }
+
+    private static JsonObject model(String model) {
+        JsonObject apply = new JsonObject();
+        apply.addProperty("model", modPath(model));
+        return apply;
+    }
+
+    private static Identifier modId(String path) {
+        return Identifier.fromNamespaceAndPath(ThinLogs.MOD_ID, path);
+    }
+
+    private static String modPath(String path) {
+        return ThinLogs.MOD_ID + ":" + path;
+    }
+
+    private static CompletableFuture<?> save(CachedOutput output, JsonObject json, Path path) {
+        return net.minecraft.data.DataProvider.saveStable(output, json, path);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    protected @NonNull Stream<? extends Holder<Block>> getKnownBlocks() {
+        return ModBlocks.allSets().stream()
+                .flatMap(set -> Stream.of(
+                        set.thinBlock().get().builtInRegistryHolder(),
+                        set.strippedThinBlock().get().builtInRegistryHolder()
+                ));
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    protected @NonNull Stream<? extends Holder<Item>> getKnownItems() {
+        return ModBlocks.allSets().stream()
+                .flatMap(set -> Stream.of(
+                        set.thinBlock().get().asItem().builtInRegistryHolder(),
+                        set.strippedThinBlock().get().asItem().builtInRegistryHolder()
+                ));
     }
 }

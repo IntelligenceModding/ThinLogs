@@ -34,6 +34,22 @@
     },
     {
       "apply": {
+        "model": "thinlogs:block/thin_jungle_log_arm_down"
+      },
+      "when": {
+        "down": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "thinlogs:block/thin_jungle_log_arm_up"
+      },
+      "when": {
+        "up": "true"
+      }
+    },
+    {
+      "apply": {
         "model": "thinlogs:block/thin_jungle_log_arm_north"
       },
       "when": {
@@ -50,14 +66,6 @@
     },
     {
       "apply": {
-        "model": "thinlogs:block/thin_jungle_log_arm_east"
-      },
-      "when": {
-        "east": "true"
-      }
-    },
-    {
-      "apply": {
         "model": "thinlogs:block/thin_jungle_log_arm_west"
       },
       "when": {
@@ -66,18 +74,10 @@
     },
     {
       "apply": {
-        "model": "thinlogs:block/thin_jungle_log_arm_up"
+        "model": "thinlogs:block/thin_jungle_log_arm_east"
       },
       "when": {
-        "up": "true"
-      }
-    },
-    {
-      "apply": {
-        "model": "thinlogs:block/thin_jungle_log_arm_down"
-      },
-      "when": {
-        "down": "true"
+        "east": "true"
       }
     }
   ]

@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "building",
   "ingredients": [
-    {
-      "item": "thinlogs:thin_warped_stem"
-    }
+    "thinlogs:thin_warped_stem"
   ],
   "result": {
     "count": 1,

@@ -8,7 +8,7 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.IntProvider;
@@ -46,6 +46,7 @@ public final class ModTreeConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> THIN_JUNGLE_TREE = key("thin_jungle_tree");
     public static final ResourceKey<ConfiguredFeature<?, ?>> THIN_ACACIA = key("thin_acacia");
     public static final ResourceKey<ConfiguredFeature<?, ?>> THIN_DARK_OAK = key("thin_dark_oak");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> THIN_PALE_OAK = key("thin_pale_oak");
     public static final ResourceKey<ConfiguredFeature<?, ?>> THIN_FANCY_OAK = key("thin_fancy_oak");
     public static final ResourceKey<ConfiguredFeature<?, ?>> THIN_SUPER_BIRCH = key("thin_super_birch");
     public static final ResourceKey<ConfiguredFeature<?, ?>> THIN_SWAMP_OAK = key("thin_swamp_oak");
@@ -113,6 +114,14 @@ public final class ModTreeConfiguredFeatures {
                 BlockStateProvider.simple(ModBlocks.DARK_OAK.thinBlock().get()),
                 new StraightTrunkPlacer(6, 2, 1),
                 leafProvider(Blocks.DARK_OAK_LEAVES),
+                new DarkOakFoliagePlacer(ConstantInt.of(0), ConstantInt.of(0)),
+                new ThreeLayersFeatureSize(1, 0, 1, 1, 2, OptionalInt.empty())
+        ).ignoreVines().build());
+
+        register(context, THIN_PALE_OAK, ModFeatures.THIN_TREE.get(), new TreeConfiguration.TreeConfigurationBuilder(
+                BlockStateProvider.simple(ModBlocks.PALE_OAK.thinBlock().get()),
+                new StraightTrunkPlacer(6, 2, 1),
+                leafProvider(Blocks.PALE_OAK_LEAVES),
                 new DarkOakFoliagePlacer(ConstantInt.of(0), ConstantInt.of(0)),
                 new ThreeLayersFeatureSize(1, 0, 1, 1, 2, OptionalInt.empty())
         ).ignoreVines().build());
@@ -227,6 +236,7 @@ public final class ModTreeConfiguredFeatures {
                 Blocks.ACACIA_SAPLING,
                 Blocks.CHERRY_SAPLING,
                 Blocks.DARK_OAK_SAPLING,
+                Blocks.PALE_OAK_SAPLING,
                 Blocks.MANGROVE_PROPAGULE,
                 Blocks.DANDELION,
                 Blocks.TORCHFLOWER,
@@ -273,6 +283,8 @@ public final class ModTreeConfiguredFeatures {
                 Blocks.AZALEA,
                 Blocks.FLOWERING_AZALEA,
                 Blocks.MOSS_CARPET,
+                Blocks.PALE_MOSS_CARPET,
+                Blocks.PALE_HANGING_MOSS,
                 Blocks.PINK_PETALS,
                 Blocks.BIG_DRIPLEAF,
                 Blocks.BIG_DRIPLEAF_STEM,
@@ -288,7 +300,7 @@ public final class ModTreeConfiguredFeatures {
     }
 
     private static ResourceKey<ConfiguredFeature<?, ?>> key(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ThinLogs.MOD_ID, name));
+        return ResourceKey.create(Registries.CONFIGURED_FEATURE, Identifier.fromNamespaceAndPath(ThinLogs.MOD_ID, name));
     }
 
     private static <FC extends net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration, F extends Feature<FC>> void register(

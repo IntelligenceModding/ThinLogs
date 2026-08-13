@@ -1,7 +1,7 @@
 package de.artemis.thinlogs.common.registration;
 
 import de.artemis.thinlogs.ThinLogs;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
@@ -19,7 +19,7 @@ public final class ModTags {
         }
 
         private static TagKey<Block> blockTag(String name) {
-            return BlockTags.create(ResourceLocation.fromNamespaceAndPath(ThinLogs.MOD_ID, name));
+            return BlockTags.create(Identifier.fromNamespaceAndPath(ThinLogs.MOD_ID, name));
         }
     }
 }

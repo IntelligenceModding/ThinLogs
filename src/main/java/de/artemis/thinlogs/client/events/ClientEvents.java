@@ -1,33 +1,30 @@
 package de.artemis.thinlogs.client.events;
 
-import de.artemis.thinlogs.ThinLogs;
 import de.artemis.thinlogs.client.model.ThinLogOverlayBakedModel;
+import de.artemis.thinlogs.common.blocks.ThinLogBlock;
 import de.artemis.thinlogs.client.render.ThinLogBlockEntityRenderer;
 import de.artemis.thinlogs.common.blocks.ThinLogBlockEntity;
 import de.artemis.thinlogs.common.blocks.ThinLogOverlay;
 import de.artemis.thinlogs.common.registration.ModBlockEntities;
 import de.artemis.thinlogs.common.registration.ModBlocks;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 
-import java.util.HashSet;
-import java.util.Set;
-
-@EventBusSubscriber(modid = ThinLogs.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public final class ClientEvents {
-    private static final Set<ResourceLocation> THIN_LOG_MODEL_IDS = collectThinLogModelIds();
-
     private ClientEvents() {
+    }
+
+    public static void registerModEventListeners(IEventBus modEventBus) {
+        modEventBus.addListener(ClientEvents::registerRenderers);
+        modEventBus.addListener(ClientEvents::wrapThinLogModels);
+        modEventBus.addListener(ClientEvents::registerBlockColors);
     }
 
     @SubscribeEvent
@@ -37,7 +34,7 @@ public final class ClientEvents {
 
     @SubscribeEvent
     public static void wrapThinLogModels(ModelEvent.ModifyBakingResult event) {
-        event.getModels().replaceAll((modelLocation, bakedModel) -> shouldWrap(modelLocation) ? new ThinLogOverlayBakedModel(bakedModel) : bakedModel);
+        event.getBakingResult().blockStateModels().replaceAll((state, model) -> shouldWrap(state) ? new ThinLogOverlayBakedModel(model) : model);
     }
 
     @SubscribeEvent
@@ -48,8 +45,8 @@ public final class ClientEvents {
         );
     }
 
-    private static boolean shouldWrap(ModelResourceLocation modelLocation) {
-        return THIN_LOG_MODEL_IDS.contains(modelLocation.id());
+    private static boolean shouldWrap(BlockState state) {
+        return state.getBlock() instanceof ThinLogBlock;
     }
 
     private static int delegatedLeafColor(BlockAndTintGetter level, BlockPos pos, int tintIndex, RegisterColorHandlersEvent.Block event) {
@@ -70,12 +67,4 @@ public final class ClientEvents {
         return event.getBlockColors().getColor(foliageOverlayState, level, pos, tintIndex);
     }
 
-    private static Set<ResourceLocation> collectThinLogModelIds() {
-        Set<ResourceLocation> ids = new HashSet<>();
-        ModBlocks.allSets().forEach(set -> {
-            ids.add(set.thinBlock().getId());
-            ids.add(set.strippedThinBlock().getId());
-        });
-        return ids;
-    }
 }

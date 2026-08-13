@@ -15,7 +15,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Minecraft-1.21.1-3C8527?style=for-the-badge&logo=minecraft&logoColor=white" alt="Minecraft 1.21.1">
+  <img src="https://img.shields.io/badge/Minecraft-1.21.11-3C8527?style=for-the-badge&logo=minecraft&logoColor=white" alt="Minecraft 1.21.11">
   &nbsp;&nbsp;&nbsp;
   <img src="https://img.shields.io/badge/Loader-NeoForge-6C47FF?style=for-the-badge" alt="NeoForge">
 </p>
@@ -62,6 +62,8 @@
 
 <p align="center">
   <a href="https://www.curseforge.com/minecraft/mc-mods/artemis-thin-logs"><img src="https://img.shields.io/badge/CurseForge-ThinLogs-F16436?style=for-the-badge&logo=curseforge&logoColor=white" alt="Artemis' Thin Logs on CurseForge"></a>
+  &nbsp;&nbsp;&nbsp;
+  <a href="https://modrinth.com/mod/artemis-thin-logs"><img src="https://img.shields.io/badge/Modrinth-ThinLogs-00AF5C?style=for-the-badge&logo=modrinth&logoColor=white" alt="Artemis' Thin Logs on Modrinth"></a>
   &nbsp;&nbsp;&nbsp;
   <a href="https://github.com/IntelligenceModding/ThinLogs"><img src="https://img.shields.io/badge/GitHub-ThinLogs-181717?style=for-the-badge&logo=github&logoColor=white" alt="ThinLogs on GitHub"></a>
 </p>

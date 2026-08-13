@@ -1,6 +1,10 @@
 package de.artemis.thinlogs.common.registration;
 
+import de.artemis.thinlogs.ThinLogs;
 import de.artemis.thinlogs.common.blocks.ThinLogBlock;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -11,7 +15,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 public final class ModBlocks {
     private static final List<ThinLogSet> THIN_LOG_SETS = new ArrayList<>();
@@ -22,6 +26,7 @@ public final class ModBlocks {
             "thin_jungle_log",
             "thin_acacia_log",
             "thin_dark_oak_log",
+            "thin_pale_oak_log",
             "thin_mangrove_log",
             "thin_cherry_log",
             "thin_bamboo_block",
@@ -33,6 +38,7 @@ public final class ModBlocks {
     public static final ThinLogSet BIRCH = registerSet(ThinLogSetDefinition.log("birch", () -> Blocks.BIRCH_LOG, () -> Blocks.STRIPPED_BIRCH_LOG, () -> Blocks.BIRCH_PLANKS));
     public static final ThinLogSet SPRUCE = registerSet(ThinLogSetDefinition.log("spruce", () -> Blocks.SPRUCE_LOG, () -> Blocks.STRIPPED_SPRUCE_LOG, () -> Blocks.SPRUCE_PLANKS));
     public static final ThinLogSet DARK_OAK = registerSet(ThinLogSetDefinition.log("dark_oak", () -> Blocks.DARK_OAK_LOG, () -> Blocks.STRIPPED_DARK_OAK_LOG, () -> Blocks.DARK_OAK_PLANKS));
+    public static final ThinLogSet PALE_OAK = registerSet(ThinLogSetDefinition.log("pale_oak", () -> Blocks.PALE_OAK_LOG, () -> Blocks.STRIPPED_PALE_OAK_LOG, () -> Blocks.PALE_OAK_PLANKS));
     public static final ThinLogSet ACACIA = registerSet(ThinLogSetDefinition.log("acacia", () -> Blocks.ACACIA_LOG, () -> Blocks.STRIPPED_ACACIA_LOG, () -> Blocks.ACACIA_PLANKS));
     public static final ThinLogSet JUNGLE = registerSet(ThinLogSetDefinition.log("jungle", () -> Blocks.JUNGLE_LOG, () -> Blocks.STRIPPED_JUNGLE_LOG, () -> Blocks.JUNGLE_PLANKS));
     public static final ThinLogSet MANGROVE = registerSet(ThinLogSetDefinition.log("mangrove", () -> Blocks.MANGROVE_LOG, () -> Blocks.STRIPPED_MANGROVE_LOG, () -> Blocks.MANGROVE_PLANKS));
@@ -48,9 +54,16 @@ public final class ModBlocks {
     private ModBlocks() {
     }
 
-    private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> blockSupplier) {
-        DeferredBlock<T> registeredBlock = Registration.BLOCKS.register(name, blockSupplier);
-        Registration.ITEMS.register(name, () -> new BlockItem(registeredBlock.get(), new Item.Properties()));
+    private static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<ResourceKey<Block>, T> blockFactory) {
+        Identifier id = Identifier.fromNamespaceAndPath(ThinLogs.MOD_ID, name);
+        ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, id);
+        ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, id);
+
+        DeferredBlock<T> registeredBlock = Registration.BLOCKS.register(name, () -> blockFactory.apply(blockKey));
+        Registration.ITEMS.register(name, () -> new BlockItem(
+                registeredBlock.get(),
+                new Item.Properties().setId(itemKey).useBlockDescriptionPrefix()
+        ));
         return registeredBlock;
     }
 
@@ -58,8 +71,8 @@ public final class ModBlocks {
         @SuppressWarnings("unchecked")
         DeferredBlock<ThinLogBlock>[] strippedHolder = new DeferredBlock[1];
 
-        DeferredBlock<ThinLogBlock> thinBlock = registerBlock(definition.thinId(), () -> new ThinLogBlock(definition.createProperties(), false, () -> strippedHolder[0].get()));
-        DeferredBlock<ThinLogBlock> strippedThinBlock = registerBlock(definition.strippedThinId(), () -> new ThinLogBlock(definition.createProperties(), true, null));
+        DeferredBlock<ThinLogBlock> thinBlock = registerBlock(definition.thinId(), key -> new ThinLogBlock(definition.createProperties().setId(key), false, () -> strippedHolder[0].get()));
+        DeferredBlock<ThinLogBlock> strippedThinBlock = registerBlock(definition.strippedThinId(), key -> new ThinLogBlock(definition.createProperties().setId(key), true, null));
         strippedHolder[0] = strippedThinBlock;
 
         ThinLogSet set = new ThinLogSet(definition, thinBlock, strippedThinBlock);

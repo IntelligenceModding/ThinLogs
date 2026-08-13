@@ -1,6 +1,6 @@
 package de.artemis.thinlogs.common.registration;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -14,10 +14,10 @@ public record ThinLogSetDefinition(
         Supplier<Block> baseBlock,
         Supplier<Block> strippedBaseBlock,
         Supplier<Block> plankBlock,
-        ResourceLocation sideTexture,
-        ResourceLocation endTexture,
-        ResourceLocation strippedSideTexture,
-        ResourceLocation strippedEndTexture,
+        Identifier sideTexture,
+        Identifier endTexture,
+        Identifier strippedSideTexture,
+        Identifier strippedEndTexture,
         SoundType soundType,
         boolean ignitedByLava
 ) {
@@ -29,10 +29,10 @@ public record ThinLogSetDefinition(
                 baseBlock,
                 strippedBaseBlock,
                 plankBlock,
-                ResourceLocation.withDefaultNamespace("block/" + woodName + "_log"),
-                ResourceLocation.withDefaultNamespace("block/" + woodName + "_log_top"),
-                ResourceLocation.withDefaultNamespace("block/stripped_" + woodName + "_log"),
-                ResourceLocation.withDefaultNamespace("block/stripped_" + woodName + "_log_top"),
+                Identifier.withDefaultNamespace("block/" + woodName + "_log"),
+                Identifier.withDefaultNamespace("block/" + woodName + "_log_top"),
+                Identifier.withDefaultNamespace("block/stripped_" + woodName + "_log"),
+                Identifier.withDefaultNamespace("block/stripped_" + woodName + "_log_top"),
                 SoundType.WOOD,
                 true
         );
@@ -46,10 +46,10 @@ public record ThinLogSetDefinition(
                 baseBlock,
                 strippedBaseBlock,
                 plankBlock,
-                ResourceLocation.withDefaultNamespace("block/" + stemName + "_stem"),
-                ResourceLocation.withDefaultNamespace("block/" + stemName + "_stem_top"),
-                ResourceLocation.withDefaultNamespace("block/stripped_" + stemName + "_stem"),
-                ResourceLocation.withDefaultNamespace("block/stripped_" + stemName + "_stem_top"),
+                Identifier.withDefaultNamespace("block/" + stemName + "_stem"),
+                Identifier.withDefaultNamespace("block/" + stemName + "_stem_top"),
+                Identifier.withDefaultNamespace("block/stripped_" + stemName + "_stem"),
+                Identifier.withDefaultNamespace("block/stripped_" + stemName + "_stem_top"),
                 SoundType.WOOD,
                 false
         );
@@ -63,10 +63,10 @@ public record ThinLogSetDefinition(
                 baseBlock,
                 strippedBaseBlock,
                 plankBlock,
-                ResourceLocation.withDefaultNamespace("block/bamboo_block"),
-                ResourceLocation.withDefaultNamespace("block/bamboo_block_top"),
-                ResourceLocation.withDefaultNamespace("block/stripped_bamboo_block"),
-                ResourceLocation.withDefaultNamespace("block/stripped_bamboo_block_top"),
+                Identifier.withDefaultNamespace("block/bamboo_block"),
+                Identifier.withDefaultNamespace("block/bamboo_block_top"),
+                Identifier.withDefaultNamespace("block/stripped_bamboo_block"),
+                Identifier.withDefaultNamespace("block/stripped_bamboo_block_top"),
                 SoundType.BAMBOO_WOOD,
                 true
         );

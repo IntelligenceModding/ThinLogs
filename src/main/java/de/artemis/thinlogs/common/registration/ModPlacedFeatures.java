@@ -8,8 +8,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.random.SimpleWeightedRandomList;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.WeightedListInt;
 import net.minecraft.world.level.block.Blocks;
@@ -38,6 +38,7 @@ public final class ModPlacedFeatures {
     public static final ResourceKey<PlacedFeature> THIN_JUNGLE_TREE_CHECKED = key("thin_jungle_tree_checked");
     public static final ResourceKey<PlacedFeature> THIN_ACACIA_CHECKED = key("thin_acacia_checked");
     public static final ResourceKey<PlacedFeature> THIN_DARK_OAK_CHECKED = key("thin_dark_oak_checked");
+    public static final ResourceKey<PlacedFeature> THIN_PALE_OAK_CHECKED = key("thin_pale_oak_checked");
     public static final ResourceKey<PlacedFeature> THIN_FANCY_OAK_CHECKED = key("thin_fancy_oak_checked");
     public static final ResourceKey<PlacedFeature> THIN_SUPER_BIRCH_CHECKED = key("thin_super_birch_checked");
     public static final ResourceKey<PlacedFeature> THIN_SWAMP_OAK_CHECKED = key("thin_swamp_oak_checked");
@@ -60,9 +61,9 @@ public final class ModPlacedFeatures {
     public static final ResourceKey<PlacedFeature> THIN_TREES_MEADOW = key("thin_trees_meadow");
     public static final ResourceKey<PlacedFeature> THIN_TREES_OLD_GROWTH_PINE_TAIGA = key("thin_trees_old_growth_pine_taiga");
     public static final ResourceKey<PlacedFeature> THIN_TREES_OLD_GROWTH_SPRUCE_TAIGA = key("thin_trees_old_growth_spruce_taiga");
+    public static final ResourceKey<PlacedFeature> THIN_TREES_PALE_GARDEN = key("thin_trees_pale_garden");
     public static final ResourceKey<PlacedFeature> THIN_TREES_PLAINS = key("thin_trees_plains");
     public static final ResourceKey<PlacedFeature> THIN_TREES_SAVANNA = key("thin_trees_savanna");
-    public static final ResourceKey<PlacedFeature> THIN_TREES_SNOWY = key("thin_trees_snowy");
     public static final ResourceKey<PlacedFeature> THIN_TREES_SPARSE_JUNGLE = key("thin_trees_sparse_jungle");
     public static final ResourceKey<PlacedFeature> THIN_TREES_SWAMP = key("thin_trees_swamp");
     public static final ResourceKey<PlacedFeature> THIN_TREES_TAIGA = key("thin_trees_taiga");
@@ -95,6 +96,9 @@ public final class ModPlacedFeatures {
         ));
         register(context, THIN_DARK_OAK_CHECKED, configured.getOrThrow(ModTreeConfiguredFeatures.THIN_DARK_OAK), List.of(
                 PlacementUtils.filteredByBlockSurvival(Blocks.DARK_OAK_SAPLING)
+        ));
+        register(context, THIN_PALE_OAK_CHECKED, configured.getOrThrow(ModTreeConfiguredFeatures.THIN_PALE_OAK), List.of(
+                PlacementUtils.filteredByBlockSurvival(Blocks.PALE_OAK_SAPLING)
         ));
         register(context, THIN_FANCY_OAK_CHECKED, configured.getOrThrow(ModTreeConfiguredFeatures.THIN_FANCY_OAK), List.of(
                 PlacementUtils.filteredByBlockSurvival(Blocks.OAK_SAPLING)
@@ -150,9 +154,9 @@ public final class ModPlacedFeatures {
         ));
         register(context, THIN_TREES_OLD_GROWTH_PINE_TAIGA, configured.getOrThrow(ModConfiguredFeatures.THIN_TREES_OLD_GROWTH_PINE_TAIGA), featureScatter(weightedCounts(1, 9, 2, 1), 0, Heightmap.Types.OCEAN_FLOOR));
         register(context, THIN_TREES_OLD_GROWTH_SPRUCE_TAIGA, configured.getOrThrow(ModConfiguredFeatures.THIN_TREES_OLD_GROWTH_SPRUCE_TAIGA), featureScatter(weightedCounts(1, 9, 2, 1), 0, Heightmap.Types.OCEAN_FLOOR));
+        register(context, THIN_TREES_PALE_GARDEN, configured.getOrThrow(ModTreeConfiguredFeatures.THIN_PALE_OAK), featureScatter(weightedCounts(1, 9, 2, 1), 0, Heightmap.Types.OCEAN_FLOOR));
         register(context, THIN_TREES_PLAINS, configured.getOrThrow(ModConfiguredFeatures.THIN_TREES_PLAINS), featureScatter(weightedCounts(0, 9, 1, 1), 0, Heightmap.Types.OCEAN_FLOOR));
         register(context, THIN_TREES_SAVANNA, configured.getOrThrow(ModConfiguredFeatures.THIN_TREES_SAVANNA), featureScatter(weightedCounts(0, 7, 1, 3), 0, Heightmap.Types.OCEAN_FLOOR));
-        register(context, THIN_TREES_SNOWY, configured.getOrThrow(ModTreeConfiguredFeatures.THIN_SPRUCE), featureScatter(weightedCounts(0, 8, 1, 2), 0, Heightmap.Types.OCEAN_FLOOR));
         register(context, THIN_TREES_SPARSE_JUNGLE, configured.getOrThrow(ModConfiguredFeatures.THIN_TREES_SPARSE_JUNGLE), featureScatter(weightedCounts(0, 7, 1, 3), 0, Heightmap.Types.OCEAN_FLOOR));
         register(context, THIN_TREES_SWAMP, configured.getOrThrow(ModTreeConfiguredFeatures.THIN_SWAMP_OAK), featureScatter(weightedCounts(0, 7, 1, 3), 2, Heightmap.Types.OCEAN_FLOOR));
         register(context, THIN_TREES_TAIGA, configured.getOrThrow(ModConfiguredFeatures.THIN_TREES_TAIGA), featureScatter(weightedCounts(1, 9, 2, 1), 0, Heightmap.Types.OCEAN_FLOOR));
@@ -171,14 +175,14 @@ public final class ModPlacedFeatures {
     }
 
     private static CountPlacement weightedCounts(int firstData, int firstWeight, int secondData, int secondWeight) {
-        SimpleWeightedRandomList.Builder<net.minecraft.util.valueproviders.IntProvider> builder = SimpleWeightedRandomList.builder();
+        WeightedList.Builder<net.minecraft.util.valueproviders.IntProvider> builder = WeightedList.builder();
         builder.add(ConstantInt.of(firstData), firstWeight);
         builder.add(ConstantInt.of(secondData), secondWeight);
         return CountPlacement.of(new WeightedListInt(builder.build()));
     }
 
     private static ResourceKey<PlacedFeature> key(String name) {
-        return ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ThinLogs.MOD_ID, name));
+        return ResourceKey.create(Registries.PLACED_FEATURE, Identifier.fromNamespaceAndPath(ThinLogs.MOD_ID, name));
     }
 
     private static void register(BootstrapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key, Holder<ConfiguredFeature<?, ?>> configuration, List<PlacementModifier> modifiers) {
