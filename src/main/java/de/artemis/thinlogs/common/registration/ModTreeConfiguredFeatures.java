@@ -14,6 +14,7 @@ import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.HugeFungusConfiguration;
@@ -32,6 +33,7 @@ import net.minecraft.world.level.levelgen.feature.rootplacers.AboveRootPlacement
 import net.minecraft.world.level.levelgen.feature.rootplacers.MangroveRootPlacer;
 import net.minecraft.world.level.levelgen.feature.rootplacers.MangroveRootPlacement;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+import net.minecraft.world.level.levelgen.feature.stateproviders.RuleBasedStateProvider;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.CherryTrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
 
@@ -55,6 +57,10 @@ public final class ModTreeConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> THIN_TALL_MANGROVE = key("thin_tall_mangrove");
     public static final ResourceKey<ConfiguredFeature<?, ?>> THIN_CRIMSON_FUNGUS = key("thin_crimson_fungus");
     public static final ResourceKey<ConfiguredFeature<?, ?>> THIN_WARPED_FUNGUS = key("thin_warped_fungus");
+    private static final BlockStateProvider DIRT_BELOW_TRUNK = RuleBasedStateProvider.ifTrueThenProvide(
+            BlockPredicate.not(BlockPredicate.matchesTag(BlockTags.CANNOT_REPLACE_BELOW_TREE_TRUNK)),
+            Blocks.DIRT
+    );
 
     private ModTreeConfiguredFeatures() {
     }
@@ -67,7 +73,8 @@ public final class ModTreeConfiguredFeatures {
                 new StraightTrunkPlacer(4, 2, 0),
                 leafProvider(Blocks.OAK_LEAVES),
                 new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 3),
-                new TwoLayersFeatureSize(1, 0, 1)
+                new TwoLayersFeatureSize(1, 0, 1),
+                DIRT_BELOW_TRUNK
         ).ignoreVines().build());
 
         register(context, THIN_BIRCH, ModFeatures.THIN_TREE.get(), new TreeConfiguration.TreeConfigurationBuilder(
@@ -75,7 +82,8 @@ public final class ModTreeConfiguredFeatures {
                 new StraightTrunkPlacer(5, 2, 0),
                 leafProvider(Blocks.BIRCH_LEAVES),
                 new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 3),
-                new TwoLayersFeatureSize(1, 0, 1)
+                new TwoLayersFeatureSize(1, 0, 1),
+                DIRT_BELOW_TRUNK
         ).ignoreVines().build());
 
         register(context, THIN_SPRUCE, ModFeatures.THIN_TREE.get(), new TreeConfiguration.TreeConfigurationBuilder(
@@ -83,7 +91,8 @@ public final class ModTreeConfiguredFeatures {
                 new StraightTrunkPlacer(5, 2, 1),
                 leafProvider(Blocks.SPRUCE_LEAVES),
                 new SpruceFoliagePlacer(UniformInt.of(2, 3), UniformInt.of(0, 2), UniformInt.of(1, 2)),
-                new TwoLayersFeatureSize(2, 0, 2)
+                new TwoLayersFeatureSize(2, 0, 2),
+                DIRT_BELOW_TRUNK
         ).ignoreVines().build());
 
         register(context, THIN_PINE, ModFeatures.THIN_TREE.get(), new TreeConfiguration.TreeConfigurationBuilder(
@@ -91,7 +100,8 @@ public final class ModTreeConfiguredFeatures {
                 new StraightTrunkPlacer(6, 4, 0),
                 leafProvider(Blocks.SPRUCE_LEAVES),
                 new PineFoliagePlacer(ConstantInt.of(1), ConstantInt.of(1), UniformInt.of(3, 4)),
-                new TwoLayersFeatureSize(2, 0, 2)
+                new TwoLayersFeatureSize(2, 0, 2),
+                DIRT_BELOW_TRUNK
         ).ignoreVines().build());
 
         register(context, THIN_JUNGLE_TREE, ModFeatures.THIN_TREE.get(), new TreeConfiguration.TreeConfigurationBuilder(
@@ -99,7 +109,8 @@ public final class ModTreeConfiguredFeatures {
                 new StraightTrunkPlacer(4, 8, 0),
                 leafProvider(Blocks.JUNGLE_LEAVES),
                 new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 3),
-                new TwoLayersFeatureSize(1, 0, 1)
+                new TwoLayersFeatureSize(1, 0, 1),
+                DIRT_BELOW_TRUNK
         ).ignoreVines().build());
 
         register(context, THIN_ACACIA, ModFeatures.THIN_TREE.get(), new TreeConfiguration.TreeConfigurationBuilder(
@@ -107,7 +118,8 @@ public final class ModTreeConfiguredFeatures {
                 new ConnectedForkingTrunkPlacer(5, 2, 2),
                 leafProvider(Blocks.ACACIA_LEAVES),
                 new AcaciaFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0)),
-                new TwoLayersFeatureSize(1, 0, 2)
+                new TwoLayersFeatureSize(1, 0, 2),
+                DIRT_BELOW_TRUNK
         ).ignoreVines().build());
 
         register(context, THIN_DARK_OAK, ModFeatures.THIN_TREE.get(), new TreeConfiguration.TreeConfigurationBuilder(
@@ -115,7 +127,8 @@ public final class ModTreeConfiguredFeatures {
                 new StraightTrunkPlacer(6, 2, 1),
                 leafProvider(Blocks.DARK_OAK_LEAVES),
                 new DarkOakFoliagePlacer(ConstantInt.of(0), ConstantInt.of(0)),
-                new ThreeLayersFeatureSize(1, 0, 1, 1, 2, OptionalInt.empty())
+                new ThreeLayersFeatureSize(1, 0, 1, 1, 2, OptionalInt.empty()),
+                DIRT_BELOW_TRUNK
         ).ignoreVines().build());
 
         register(context, THIN_PALE_OAK, ModFeatures.THIN_TREE.get(), new TreeConfiguration.TreeConfigurationBuilder(
@@ -123,7 +136,8 @@ public final class ModTreeConfiguredFeatures {
                 new StraightTrunkPlacer(6, 2, 1),
                 leafProvider(Blocks.PALE_OAK_LEAVES),
                 new DarkOakFoliagePlacer(ConstantInt.of(0), ConstantInt.of(0)),
-                new ThreeLayersFeatureSize(1, 0, 1, 1, 2, OptionalInt.empty())
+                new ThreeLayersFeatureSize(1, 0, 1, 1, 2, OptionalInt.empty()),
+                DIRT_BELOW_TRUNK
         ).ignoreVines().build());
 
         register(context, THIN_FANCY_OAK, ModFeatures.THIN_TREE.get(), new TreeConfiguration.TreeConfigurationBuilder(
@@ -131,7 +145,8 @@ public final class ModTreeConfiguredFeatures {
                 new ConnectedBranchingTrunkPlacer(4, 7, 0, UniformInt.of(2, 4), 0.65F, UniformInt.of(2, 4)),
                 leafProvider(Blocks.OAK_LEAVES),
                 new FancyFoliagePlacer(ConstantInt.of(2), ConstantInt.of(4), 4),
-                new TwoLayersFeatureSize(0, 0, 0, OptionalInt.of(4))
+                new TwoLayersFeatureSize(0, 0, 0, OptionalInt.of(4)),
+                DIRT_BELOW_TRUNK
         ).ignoreVines().build());
 
         register(context, THIN_SUPER_BIRCH, ModFeatures.THIN_TREE.get(), new TreeConfiguration.TreeConfigurationBuilder(
@@ -139,7 +154,8 @@ public final class ModTreeConfiguredFeatures {
                 new StraightTrunkPlacer(5, 2, 6),
                 leafProvider(Blocks.BIRCH_LEAVES),
                 new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 3),
-                new TwoLayersFeatureSize(1, 0, 1)
+                new TwoLayersFeatureSize(1, 0, 1),
+                DIRT_BELOW_TRUNK
         ).ignoreVines().build());
 
         register(context, THIN_SWAMP_OAK, ModFeatures.THIN_TREE.get(), new TreeConfiguration.TreeConfigurationBuilder(
@@ -147,7 +163,8 @@ public final class ModTreeConfiguredFeatures {
                 new StraightTrunkPlacer(5, 3, 0),
                 leafProvider(Blocks.OAK_LEAVES),
                 new BlobFoliagePlacer(ConstantInt.of(3), ConstantInt.of(0), 3),
-                new TwoLayersFeatureSize(1, 0, 1)
+                new TwoLayersFeatureSize(1, 0, 1),
+                DIRT_BELOW_TRUNK
         ).build());
 
         register(context, THIN_CHERRY, ModFeatures.THIN_TREE.get(), new TreeConfiguration.TreeConfigurationBuilder(
@@ -171,7 +188,8 @@ public final class ModTreeConfiguredFeatures {
                         0.16666667F,
                         0.33333334F
                 ),
-                new TwoLayersFeatureSize(1, 0, 2)
+                new TwoLayersFeatureSize(1, 0, 2),
+                DIRT_BELOW_TRUNK
         ).ignoreVines().build());
 
         register(context, THIN_MANGROVE, ModFeatures.THIN_TREE.get(), new TreeConfiguration.TreeConfigurationBuilder(
@@ -181,7 +199,7 @@ public final class ModTreeConfiguredFeatures {
                 new RandomSpreadFoliagePlacer(ConstantInt.of(3), ConstantInt.of(0), ConstantInt.of(2), 70),
                 Optional.of(mangroveRootPlacer(blocks, UniformInt.of(1, 3))),
                 new TwoLayersFeatureSize(2, 0, 2),
-                TreeConfiguration.PLACE_BELOW_OVERWORLD_TRUNKS
+                DIRT_BELOW_TRUNK
         ).ignoreVines().build());
 
         register(context, THIN_TALL_MANGROVE, ModFeatures.THIN_TREE.get(), new TreeConfiguration.TreeConfigurationBuilder(
@@ -191,7 +209,7 @@ public final class ModTreeConfiguredFeatures {
                 new RandomSpreadFoliagePlacer(ConstantInt.of(3), ConstantInt.of(0), ConstantInt.of(2), 70),
                 Optional.of(mangroveRootPlacer(blocks, UniformInt.of(3, 7))),
                 new TwoLayersFeatureSize(3, 0, 2),
-                TreeConfiguration.PLACE_BELOW_OVERWORLD_TRUNKS
+                DIRT_BELOW_TRUNK
         ).ignoreVines().build());
 
         register(context, THIN_CRIMSON_FUNGUS, Feature.HUGE_FUNGUS, new HugeFungusConfiguration(

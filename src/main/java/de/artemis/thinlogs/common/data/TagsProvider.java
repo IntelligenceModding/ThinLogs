@@ -5,13 +5,19 @@ import de.artemis.thinlogs.common.registration.ModBlocks;
 import de.artemis.thinlogs.common.registration.ModTags;
 import de.artemis.thinlogs.common.registration.ThinLogSet;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public final class TagsProvider {
@@ -26,7 +32,7 @@ public final class TagsProvider {
         @Override
         protected void addTags(HolderLookup.@NotNull Provider provider) {
             for (Block block : ModBlocks.allThinLogBlocks()) {
-                tag(BlockTags.MINEABLE_WITH_AXE).add(block);
+                tag(BlockTags.MINEABLE_WITH_AXE).add(key(block));
             }
 
             addSpeciesTags();
@@ -36,63 +42,53 @@ public final class TagsProvider {
             tag(ModTags.BlockTagsSet.THIN_LOG_OVERLAY_LEAVES).addTag(BlockTags.LEAVES);
             tag(ModTags.BlockTagsSet.THIN_LOG_OVERLAY_CARPETS)
                     .addTag(BlockTags.WOOL_CARPETS)
-                    .add(Blocks.MOSS_CARPET);
+                    .add(key(Blocks.MOSS_CARPET));
             tag(ModTags.BlockTagsSet.THIN_LOG_OVERLAY_SNOW)
-                    .add(Blocks.SNOW, Blocks.SNOW_BLOCK);
+                    .addAll(List.of(key(Blocks.SNOW), key(Blocks.SNOW_BLOCK)));
         }
 
         private void addSpeciesTags() {
-            tag(BlockTags.OAK_LOGS).add(ModBlocks.OAK.thinBlock().get(), ModBlocks.OAK.strippedThinBlock().get());
-            tag(BlockTags.BIRCH_LOGS).add(ModBlocks.BIRCH.thinBlock().get(), ModBlocks.BIRCH.strippedThinBlock().get());
-            tag(BlockTags.SPRUCE_LOGS).add(ModBlocks.SPRUCE.thinBlock().get(), ModBlocks.SPRUCE.strippedThinBlock().get());
-            tag(BlockTags.JUNGLE_LOGS).add(ModBlocks.JUNGLE.thinBlock().get(), ModBlocks.JUNGLE.strippedThinBlock().get());
-            tag(BlockTags.ACACIA_LOGS).add(ModBlocks.ACACIA.thinBlock().get(), ModBlocks.ACACIA.strippedThinBlock().get());
-            tag(BlockTags.DARK_OAK_LOGS).add(ModBlocks.DARK_OAK.thinBlock().get(), ModBlocks.DARK_OAK.strippedThinBlock().get());
-            tag(BlockTags.PALE_OAK_LOGS).add(ModBlocks.PALE_OAK.thinBlock().get(), ModBlocks.PALE_OAK.strippedThinBlock().get());
-            tag(BlockTags.MANGROVE_LOGS).add(ModBlocks.MANGROVE.thinBlock().get(), ModBlocks.MANGROVE.strippedThinBlock().get());
-            tag(BlockTags.CHERRY_LOGS).add(ModBlocks.CHERRY.thinBlock().get(), ModBlocks.CHERRY.strippedThinBlock().get());
-            tag(BlockTags.CRIMSON_STEMS).add(ModBlocks.CRIMSON.thinBlock().get(), ModBlocks.CRIMSON.strippedThinBlock().get());
-            tag(BlockTags.WARPED_STEMS).add(ModBlocks.WARPED.thinBlock().get(), ModBlocks.WARPED.strippedThinBlock().get());
-            tag(BlockTags.BAMBOO_BLOCKS).add(ModBlocks.BAMBOO.thinBlock().get(), ModBlocks.BAMBOO.strippedThinBlock().get());
+            tag(vanillaTag("oak_logs")).addAll(keys(ModBlocks.OAK));
+            tag(vanillaTag("birch_logs")).addAll(keys(ModBlocks.BIRCH));
+            tag(vanillaTag("spruce_logs")).addAll(keys(ModBlocks.SPRUCE));
+            tag(vanillaTag("jungle_logs")).addAll(keys(ModBlocks.JUNGLE));
+            tag(vanillaTag("acacia_logs")).addAll(keys(ModBlocks.ACACIA));
+            tag(vanillaTag("dark_oak_logs")).addAll(keys(ModBlocks.DARK_OAK));
+            tag(vanillaTag("pale_oak_logs")).addAll(keys(ModBlocks.PALE_OAK));
+            tag(vanillaTag("mangrove_logs")).addAll(keys(ModBlocks.MANGROVE));
+            tag(vanillaTag("cherry_logs")).addAll(keys(ModBlocks.CHERRY));
+            tag(vanillaTag("crimson_stems")).addAll(keys(ModBlocks.CRIMSON));
+            tag(vanillaTag("warped_stems")).addAll(keys(ModBlocks.WARPED));
+            tag(BlockTags.BAMBOO_BLOCKS).addAll(keys(ModBlocks.BAMBOO));
 
-            tag(BlockTags.OVERWORLD_NATURAL_LOGS).add(
-                    ModBlocks.OAK.thinBlock().get(),
-                    ModBlocks.BIRCH.thinBlock().get(),
-                    ModBlocks.SPRUCE.thinBlock().get(),
-                    ModBlocks.JUNGLE.thinBlock().get(),
-                    ModBlocks.ACACIA.thinBlock().get(),
-                    ModBlocks.DARK_OAK.thinBlock().get(),
-                    ModBlocks.PALE_OAK.thinBlock().get(),
-                    ModBlocks.MANGROVE.thinBlock().get(),
-                    ModBlocks.CHERRY.thinBlock().get()
-            );
+            tag(BlockTags.OVERWORLD_NATURAL_LOGS).addAll(thinBlockKeys(OVERWORLD_NATURAL_LOG_SETS));
         }
 
         private void addMinecraftLogTags() {
-            tag(BlockTags.LOGS).add(blocks(ALL_LOG_SETS));
-            tag(BlockTags.LOGS_THAT_BURN).add(blocks(FLAMMABLE_LOG_SETS));
-            tag(BlockTags.COMPLETES_FIND_TREE_TUTORIAL).add(blocks(ALL_LOG_SETS));
+            tag(BlockTags.LOGS).addAll(keys(ALL_LOG_SETS));
+            tag(vanillaTag("logs_that_burn")).addAll(keys(FLAMMABLE_LOG_SETS));
+            tag(BlockTags.COMPLETES_FIND_TREE_TUTORIAL).addAll(keys(ALL_LOG_SETS));
         }
 
         private void addCompatibilityTags() {
-            tag(Tags.Blocks.OVERWORLD_NATURAL_LOGS).add(thinBlocks(OVERWORLD_NATURAL_LOG_SETS));
-            tag(Tags.Blocks.NETHER_NATURAL_LOGS).add(thinBlocks(NETHER_NATURAL_LOG_SETS));
-            tag(Tags.Blocks.NATURAL_LOGS).add(thinBlocks(NATURAL_LOG_SETS));
+            tag(Tags.Blocks.OVERWORLD_NATURAL_LOGS).addAll(thinBlockKeys(OVERWORLD_NATURAL_LOG_SETS));
+            tag(Tags.Blocks.NETHER_NATURAL_LOGS).addAll(thinBlockKeys(NETHER_NATURAL_LOG_SETS));
+            tag(Tags.Blocks.NATURAL_LOGS).addAll(thinBlockKeys(NATURAL_LOG_SETS));
 
-            tag(Tags.Blocks.STRIPPED_LOGS).add(
-                    ModBlocks.OAK.strippedThinBlock().get(),
-                    ModBlocks.BIRCH.strippedThinBlock().get(),
-                    ModBlocks.SPRUCE.strippedThinBlock().get(),
-                    ModBlocks.JUNGLE.strippedThinBlock().get(),
-                    ModBlocks.ACACIA.strippedThinBlock().get(),
-                    ModBlocks.DARK_OAK.strippedThinBlock().get(),
-                    ModBlocks.PALE_OAK.strippedThinBlock().get(),
-                    ModBlocks.MANGROVE.strippedThinBlock().get(),
-                    ModBlocks.CHERRY.strippedThinBlock().get(),
-                    ModBlocks.BAMBOO.strippedThinBlock().get(),
-                    ModBlocks.CRIMSON.strippedThinBlock().get(),
-                    ModBlocks.WARPED.strippedThinBlock().get()
-            );
+            tag(Tags.Blocks.STRIPPED_LOGS).addAll(List.of(
+                    key(ModBlocks.OAK.strippedThinBlock().get()),
+                    key(ModBlocks.BIRCH.strippedThinBlock().get()),
+                    key(ModBlocks.SPRUCE.strippedThinBlock().get()),
+                    key(ModBlocks.JUNGLE.strippedThinBlock().get()),
+                    key(ModBlocks.ACACIA.strippedThinBlock().get()),
+                    key(ModBlocks.DARK_OAK.strippedThinBlock().get()),
+                    key(ModBlocks.PALE_OAK.strippedThinBlock().get()),
+                    key(ModBlocks.MANGROVE.strippedThinBlock().get()),
+                    key(ModBlocks.CHERRY.strippedThinBlock().get()),
+                    key(ModBlocks.BAMBOO.strippedThinBlock().get()),
+                    key(ModBlocks.CRIMSON.strippedThinBlock().get()),
+                    key(ModBlocks.WARPED.strippedThinBlock().get())
+            ));
         }
 
     }
@@ -131,22 +127,29 @@ public final class TagsProvider {
     private static final ThinLogSet[] FLAMMABLE_LOG_SETS = OVERWORLD_NATURAL_LOG_SETS;
     private static final ThinLogSet[] ALL_LOG_SETS = NATURAL_LOG_SETS;
 
-    private static Block[] blocks(ThinLogSet... sets) {
-        Block[] blocks = new Block[sets.length * 2];
-        int index = 0;
+    private static List<ResourceKey<Block>> keys(ThinLogSet... sets) {
+        List<ResourceKey<Block>> keys = new ArrayList<>(sets.length * 2);
         for (ThinLogSet set : sets) {
-            blocks[index++] = set.thinBlock().get();
-            blocks[index++] = set.strippedThinBlock().get();
+            keys.add(key(set.thinBlock().get()));
+            keys.add(key(set.strippedThinBlock().get()));
         }
-        return blocks;
+        return keys;
     }
 
-    private static Block[] thinBlocks(ThinLogSet... sets) {
-        Block[] blocks = new Block[sets.length];
-        for (int i = 0; i < sets.length; i++) {
-            blocks[i] = sets[i].thinBlock().get();
+    private static List<ResourceKey<Block>> thinBlockKeys(ThinLogSet... sets) {
+        List<ResourceKey<Block>> keys = new ArrayList<>(sets.length);
+        for (ThinLogSet set : sets) {
+            keys.add(key(set.thinBlock().get()));
         }
-        return blocks;
+        return keys;
+    }
+
+    private static ResourceKey<Block> key(Block block) {
+        return block.builtInRegistryHolder().key();
+    }
+
+    private static TagKey<Block> vanillaTag(String name) {
+        return TagKey.create(Registries.BLOCK, Identifier.withDefaultNamespace(name));
     }
 
     private static ThinLogSet[] concat(ThinLogSet[] first, ThinLogSet[] second) {
