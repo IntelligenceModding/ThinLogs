@@ -10,6 +10,8 @@
   It focuses on thin log, stem, and bamboo variants that fit vanilla wood sets while giving builders narrower trunks, branches, poles, supports, and finer structural detailing.
 </p>
 
+<br>
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/IntelligenceModding/ThinLogs/refs/heads/assets/Compatibility.png" alt="Compatibility" height="75">
 </p>
@@ -23,6 +25,8 @@
 <p align="center">
   Artemis' Thin Logs is designed to work cleanly with resource packs and shaders.
 </p>
+
+<br>
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/IntelligenceModding/ThinLogs/refs/heads/assets/Features.png" alt="Features" height="75">
@@ -44,6 +48,34 @@
   Thin Logs is built to stay close to vanilla Minecraft while opening up more precise organic and architectural detailing.
 </p>
 
+<br>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/IntelligenceModding/ThinLogs/refs/heads/assets/Resources.png" alt="Resources" height="75">
+</p>
+
+<p align="center">
+  Bug reports, feature requests, version support requests, and contributions are welcome.
+</p>
+
+<p align="center">
+  Please read the contribution guidelines before submitting changes and use the appropriate issue form when reporting problems or suggesting improvements.
+</p>
+
+<p align="center">
+  <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/GitHub-Contributing%20Guidelines-181717?style=for-the-badge&logo=github&logoColor=white" alt="Contribution Guidelines"></a>
+  &nbsp;&nbsp;&nbsp;
+  <a href="https://github.com/IntelligenceModding/ThinLogs/issues/new/choose"><img src="https://img.shields.io/badge/GitHub-Issues-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub Issues"></a>
+</p>
+
+<p align="center">
+  <a href="SUPPORT.md"><img src="https://img.shields.io/badge/GitHub-Support-181717?style=for-the-badge&logo=github&logoColor=white" alt="Support"></a>
+  &nbsp;&nbsp;&nbsp;
+  <a href="CODE_OF_CONDUCT.md"><img src="https://img.shields.io/badge/GitHub-Code%20of%20Conduct-181717?style=for-the-badge&logo=github&logoColor=white" alt="Code of Conduct"></a>
+</p>
+
+<br>
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/IntelligenceModding/ThinLogs/refs/heads/assets/Community.png" alt="Community" height="75">
 </p>
@@ -58,12 +90,14 @@
 
 <p align="center">
   <a href="https://discord.intelligence-modding.de/"><img src="https://img.shields.io/badge/Discord-Join%20Community-5865F2?style=for-the-badge&logo=discord&logoColor=white" alt="Join the Intelligence Modding Discord"></a>
+  &nbsp;&nbsp;&nbsp;
+  <a href="https://www.youtube.com/@intelligencemodding4093"><img src="https://img.shields.io/badge/YouTube-Intelligence%20Modding-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="Intelligence Modding on YouTube"></a>
 </p>
 
 <p align="center">
   <a href="https://www.curseforge.com/minecraft/mc-mods/artemis-thin-logs"><img src="https://img.shields.io/badge/CurseForge-ThinLogs-F16436?style=for-the-badge&logo=curseforge&logoColor=white" alt="Artemis' Thin Logs on CurseForge"></a>
   &nbsp;&nbsp;&nbsp;
-  <a href="https://github.com/IntelligenceModding/ThinLogs"><img src="https://img.shields.io/badge/GitHub-ThinLogs-181717?style=for-the-badge&logo=github&logoColor=white" alt="ThinLogs on GitHub"></a>
+  <a href="https://modrinth.com/mod/artemis-thin-logs"><img src="https://img.shields.io/badge/Modrinth-ThinLogs-00AF5C?style=for-the-badge&logo=modrinth&logoColor=white" alt="Artemis' Thin Logs on Modrinth"></a>
 </p>
 
 <p align="center">
@@ -71,6 +105,8 @@
   &nbsp;&nbsp;&nbsp;
   <a href="https://github.com/IntelligenceModding"><img src="https://img.shields.io/badge/GitHub-IntelligenceModding-181717?style=for-the-badge&logo=github&logoColor=white" alt="Intelligence Modding on GitHub"></a>
 </p>
+
+<br>
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/IntelligenceModding/ThinLogs/refs/heads/assets/Acknowledgments.png" alt="Acknowledgments" height="75">
