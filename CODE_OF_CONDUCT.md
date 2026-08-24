@@ -2,8 +2,6 @@
   <img src="https://raw.githubusercontent.com/IntelligenceModding/ThinLogs/refs/heads/assets/Project%20Title.png" alt="Artemis' Thin Logs" height="139">
 </p>
 
-<h1 align="center">Code of Conduct</h1>
-
 ## Our Pledge
 
 We are committed to making participation in Artemis' Thin Logs a welcoming and harassment-free experience for everyone, regardless of age, disability, ethnicity, gender identity and expression, level of experience, nationality, personal appearance, race, religion, sex characteristics, sexual identity, or sexual orientation.
