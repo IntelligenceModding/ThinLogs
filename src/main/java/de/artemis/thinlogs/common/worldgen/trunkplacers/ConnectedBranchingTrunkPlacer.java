@@ -12,7 +12,7 @@ import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.IntProviders;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
+import net.minecraft.world.level.levelgen.feature.TreeFeature;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
@@ -61,7 +61,7 @@ public class ConnectedBranchingTrunkPlacer extends TrunkPlacer {
             RandomSource random,
             int freeTreeHeight,
             BlockPos pos,
-            TreeConfiguration config
+            TreeFeature config
     ) {
         placeBelowTrunkBlock(level, blockSetter, random, pos.below(), config);
         List<FoliagePlacer.FoliageAttachment> attachments = Lists.newArrayList();
@@ -88,7 +88,7 @@ public class ConnectedBranchingTrunkPlacer extends TrunkPlacer {
             WorldGenLevel level,
             BiConsumer<BlockPos, BlockState> blockSetter,
             RandomSource random,
-            TreeConfiguration config,
+            TreeFeature config,
             List<FoliagePlacer.FoliageAttachment> attachments,
             int baseX,
             int baseY,

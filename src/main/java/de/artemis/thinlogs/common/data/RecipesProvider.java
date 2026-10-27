@@ -3,10 +3,7 @@ package de.artemis.thinlogs.common.data;
 import de.artemis.thinlogs.common.registration.ModBlocks;
 import de.artemis.thinlogs.common.registration.ThinLogSet;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -16,11 +13,11 @@ import net.minecraft.world.level.ItemLike;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 
 public class RecipesProvider extends RecipeProvider {
-    public RecipesProvider(HolderLookup.Provider registries, RecipeOutput output) {
-        super(registries, output);
+    public RecipesProvider(net.minecraft.data.worldgen.BootstrapContext<Recipe<?>> recipes,
+                           net.minecraft.data.worldgen.BootstrapContext<net.minecraft.advancements.Advancement> advancements) {
+        super(recipes, advancements);
     }
 
     @Override
@@ -96,19 +93,4 @@ public class RecipesProvider extends RecipeProvider {
         }
     }
 
-    public static class Runner extends RecipeProvider.Runner {
-        public Runner(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> registries) {
-            super(packOutput, registries);
-        }
-
-        @Override
-        protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, RecipeOutput output) {
-            return new RecipesProvider(registries, output);
-        }
-
-        @Override
-        public String getName() {
-            return "Thin Logs Recipes";
-        }
-    }
 }

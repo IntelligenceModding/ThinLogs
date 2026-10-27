@@ -1,0 +1,446 @@
+{
+  "values": {
+    "thinlogs:thin_acacia_log": {
+      "transform_data": {
+        "block_state_provider": {
+          "type": "minecraft:rule_based",
+          "rules": [
+            {
+              "if_true": {
+                "type": "minecraft:matching_blocks",
+                "blocks": "thinlogs:thin_acacia_log"
+              },
+              "then": {
+                "type": "minecraft:copy_properties",
+                "source": {
+                  "id": "thinlogs:thin_stripped_acacia_log",
+                  "properties": {
+                    "anchor_face": "none",
+                    "core_orientation": "vertical",
+                    "down": "false",
+                    "east": "false",
+                    "north": "false",
+                    "south": "false",
+                    "up": "false",
+                    "west": "false"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "item_damage_per_use": 1,
+        "sound": "minecraft:item.axe.strip"
+      },
+      "transformer": "minecraft:axe"
+    },
+    "thinlogs:thin_bamboo_block": {
+      "transform_data": {
+        "block_state_provider": {
+          "type": "minecraft:rule_based",
+          "rules": [
+            {
+              "if_true": {
+                "type": "minecraft:matching_blocks",
+                "blocks": "thinlogs:thin_bamboo_block"
+              },
+              "then": {
+                "type": "minecraft:copy_properties",
+                "source": {
+                  "id": "thinlogs:thin_stripped_bamboo_log",
+                  "properties": {
+                    "anchor_face": "none",
+                    "core_orientation": "vertical",
+                    "down": "false",
+                    "east": "false",
+                    "north": "false",
+                    "south": "false",
+                    "up": "false",
+                    "west": "false"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "item_damage_per_use": 1,
+        "sound": "minecraft:item.axe.strip"
+      },
+      "transformer": "minecraft:axe"
+    },
+    "thinlogs:thin_birch_log": {
+      "transform_data": {
+        "block_state_provider": {
+          "type": "minecraft:rule_based",
+          "rules": [
+            {
+              "if_true": {
+                "type": "minecraft:matching_blocks",
+                "blocks": "thinlogs:thin_birch_log"
+              },
+              "then": {
+                "type": "minecraft:copy_properties",
+                "source": {
+                  "id": "thinlogs:thin_stripped_birch_log",
+                  "properties": {
+                    "anchor_face": "none",
+                    "core_orientation": "vertical",
+                    "down": "false",
+                    "east": "false",
+                    "north": "false",
+                    "south": "false",
+                    "up": "false",
+                    "west": "false"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "item_damage_per_use": 1,
+        "sound": "minecraft:item.axe.strip"
+      },
+      "transformer": "minecraft:axe"
+    },
+    "thinlogs:thin_cherry_log": {
+      "transform_data": {
+        "block_state_provider": {
+          "type": "minecraft:rule_based",
+          "rules": [
+            {
+              "if_true": {
+                "type": "minecraft:matching_blocks",
+                "blocks": "thinlogs:thin_cherry_log"
+              },
+              "then": {
+                "type": "minecraft:copy_properties",
+                "source": {
+                  "id": "thinlogs:thin_stripped_cherry_log",
+                  "properties": {
+                    "anchor_face": "none",
+                    "core_orientation": "vertical",
+                    "down": "false",
+                    "east": "false",
+                    "north": "false",
+                    "south": "false",
+                    "up": "false",
+                    "west": "false"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "item_damage_per_use": 1,
+        "sound": "minecraft:item.axe.strip"
+      },
+      "transformer": "minecraft:axe"
+    },
+    "thinlogs:thin_crimson_stem": {
+      "transform_data": {
+        "block_state_provider": {
+          "type": "minecraft:rule_based",
+          "rules": [
+            {
+              "if_true": {
+                "type": "minecraft:matching_blocks",
+                "blocks": "thinlogs:thin_crimson_stem"
+              },
+              "then": {
+                "type": "minecraft:copy_properties",
+                "source": {
+                  "id": "thinlogs:thin_stripped_crimson_stem",
+                  "properties": {
+                    "anchor_face": "none",
+                    "core_orientation": "vertical",
+                    "down": "false",
+                    "east": "false",
+                    "north": "false",
+                    "south": "false",
+                    "up": "false",
+                    "west": "false"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "item_damage_per_use": 1,
+        "sound": "minecraft:item.axe.strip"
+      },
+      "transformer": "minecraft:axe"
+    },
+    "thinlogs:thin_dark_oak_log": {
+      "transform_data": {
+        "block_state_provider": {
+          "type": "minecraft:rule_based",
+          "rules": [
+            {
+              "if_true": {
+                "type": "minecraft:matching_blocks",
+                "blocks": "thinlogs:thin_dark_oak_log"
+              },
+              "then": {
+                "type": "minecraft:copy_properties",
+                "source": {
+                  "id": "thinlogs:thin_stripped_dark_oak_log",
+                  "properties": {
+                    "anchor_face": "none",
+                    "core_orientation": "vertical",
+                    "down": "false",
+                    "east": "false",
+                    "north": "false",
+                    "south": "false",
+                    "up": "false",
+                    "west": "false"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "item_damage_per_use": 1,
+        "sound": "minecraft:item.axe.strip"
+      },
+      "transformer": "minecraft:axe"
+    },
+    "thinlogs:thin_jungle_log": {
+      "transform_data": {
+        "block_state_provider": {
+          "type": "minecraft:rule_based",
+          "rules": [
+            {
+              "if_true": {
+                "type": "minecraft:matching_blocks",
+                "blocks": "thinlogs:thin_jungle_log"
+              },
+              "then": {
+                "type": "minecraft:copy_properties",
+                "source": {
+                  "id": "thinlogs:thin_stripped_jungle_log",
+                  "properties": {
+                    "anchor_face": "none",
+                    "core_orientation": "vertical",
+                    "down": "false",
+                    "east": "false",
+                    "north": "false",
+                    "south": "false",
+                    "up": "false",
+                    "west": "false"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "item_damage_per_use": 1,
+        "sound": "minecraft:item.axe.strip"
+      },
+      "transformer": "minecraft:axe"
+    },
+    "thinlogs:thin_mangrove_log": {
+      "transform_data": {
+        "block_state_provider": {
+          "type": "minecraft:rule_based",
+          "rules": [
+            {
+              "if_true": {
+                "type": "minecraft:matching_blocks",
+                "blocks": "thinlogs:thin_mangrove_log"
+              },
+              "then": {
+                "type": "minecraft:copy_properties",
+                "source": {
+                  "id": "thinlogs:thin_stripped_mangrove_log",
+                  "properties": {
+                    "anchor_face": "none",
+                    "core_orientation": "vertical",
+                    "down": "false",
+                    "east": "false",
+                    "north": "false",
+                    "south": "false",
+                    "up": "false",
+                    "west": "false"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "item_damage_per_use": 1,
+        "sound": "minecraft:item.axe.strip"
+      },
+      "transformer": "minecraft:axe"
+    },
+    "thinlogs:thin_oak_log": {
+      "transform_data": {
+        "block_state_provider": {
+          "type": "minecraft:rule_based",
+          "rules": [
+            {
+              "if_true": {
+                "type": "minecraft:matching_blocks",
+                "blocks": "thinlogs:thin_oak_log"
+              },
+              "then": {
+                "type": "minecraft:copy_properties",
+                "source": {
+                  "id": "thinlogs:thin_stripped_oak_log",
+                  "properties": {
+                    "anchor_face": "none",
+                    "core_orientation": "vertical",
+                    "down": "false",
+                    "east": "false",
+                    "north": "false",
+                    "south": "false",
+                    "up": "false",
+                    "west": "false"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "item_damage_per_use": 1,
+        "sound": "minecraft:item.axe.strip"
+      },
+      "transformer": "minecraft:axe"
+    },
+    "thinlogs:thin_pale_oak_log": {
+      "transform_data": {
+        "block_state_provider": {
+          "type": "minecraft:rule_based",
+          "rules": [
+            {
+              "if_true": {
+                "type": "minecraft:matching_blocks",
+                "blocks": "thinlogs:thin_pale_oak_log"
+              },
+              "then": {
+                "type": "minecraft:copy_properties",
+                "source": {
+                  "id": "thinlogs:thin_stripped_pale_oak_log",
+                  "properties": {
+                    "anchor_face": "none",
+                    "core_orientation": "vertical",
+                    "down": "false",
+                    "east": "false",
+                    "north": "false",
+                    "south": "false",
+                    "up": "false",
+                    "west": "false"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "item_damage_per_use": 1,
+        "sound": "minecraft:item.axe.strip"
+      },
+      "transformer": "minecraft:axe"
+    },
+    "thinlogs:thin_poplar_log": {
+      "transform_data": {
+        "block_state_provider": {
+          "type": "minecraft:rule_based",
+          "rules": [
+            {
+              "if_true": {
+                "type": "minecraft:matching_blocks",
+                "blocks": "thinlogs:thin_poplar_log"
+              },
+              "then": {
+                "type": "minecraft:copy_properties",
+                "source": {
+                  "id": "thinlogs:thin_stripped_poplar_log",
+                  "properties": {
+                    "anchor_face": "none",
+                    "core_orientation": "vertical",
+                    "down": "false",
+                    "east": "false",
+                    "north": "false",
+                    "south": "false",
+                    "up": "false",
+                    "west": "false"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "item_damage_per_use": 1,
+        "sound": "minecraft:item.axe.strip"
+      },
+      "transformer": "minecraft:axe"
+    },
+    "thinlogs:thin_spruce_log": {
+      "transform_data": {
+        "block_state_provider": {
+          "type": "minecraft:rule_based",
+          "rules": [
+            {
+              "if_true": {
+                "type": "minecraft:matching_blocks",
+                "blocks": "thinlogs:thin_spruce_log"
+              },
+              "then": {
+                "type": "minecraft:copy_properties",
+                "source": {
+                  "id": "thinlogs:thin_stripped_spruce_log",
+                  "properties": {
+                    "anchor_face": "none",
+                    "core_orientation": "vertical",
+                    "down": "false",
+                    "east": "false",
+                    "north": "false",
+                    "south": "false",
+                    "up": "false",
+                    "west": "false"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "item_damage_per_use": 1,
+        "sound": "minecraft:item.axe.strip"
+      },
+      "transformer": "minecraft:axe"
+    },
+    "thinlogs:thin_warped_stem": {
+      "transform_data": {
+        "block_state_provider": {
+          "type": "minecraft:rule_based",
+          "rules": [
+            {
+              "if_true": {
+                "type": "minecraft:matching_blocks",
+                "blocks": "thinlogs:thin_warped_stem"
+              },
+              "then": {
+                "type": "minecraft:copy_properties",
+                "source": {
+                  "id": "thinlogs:thin_stripped_warped_stem",
+                  "properties": {
+                    "anchor_face": "none",
+                    "core_orientation": "vertical",
+                    "down": "false",
+                    "east": "false",
+                    "north": "false",
+                    "south": "false",
+                    "up": "false",
+                    "west": "false"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "item_damage_per_use": 1,
+        "sound": "minecraft:item.axe.strip"
+      },
+      "transformer": "minecraft:axe"
+    }
+  }
+}

@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "thinlogs:thin_stripped_oak_log"
+        "recipes": "thinlogs:thin_stripped_oak_log"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

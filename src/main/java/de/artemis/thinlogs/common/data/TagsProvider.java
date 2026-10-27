@@ -50,6 +50,7 @@ public final class TagsProvider {
         private void addSpeciesTags() {
             tag(vanillaTag("oak_logs")).addAll(keys(ModBlocks.OAK));
             tag(vanillaTag("birch_logs")).addAll(keys(ModBlocks.BIRCH));
+            tag(vanillaTag("poplar_logs")).addAll(keys(ModBlocks.POPLAR));
             tag(vanillaTag("spruce_logs")).addAll(keys(ModBlocks.SPRUCE));
             tag(vanillaTag("jungle_logs")).addAll(keys(ModBlocks.JUNGLE));
             tag(vanillaTag("acacia_logs")).addAll(keys(ModBlocks.ACACIA));
@@ -71,13 +72,14 @@ public final class TagsProvider {
         }
 
         private void addCompatibilityTags() {
-            tag(Tags.Blocks.OVERWORLD_NATURAL_LOGS).addAll(thinBlockKeys(OVERWORLD_NATURAL_LOG_SETS));
-            tag(Tags.Blocks.NETHER_NATURAL_LOGS).addAll(thinBlockKeys(NETHER_NATURAL_LOG_SETS));
-            tag(Tags.Blocks.NATURAL_LOGS).addAll(thinBlockKeys(NATURAL_LOG_SETS));
+            tag(Tags.BlockItems.OVERWORLD_NATURAL_LOGS.block()).addAll(thinBlockKeys(OVERWORLD_NATURAL_LOG_SETS));
+            tag(Tags.BlockItems.NETHER_NATURAL_LOGS.block()).addAll(thinBlockKeys(NETHER_NATURAL_LOG_SETS));
+            tag(Tags.BlockItems.NATURAL_LOGS.block()).addAll(thinBlockKeys(NATURAL_LOG_SETS));
 
-            tag(Tags.Blocks.STRIPPED_LOGS).addAll(List.of(
+            tag(Tags.BlockItems.STRIPPED_LOGS.block()).addAll(List.of(
                     key(ModBlocks.OAK.strippedThinBlock().get()),
                     key(ModBlocks.BIRCH.strippedThinBlock().get()),
+                    key(ModBlocks.POPLAR.strippedThinBlock().get()),
                     key(ModBlocks.SPRUCE.strippedThinBlock().get()),
                     key(ModBlocks.JUNGLE.strippedThinBlock().get()),
                     key(ModBlocks.ACACIA.strippedThinBlock().get()),
@@ -111,6 +113,7 @@ public final class TagsProvider {
     private static final ThinLogSet[] OVERWORLD_NATURAL_LOG_SETS = {
             ModBlocks.OAK,
             ModBlocks.BIRCH,
+            ModBlocks.POPLAR,
             ModBlocks.SPRUCE,
             ModBlocks.JUNGLE,
             ModBlocks.ACACIA,

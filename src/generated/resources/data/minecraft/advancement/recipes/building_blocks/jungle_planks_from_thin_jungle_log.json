@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:jungle_planks_from_thin_jungle_log"
+        "recipes": "minecraft:jungle_planks_from_thin_jungle_log"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:bamboo_planks_from_thin_bamboo_block"
+        "recipes": "minecraft:bamboo_planks_from_thin_bamboo_block"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

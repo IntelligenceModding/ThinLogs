@@ -15,16 +15,25 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
-public class ModDatapackProvider extends DatapackBuiltinEntriesProvider {
+public final class ModDatapackProvider {
     public static final RegistrySetBuilder BUILDER = new RegistrySetBuilder()
-            .add(Registries.CONFIGURED_FEATURE, context -> {
+            .add(Registries.FEATURE, context -> {
                 ModConfiguredFeatures.bootstrap(context);
                 ModTreeConfiguredFeatures.bootstrap(context);
             })
             .add(Registries.PLACED_FEATURE, ModPlacedFeatures::bootstrap)
             .add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, ModBiomeModifiers::bootstrap);
 
-    public ModDatapackProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
-        super(output, registries, BUILDER, Set.of(ThinLogs.MOD_ID));
+    public static DatapackBuiltinEntriesProvider world(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+        return DatapackBuiltinEntriesProvider.forWorldLayer(output, "Thin Logs World Data", registries, BUILDER, Set.of(ThinLogs.MOD_ID));
+    }
+
+    public static DatapackBuiltinEntriesProvider reloadable(PackOutput output, CompletableFuture<HolderLookup.Provider> world,
+                                                          CompletableFuture<HolderLookup.Provider> reloadable) {
+        RegistrySetBuilder builder = new RegistrySetBuilder()
+                .add(Registries.LOOT_TABLE, new BlockLootTablesProvider())
+                .add(net.minecraft.data.recipes.RecipeProvider.asBootstrap(RecipesProvider::new));
+        return DatapackBuiltinEntriesProvider.forReloadableLayer(output, "Thin Logs Recipes and Loot", world, reloadable,
+                builder, Set.of(ThinLogs.MOD_ID, "minecraft"));
     }
 }

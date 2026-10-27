@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "minecraft:poplar_planks_from_thin_stripped_poplar_log"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_thin_stripped_poplar_log": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thinlogs:thin_stripped_poplar_log"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_thin_stripped_poplar_log"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:poplar_planks_from_thin_stripped_poplar_log"
+    ]
+  }
+}

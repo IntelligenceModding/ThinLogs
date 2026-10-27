@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:spruce_planks_from_thin_stripped_spruce_log"
+        "recipes": "minecraft:spruce_planks_from_thin_stripped_spruce_log"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

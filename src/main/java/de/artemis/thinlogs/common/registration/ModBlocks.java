@@ -23,6 +23,7 @@ public final class ModBlocks {
             "thin_oak_log",
             "thin_spruce_log",
             "thin_birch_log",
+            "thin_poplar_log",
             "thin_jungle_log",
             "thin_acacia_log",
             "thin_dark_oak_log",
@@ -36,6 +37,7 @@ public final class ModBlocks {
 
     public static final ThinLogSet OAK = registerSet(ThinLogSetDefinition.log("oak", () -> Blocks.OAK_LOG, () -> Blocks.STRIPPED_OAK_LOG, () -> Blocks.OAK_PLANKS));
     public static final ThinLogSet BIRCH = registerSet(ThinLogSetDefinition.log("birch", () -> Blocks.BIRCH_LOG, () -> Blocks.STRIPPED_BIRCH_LOG, () -> Blocks.BIRCH_PLANKS));
+    public static final ThinLogSet POPLAR = registerSet(ThinLogSetDefinition.log("poplar", () -> Blocks.POPLAR_LOG, () -> Blocks.STRIPPED_POPLAR_LOG, () -> Blocks.POPLAR_PLANKS));
     public static final ThinLogSet SPRUCE = registerSet(ThinLogSetDefinition.log("spruce", () -> Blocks.SPRUCE_LOG, () -> Blocks.STRIPPED_SPRUCE_LOG, () -> Blocks.SPRUCE_PLANKS));
     public static final ThinLogSet DARK_OAK = registerSet(ThinLogSetDefinition.log("dark_oak", () -> Blocks.DARK_OAK_LOG, () -> Blocks.STRIPPED_DARK_OAK_LOG, () -> Blocks.DARK_OAK_PLANKS));
     public static final ThinLogSet PALE_OAK = registerSet(ThinLogSetDefinition.log("pale_oak", () -> Blocks.PALE_OAK_LOG, () -> Blocks.STRIPPED_PALE_OAK_LOG, () -> Blocks.PALE_OAK_PLANKS));
@@ -68,12 +70,9 @@ public final class ModBlocks {
     }
 
     public static ThinLogSet registerSet(ThinLogSetDefinition definition) {
-        @SuppressWarnings("unchecked")
-        DeferredBlock<ThinLogBlock>[] strippedHolder = new DeferredBlock[1];
 
-        DeferredBlock<ThinLogBlock> thinBlock = registerBlock(definition.thinId(), key -> new ThinLogBlock(definition.createProperties().setId(key), false, () -> strippedHolder[0].get()));
-        DeferredBlock<ThinLogBlock> strippedThinBlock = registerBlock(definition.strippedThinId(), key -> new ThinLogBlock(definition.createProperties().setId(key), true, null));
-        strippedHolder[0] = strippedThinBlock;
+        DeferredBlock<ThinLogBlock> thinBlock = registerBlock(definition.thinId(), key -> new ThinLogBlock(definition.createProperties().setId(key)));
+        DeferredBlock<ThinLogBlock> strippedThinBlock = registerBlock(definition.strippedThinId(), key -> new ThinLogBlock(definition.createProperties().setId(key)));
 
         ThinLogSet set = new ThinLogSet(definition, thinBlock, strippedThinBlock);
         THIN_LOG_SETS.add(set);

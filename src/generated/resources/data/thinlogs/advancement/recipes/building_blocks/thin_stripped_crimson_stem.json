@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "thinlogs:thin_stripped_crimson_stem"
+        "recipes": "thinlogs:thin_stripped_crimson_stem"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

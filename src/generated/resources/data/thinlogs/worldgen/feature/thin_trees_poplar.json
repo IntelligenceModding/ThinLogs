@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:weighted_random_selector",
+  "features": [
+    {
+      "data": "thinlogs:thin_red_poplar_checked",
+      "weight": 1
+    },
+    {
+      "data": "thinlogs:thin_orange_poplar_checked",
+      "weight": 1
+    },
+    {
+      "data": "thinlogs:thin_yellow_poplar_checked",
+      "weight": 1
+    }
+  ]
+}

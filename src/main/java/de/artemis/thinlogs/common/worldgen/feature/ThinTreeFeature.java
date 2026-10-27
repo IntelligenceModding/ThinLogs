@@ -1,6 +1,6 @@
 package de.artemis.thinlogs.common.worldgen.feature;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import de.artemis.thinlogs.common.blockStateProperties.AnchorFace;
 import de.artemis.thinlogs.common.blockStateProperties.CoreOrientation;
 import de.artemis.thinlogs.common.blockStateProperties.ModBlockStateProperties;
@@ -20,45 +20,37 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.feature.TreeFeature;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ThinTreeFeature extends Feature<TreeConfiguration> {
+public record ThinTreeFeature(TreeFeature tree) implements Feature {
+    public static final MapCodec<ThinTreeFeature> CODEC = TreeFeature.CODEC.xmap(ThinTreeFeature::new, ThinTreeFeature::tree);
     private static final int SCAN_RADIUS_XZ = 8;
     private static final int SCAN_BELOW = 2;
     private static final int SCAN_ABOVE = 24;
 
-    public ThinTreeFeature(Codec<TreeConfiguration> codec) {
-        super(codec);
+    @Override
+    public MapCodec<ThinTreeFeature> codec() {
+        return CODEC;
     }
 
     @Override
-    public boolean place(FeaturePlaceContext<TreeConfiguration> context) {
-        if (!hasValidBaseSupport(context.level(), context.origin())) {
+    public boolean place(WorldGenLevel level, ChunkGenerator chunkGenerator, RandomSource random, BlockPos origin) {
+        if (!hasValidBaseSupport(level, origin)) {
             return false;
         }
-
-        Map<BlockPos, BlockState> originalStates = snapshotArea(context.level(), context.origin());
-        boolean placed = Feature.TREE.place(
-                context.config(),
-                context.level(),
-                context.chunkGenerator(),
-                context.random(),
-                context.origin()
-        );
-        if (!placed) {
+        Map<BlockPos, BlockState> originalStates = snapshotArea(level, origin);
+        if (!tree.place(level, chunkGenerator, random, origin)) {
             return false;
         }
-
-        postProcess(context.level(), context.origin(), context.config(), originalStates);
+        postProcess(level, origin, tree, originalStates);
         return true;
     }
-
     private static boolean hasValidBaseSupport(WorldGenLevel level, BlockPos origin) {
         BlockState supportState = level.getBlockState(origin.below());
         return !isCanopyOrLogSupport(supportState);
@@ -70,13 +62,13 @@ public class ThinTreeFeature extends Feature<TreeConfiguration> {
                 || state.getBlock() instanceof ThinLogBlock;
     }
 
-    private static void postProcess(WorldGenLevel level, BlockPos origin, TreeConfiguration configuration, Map<BlockPos, BlockState> originalStates) {
+    private static void postProcess(WorldGenLevel level, BlockPos origin, TreeFeature configuration, Map<BlockPos, BlockState> originalStates) {
         List<BlockPos> thinLogPositions = findThinLogs(level, origin);
         if (thinLogPositions.isEmpty()) {
             return;
         }
 
-        BlockState leafOverlaySample = normalizeLeafOverlayState(configuration.foliageProvider.getState(level, RandomSource.create(0L), origin));
+        BlockState leafOverlaySample = normalizeLeafOverlayState(configuration.foliageProvider().value().getState(level, RandomSource.create(0L), origin));
         restoreSupportBlocks(level, thinLogPositions, originalStates);
 
         for (BlockPos pos : thinLogPositions) {

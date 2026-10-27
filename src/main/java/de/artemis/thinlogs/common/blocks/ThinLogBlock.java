@@ -14,7 +14,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -37,23 +36,14 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
-import net.neoforged.neoforge.common.ItemAbilities;
-import net.neoforged.neoforge.common.ItemAbility;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Supplier;
-
 public class ThinLogBlock extends Block implements EntityBlock {
     private static final int BLOCK_ENTITY_SYNC_FLAGS = 3 | 8;
-    private final boolean stripped;
-    @Nullable
-    private final Supplier<Block> strippedVariant;
 
-    public ThinLogBlock(Properties properties, boolean stripped, @Nullable Supplier<Block> strippedVariant) {
-        super(properties.noOcclusion().pushReaction(PushReaction.NORMAL));
-        this.stripped = stripped;
-        this.strippedVariant = strippedVariant;
+    public ThinLogBlock(Properties properties) {
+        super(properties.noOcclusion().pushReaction(PushReaction.PUSH_PULL));
         registerDefaultState(defaultBlockState()
                 .setValue(ModBlockStateProperties.NORTH, false)
                 .setValue(ModBlockStateProperties.EAST, false)
@@ -141,14 +131,6 @@ public class ThinLogBlock extends Block implements EntityBlock {
             dropUnsupportedOverlay(actualLevel, currentPos, state);
         }
         return state;
-    }
-
-    @Override
-    public @Nullable BlockState getToolModifiedState(BlockState blockState, UseOnContext context, ItemAbility itemAbility, boolean simulate) {
-        if (itemAbility == ItemAbilities.AXE_STRIP && !stripped && strippedVariant != null) {
-            return copyConnections(strippedVariant.get().defaultBlockState(), blockState);
-        }
-        return null;
     }
 
     @Override
@@ -243,13 +225,9 @@ public class ThinLogBlock extends Block implements EntityBlock {
         return state.setValue(ModBlockStateProperties.CORE_ORIENTATION, resolveCoreOrientation(state));
     }
 
-    private static BlockState copyConnections(BlockState target, BlockState source) {
-        for (Direction direction : Direction.values()) {
-            target = target.setValue(ModBlockStateProperties.connection(direction), source.getValue(ModBlockStateProperties.connection(direction)));
-        }
-        return target
-                .setValue(ModBlockStateProperties.ANCHOR_FACE, source.getValue(ModBlockStateProperties.ANCHOR_FACE))
-                .setValue(ModBlockStateProperties.CORE_ORIENTATION, source.getValue(ModBlockStateProperties.CORE_ORIENTATION));
+    private static boolean isConnectionTool(ItemStack stack) {
+        var transformer = stack.get(net.minecraft.core.component.DataComponents.BLOCK_TRANSFORMER);
+        return transformer != null && transformer.is(net.minecraft.world.item.component.BlockTransformers.AXE);
     }
 
     private static CoreOrientation resolveCoreOrientation(BlockState state) {
@@ -325,7 +303,7 @@ public class ThinLogBlock extends Block implements EntityBlock {
     }
 
     public static InteractionResult tryToggleConnection(ItemStack itemStack, BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-        if (!player.isShiftKeyDown() || !itemStack.canPerformAction(ItemAbilities.AXE_STRIP)) {
+        if (!player.isShiftKeyDown() || !isConnectionTool(itemStack)) {
             return InteractionResult.TRY_WITH_EMPTY_HAND;
         }
 
@@ -360,7 +338,7 @@ public class ThinLogBlock extends Block implements EntityBlock {
                     syncThinLogBlockEntity(level, neighborPos);
                 }
             }
-            level.playSound(null, pos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, disabled ? 0.9F : 1.1F);
+            level.playSound(null, pos, SoundEvents.AXE_STRIP.value(), SoundSource.BLOCKS, 1.0F, disabled ? 0.9F : 1.1F);
         }
 
         return sidedSuccess(level);
@@ -465,7 +443,7 @@ public class ThinLogBlock extends Block implements EntityBlock {
     }
 
     public static boolean shouldInterceptRightClick(ItemStack itemStack, Player player) {
-        if (player.isShiftKeyDown() && itemStack.canPerformAction(ItemAbilities.AXE_STRIP)) {
+        if (player.isShiftKeyDown() && isConnectionTool(itemStack)) {
             return true;
         }
         if (canRemoveOverlayWithItem(itemStack)) {

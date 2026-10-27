@@ -13,6 +13,7 @@ import net.neoforged.neoforge.common.world.BiomeModifiers;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 public final class ModBiomeModifiers {
+    public static final ResourceKey<BiomeModifier> ADD_THIN_DAPPLED_FOREST = key("add_thin_dappled_forest");
     public static final ResourceKey<BiomeModifier> ADD_THIN_CHERRY_GROVE = key("add_thin_cherry_grove");
     public static final ResourceKey<BiomeModifier> ADD_THIN_CRIMSON_FOREST = key("add_thin_crimson_forest");
     public static final ResourceKey<BiomeModifier> ADD_THIN_DARK_FOREST = key("add_thin_dark_forest");
@@ -42,6 +43,11 @@ public final class ModBiomeModifiers {
     public static void bootstrap(BootstrapContext<BiomeModifier> context) {
         var placedFeatures = context.lookup(Registries.PLACED_FEATURE);
         var biomes = context.lookup(Registries.BIOME);
+        context.register(ADD_THIN_DAPPLED_FOREST, new BiomeModifiers.AddFeaturesBiomeModifier(
+                HolderSet.direct(biomes.getOrThrow(Biomes.DAPPLED_FOREST)),
+                HolderSet.direct(placedFeatures.getOrThrow(ModPlacedFeatures.THIN_TREES_POPLAR)),
+                GenerationStep.Decoration.VEGETAL_DECORATION
+        ));
 
         context.register(ADD_THIN_CHERRY_GROVE, new BiomeModifiers.AddFeaturesBiomeModifier(
                 HolderSet.direct(biomes.getOrThrow(Biomes.CHERRY_GROVE)),

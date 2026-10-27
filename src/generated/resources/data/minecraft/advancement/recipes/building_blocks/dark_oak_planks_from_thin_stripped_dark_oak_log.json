@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:dark_oak_planks_from_thin_stripped_dark_oak_log"
+        "recipes": "minecraft:dark_oak_planks_from_thin_stripped_dark_oak_log"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

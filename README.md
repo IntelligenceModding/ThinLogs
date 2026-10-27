@@ -15,7 +15,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Minecraft-26.2-3C8527?style=for-the-badge&logo=minecraft&logoColor=white" alt="Minecraft 26.2">
+  <img src="https://img.shields.io/badge/Minecraft-26.3-3C8527?style=for-the-badge&logo=minecraft&logoColor=white" alt="Minecraft 26.3">
   &nbsp;&nbsp;&nbsp;
   <img src="https://img.shields.io/badge/Loader-NeoForge-6C47FF?style=for-the-badge" alt="NeoForge">
 </p>
@@ -33,9 +33,9 @@
 </p>
 
 <p align="center">
-  &bull; Thin variants for oak, spruce, birch, jungle, acacia, dark oak, mangrove, cherry, bamboo, crimson, and warped wood sets<br>
+  &bull; Thin variants for oak, spruce, birch, poplar, jungle, acacia, dark oak, pale oak, mangrove, cherry, bamboo, crimson, and warped wood sets<br>
   &bull; Matching stripped thin variants for every included wood type<br>
-  &bull; Support for leaves, carpets, moss carpet, snow layers, and snow blocks around thin logs<br>
+  &bull; Support for leaves, including red, orange, and yellow poplar leaves, carpets, moss carpet, snow layers, and snow blocks around thin logs<br>
   &bull; Natural thin tree and fungus world generation across many overworld biomes and both nether forests<br>
   &bull; Decorative building options for trunks, branches, beams, poles, supports, and custom trees
 </p>

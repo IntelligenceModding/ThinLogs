@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "thinlogs:thin_acacia_log"
+        "recipes": "thinlogs:thin_acacia_log"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

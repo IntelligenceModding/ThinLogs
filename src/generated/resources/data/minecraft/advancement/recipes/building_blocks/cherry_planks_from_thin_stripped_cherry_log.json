@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:cherry_planks_from_thin_stripped_cherry_log"
+        "recipes": "minecraft:cherry_planks_from_thin_stripped_cherry_log"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

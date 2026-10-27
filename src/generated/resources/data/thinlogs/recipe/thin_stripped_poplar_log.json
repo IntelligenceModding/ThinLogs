@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "A": "minecraft:stripped_poplar_log"
+  },
+  "pattern": [
+    "A",
+    "A"
+  ],
+  "result": {
+    "count": 8,
+    "id": "thinlogs:thin_stripped_poplar_log"
+  }
+}

@@ -1,7 +1,7 @@
 package de.artemis.thinlogs.common.registration;
 
 import de.artemis.thinlogs.ThinLogs;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
@@ -15,7 +15,6 @@ import net.minecraft.util.valueproviders.WeightedListInt;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
 import net.minecraft.world.level.levelgen.placement.CountOnEveryLayerPlacement;
@@ -31,6 +30,10 @@ import net.minecraft.world.level.levelgen.placement.SurfaceWaterDepthFilter;
 import java.util.List;
 
 public final class ModPlacedFeatures {
+    public static final ResourceKey<PlacedFeature> THIN_RED_POPLAR_CHECKED = key("thin_red_poplar_checked");
+    public static final ResourceKey<PlacedFeature> THIN_ORANGE_POPLAR_CHECKED = key("thin_orange_poplar_checked");
+    public static final ResourceKey<PlacedFeature> THIN_YELLOW_POPLAR_CHECKED = key("thin_yellow_poplar_checked");
+    public static final ResourceKey<PlacedFeature> THIN_TREES_POPLAR = key("thin_trees_poplar");
     public static final ResourceKey<PlacedFeature> THIN_OAK_CHECKED = key("thin_oak_checked");
     public static final ResourceKey<PlacedFeature> THIN_BIRCH_CHECKED = key("thin_birch_checked");
     public static final ResourceKey<PlacedFeature> THIN_SPRUCE_CHECKED = key("thin_spruce_checked");
@@ -74,7 +77,15 @@ public final class ModPlacedFeatures {
     }
 
     public static void bootstrap(BootstrapContext<PlacedFeature> context) {
-        var configured = context.lookup(Registries.CONFIGURED_FEATURE);
+        var configured = context.lookup(Registries.FEATURE);
+        register(context, THIN_RED_POPLAR_CHECKED, configured.getOrThrow(ModTreeConfiguredFeatures.THIN_RED_POPLAR), List.of(
+                PlacementUtils.filteredByBlockSurvival(Blocks.POPLAR_SAPLING)));
+        register(context, THIN_ORANGE_POPLAR_CHECKED, configured.getOrThrow(ModTreeConfiguredFeatures.THIN_ORANGE_POPLAR), List.of(
+                PlacementUtils.filteredByBlockSurvival(Blocks.POPLAR_SAPLING)));
+        register(context, THIN_YELLOW_POPLAR_CHECKED, configured.getOrThrow(ModTreeConfiguredFeatures.THIN_YELLOW_POPLAR), List.of(
+                PlacementUtils.filteredByBlockSurvival(Blocks.POPLAR_SAPLING)));
+        register(context, THIN_TREES_POPLAR, configured.getOrThrow(ModConfiguredFeatures.THIN_TREES_POPLAR),
+                featureScatter(weightedCounts(1, 9, 2, 1), 0, Heightmap.Types.OCEAN_FLOOR));
 
         register(context, THIN_OAK_CHECKED, configured.getOrThrow(ModTreeConfiguredFeatures.THIN_OAK), List.of(
                 PlacementUtils.filteredByBlockSurvival(Blocks.OAK_SAPLING)
@@ -121,11 +132,11 @@ public final class ModPlacedFeatures {
 
         register(context, THIN_PINE_ON_SNOW, configured.getOrThrow(ModTreeConfiguredFeatures.THIN_PINE), List.of(
                 EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.not(BlockPredicate.matchesBlocks(Blocks.POWDER_SNOW)), 8),
-                BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(new BlockPos(0, -1, 0), Blocks.SNOW_BLOCK, Blocks.POWDER_SNOW))
+                BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(net.minecraft.core.Direction.DOWN, Blocks.SNOW_BLOCK, Blocks.POWDER_SNOW))
         ));
         register(context, THIN_SPRUCE_ON_SNOW, configured.getOrThrow(ModTreeConfiguredFeatures.THIN_SPRUCE), List.of(
                 EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.not(BlockPredicate.matchesBlocks(Blocks.POWDER_SNOW)), 8),
-                BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(new BlockPos(0, -1, 0), Blocks.SNOW_BLOCK, Blocks.POWDER_SNOW))
+                BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(net.minecraft.core.Direction.DOWN, Blocks.SNOW_BLOCK, Blocks.POWDER_SNOW))
         ));
 
         register(context, THIN_CRIMSON_FUNGI, configured.getOrThrow(ModTreeConfiguredFeatures.THIN_CRIMSON_FUNGUS), List.of(
@@ -185,7 +196,7 @@ public final class ModPlacedFeatures {
         return ResourceKey.create(Registries.PLACED_FEATURE, Identifier.fromNamespaceAndPath(ThinLogs.MOD_ID, name));
     }
 
-    private static void register(BootstrapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key, Holder<ConfiguredFeature<?, ?>> configuration, List<PlacementModifier> modifiers) {
+    private static void register(BootstrapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key, Holder<Feature> configuration, List<PlacementModifier> modifiers) {
         context.register(key, new PlacedFeature(configuration, List.copyOf(modifiers)));
     }
 }

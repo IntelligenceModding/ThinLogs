@@ -28,13 +28,13 @@ public class DataProvider {
 
     private static void addServerProviders(GatherDataEvent event) {
         DataGenerator generator = event.getGenerator();
-        CompletableFuture<HolderLookup.Provider> future = event.getLookupProvider();
+        CompletableFuture<HolderLookup.Provider> future = event.getWorldLookupProvider();
 
-        event.addProvider(new BlockLootTablesProvider(generator.getPackOutput(), future));
         event.addProvider(new TagsProvider.BlockTagsProvider(generator.getPackOutput(), future));
         event.addProvider(new TagsProvider.ItemTagsProvider(generator.getPackOutput(), future));
-        event.addProvider(new ModDatapackProvider(generator.getPackOutput(), future));
-        event.addProvider(new RecipesProvider.Runner(generator.getPackOutput(), future));
+        event.addProvider(new BlockTransformsProvider(generator.getPackOutput(), future));
+        var world = event.addProvider(ModDatapackProvider.world(generator.getPackOutput(), future));
+        event.addProvider(ModDatapackProvider.reloadable(generator.getPackOutput(), world.getRegistryProvider(), event.getReloadableLookupProvider()));
     }
 
     public static String getRegistryName(Item item) {

@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:random_selector",
+  "default": "thinlogs:thin_spruce_checked",
+  "features": [
+    {
+      "chance": 0.6,
+      "feature": "thinlogs:thin_pine_checked"
+    }
+  ]
+}
